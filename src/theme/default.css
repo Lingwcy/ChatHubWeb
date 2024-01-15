@@ -1,0 +1,56 @@
+
+#nav{
+    background-color: #19191d;
+    transition: all 0.3s ease-in-out;
+}
+.linkBlock{
+    color: rgb(255, 255, 255);
+    transition: all 0.3s ease-in-out;
+}
+#SearchPlaceHolder{
+    color: #f7f3f3;
+    transition: all 0.3s ease-in-out;
+}
+.DoSearchBlcok{
+    background-color: white;
+    transition: all 0.3s ease-in-out;
+}
+.el-font{
+    color: rgba(243, 243, 243, 0.714);
+    transition: all 0.3s ease-in-out;
+}
+#MainContent{
+    background-color: rgba(255, 255, 255, 0.425);
+    transition: all 0.3s ease-in-out;
+}
+#Logincontainer{
+    transition: all 0.3s ease-in-out;
+
+}
+#LoginContentContainer{
+    background-color: #313139;
+    opacity: 0.95;
+    border-radius: 10px;
+}
+.el-input__wrapper{
+    border-bottom: 2px solid #c8c9cc ;
+}
+#loginNavBar{
+    background-color: #f2f3f5;
+    transition: all 0.3s ease-in-out;
+}
+#leftScan{
+
+    transition: all 0.3s ease-in-out;
+}
+#rightLogin-content-main{
+    transition: all 0.3s ease-in-out;
+}
+#hero-detail{
+    color:rgba(60, 60, 60, 0.7);
+    transition: all 0.3s ease-in-out;
+}
+#about-header-content-made-text{
+    color: rgba(43, 42, 42, 0.7);
+    transition: all 0.3s ease-in-out;
+}

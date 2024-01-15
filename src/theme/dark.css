@@ -1,0 +1,67 @@
+
+
+#nav{
+    background-color: #303133;
+    transition: all 0.3s ease-in-out;
+    border-bottom: 1px solid #c45656 ;
+}
+
+.linkBlock{
+    color: #e9e9eb;
+    transition: all 0.3s ease-in-out;
+}
+#SearchPlaceHolder{
+    color: #b1b3b8;
+    transition: all 0.3s ease-in-out;
+}
+.DoSearchBlcok{
+    background-color: #303133;
+    transition: all 0.3s ease-in-out;
+}
+.el-font{
+    color: #dedfe0;
+    transition: all 0.3s ease-in-out;
+}
+#MainContent{
+    transition: all 0.3s ease-in-out;
+}
+#Logincontainer{
+    transition: all 0.3s ease-in-out;
+}
+#LoginContentContainer{
+    background-color: #252525;
+    opacity: 0.95;
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+}
+.el-input__wrapper{
+    border-bottom: 2px solid #c45656 ;
+}
+#leftScan{
+    transition: all 0.3s ease-in-out;
+}
+#loginNavBar{
+    background-color: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+.rightLogin-header-container-items{
+
+    transition: all 0.3s ease-in-out;
+}
+
+
+#loginBt{
+    background-color:#909399;
+    transition: all 0.3s ease-in-out;
+}
+#loginBt:hover{
+    background-color:#c45656;
+}
+#hero-detail{
+    color:rgba(235, 235, 235, 0.6);
+    transition: all 0.3s ease-in-out;
+}
+#about-header-content-made-text{
+    color: aliceblue;
+    transition: all 0.3s ease-in-out;
+}
