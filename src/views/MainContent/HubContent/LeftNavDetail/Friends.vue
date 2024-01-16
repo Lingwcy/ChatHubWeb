@@ -2,30 +2,31 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from '../../../../common/axiosSetting';
-import { UseUserInformationStore, UseFriendsStore, UsePublicMsgStore, UseMsgStore } from '../../../../store/index'
+import { UseUserInformationStore, UseFriendsStore, UsePublicMsgStore, UseMsgStore, UseChatStore } from '../../../../store/index'
 const userInfo = UseUserInformationStore()
 const fristore = UseFriendsStore()
 const Pmsg = UsePublicMsgStore()
 const msgStore = UseMsgStore()
+const chatStore = UseChatStore()
 const dialogVisible = ref(false)
 let friendsReq = []
 let friendsReqJson = reactive({}) as any
-onMounted(function(){
+onMounted(function () {
 })
 
 
 
 //加载好友请求
 const getFriendsReq = () => {
-  dialogVisible.value=true
-    axios.get('api/friends/frined-request-list/' + userInfo.userName + '')
-        .then(res => {
+  dialogVisible.value = true
+  axios.get('api/friends/frined-request-list/' + userInfo.userName + '')
+    .then(res => {
 
-            friendsReq = res.data.data.split('$')
-            for (let i = 0; i < friendsReq.length - 1; i++) {
-                friendsReqJson[i] = JSON.parse(friendsReq[i]);
-            }
-        })
+      friendsReq = res.data.data.split('$')
+      for (let i = 0; i < friendsReq.length - 1; i++) {
+        friendsReqJson[i] = JSON.parse(friendsReq[i]);
+      }
+    })
 }
 
 
@@ -77,7 +78,7 @@ const AddFriends = () => {
     })
 }
 
-const sendFridendsRequst = async (TagetName:any, FromName:any) => {
+const sendFridendsRequst = async (TagetName: any, FromName: any) => {
   await ElMessageBox.prompt(
     '找到此用户,请输入验证信息',
     '发送添加请求',
@@ -125,7 +126,7 @@ const sendFridendsRequst = async (TagetName:any, FromName:any) => {
             type: 'success',
             message: '添加请求已经成功发送!',
           })
-          await userInfo.connection.invoke("SendFriendsRequest",TagetName);
+          await userInfo.connection.invoke("SendFriendsRequest", TagetName);
         }
         else {
           ElMessage({
@@ -152,100 +153,98 @@ const getFriendsList = async () => {
     })
 }
 
-const TurnFriendsToMessageBox = (friends:any) => {
-  let flag1 =false//判断消息存储库
+const TurnFriendsToMessageBox = (friends: any) => {
+  let flag1 = false//判断消息存储库
   Pmsg.Cmsg.forEach(element => {
-    if (element.name == friends.FriendName) {
-      flag1=true
+    if (element.targetUserName == friends.FriendName) {
+      flag1 = true
 
 
-      for(let i=0;i<msgStore.editableTabs.length;i++){
-        if(msgStore.editableTabs[i].name==friends.FriendName){
+      for (let i = 0; i < chatStore.targetUserTab.length; i++) {
+        if (chatStore.targetUserTab[i].tabName == friends.FriendName) {
           return
         }
       }
 
-      msgStore.editableTabs.push({
-        title: friends.FriendName,
-        name: friends.FriendName,
-        content: '新增的消息链',
-        xmsg: reactive(element)
+      chatStore.targetUserTab.push({
+        tabTitle: friends.FriendName,
+        tabName: friends.FriendName,
+        targetUserMessage: reactive(element)
       })
     }
-    
+
   });
-  if(flag1) return
+  if (flag1) return
   Pmsg.Cmsg.push(
-          {
-            name: friends.FriendName,
-            messages: [],
-            messagesNames: [],
-            messagesHeader: [],
+    {
+      targetUserName: friends.FriendName,
+      messages: [],
+      messageNames: [],
+      messageHeaders: [],
+    }
+  )
+  chatStore.targetUserTab.push({
+    tabTitle: friends.FriendName,
+    tabName: friends.FriendName,
+    targetUserMessage: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length - 1])
+  })
+}
+const acceptFriendsReq = (TargetModel:any) => {
+  axios.post('api/friends/friend-accept', TargetModel)
+    .then(res => {
+      if (res.data.errors != null) {
+        ElMessage({
+          type: 'error',
+          message: `已经是好友了 ${res.data.errors}`,
+        })
+        return
+
+      }
+      if (res.data.data == "1") {
+        ElMessage({
+          type: 'success',
+          message: `已成功添加好友!`,
+        })
+        getFriendsList()
+
+        for (let key in friendsReqJson) {
+          if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
+            delete friendsReqJson[key]
           }
-        )
-  msgStore.editableTabs.push({
-        title: friends.FriendName,
-        name: friends.FriendName,
-        content: '新增的消息链',
-        xmsg: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length-1])
-      })
-}
-const acceptFriendsReq = (TargetModel) => {
-    axios.post('api/friends/friend-accept', TargetModel)
-        .then(res => {
-            if (res.data.errors != null) {
-                ElMessage({
-                    type: 'error',
-                    message: `已经是好友了 ${res.data.errors}`,
-                })
-                return
-
-            }
-            if (res.data.data == "1") {
-                ElMessage({
-                    type: 'success',
-                    message: `已成功添加好友!`,
-                })
-                getFriendsList()
-
-                for (let key in friendsReqJson) {
-                    if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
-                        delete friendsReqJson[key]
-                    }
-                }
-            }
-        })
-        .catch(err => {
-            ElMessage({
-                type: 'info',
-                message: '系统错误' + err,
-            })
-        })
-}
-const rejectFriendsReq = (TargetModel) => {
-    axios.delete('api/friends/frined-req-remove', {
-        data: TargetModel
+        }
+      }
     })
-        .then(res => {
-            if (res.data.data == "1") {
-                ElMessage({
-                    type: 'success',
-                    message: `已拒绝请求!`,
-                })
-                for (let key in friendsReqJson) {
-                    if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
-                        delete friendsReqJson[key]
-                    }
-                }
+    .catch(err => {
+      ElMessage({
+        type: 'info',
+        message: '系统错误' + err,
+      })
+    })
+}
+const rejectFriendsReq = (TargetModel:any) => {
+  axios.delete('api/friends/frined-req-remove', {
+    data: TargetModel
+  })
+    .then(res => {
+      if (res.data.data == "1") {
+        ElMessage({
+          type: 'success',
+          message: `已拒绝请求!`,
+        })
+        for (let key in friendsReqJson) {
+          if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
+            delete friendsReqJson[key]
+          }
+        }
 
-            }
-        })
-        .catch(err => {
-            ElMessage({
-                type: 'info',
-                message: '系统错误' + err,
-            })
-        })
+      }
+    })
+    .catch(err => {
+      ElMessage({
+        type: 'info',
+        message: '系统错误' + err,
+      })
+    })
 }
 
 getFriendsList()
@@ -275,27 +274,27 @@ getFriendsList()
 
   <el-dialog v-model="dialogVisible" title="好友请求" width="300px" draggable>
     <div v-for="(req, index) in friendsReqJson">
-        <div  class="FriendsRequestContent">
-            <div id="friendReq-Header">
-                <img v-bind:src="'../../../src/images/systemHeader/' + req.UserImg" id="friendReq-Header-img" />
-            </div>
-
-
-            <div id="friendReq-Body">
-                <div id="friendReq-Body-inner">
-                    <div class="friendReq-Body-info">{{ req.UserName }}</div>
-                    <div class="friendReq-Body-info2">{{ req.ReqMsg }}</div>
-
-                    <div  class="friendReq-Body-info2">
-                        <el-button class="friendReq-Body-info-bt" round
-                            v-on:click="acceptFriendsReq(friendsReqJson[index])">同意</el-button>
-                        <el-button class="friendReq-Body-info-bt" round
-                            v-on:click="rejectFriendsReq(friendsReqJson[index])">拒绝</el-button>
-                    </div>
-                </div>
-            </div>
-
+      <div class="FriendsRequestContent">
+        <div id="friendReq-Header">
+          <img v-bind:src="'../../../src/images/systemHeader/' + req.UserImg" id="friendReq-Header-img" />
         </div>
+
+
+        <div id="friendReq-Body">
+          <div id="friendReq-Body-inner">
+            <div class="friendReq-Body-info">{{ req.UserName }}</div>
+            <div class="friendReq-Body-info2">{{ req.ReqMsg }}</div>
+
+            <div class="friendReq-Body-info2">
+              <el-button class="friendReq-Body-info-bt" round
+                v-on:click="acceptFriendsReq(friendsReqJson[index])">同意</el-button>
+              <el-button class="friendReq-Body-info-bt" round
+                v-on:click="rejectFriendsReq(friendsReqJson[index])">拒绝</el-button>
+            </div>
+          </div>
+        </div>
+
+      </div>
 
     </div>
 
@@ -311,73 +310,73 @@ getFriendsList()
   </el-dialog>
 </template>
 <style>
-
 .FriendsRequestContent {
-    display: flex;
-    height: 100%;
-    border-bottom: 1px solid #e9e9eb;
+  display: flex;
+  height: 100%;
+  border-bottom: 1px solid #e9e9eb;
 }
 
 #friendReq-Header {
-    width: 28%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 5px;
+  width: 28%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 #friendReq-Body {
-    width: 70%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-left: 10px;
+  width: 70%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
 
 }
 
 #friendReq-Header-img {
-    width: 40px;
-    height: 40px;
-    overflow: hidden;
-    border-radius: 15px;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 15px;
 }
 
 .friendReq-Body-info {
-    width: 100%;
-    height: 22px;
-    overflow: hidden;
-    color: #606266;
-    font-size: 12px;
-    font-weight: 500;
-    margin-top: 5px;
+  width: 100%;
+  height: 22px;
+  overflow: hidden;
+  color: #606266;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 5px;
 }
 
 .friendReq-Body-info2 {
-    width: 100%;
-    height: 27px;
-    overflow: hidden;
-    color: #606266;
-    font-size: 10px;
-    font-weight: 500;
+  width: 100%;
+  height: 27px;
+  overflow: hidden;
+  color: #606266;
+  font-size: 10px;
+  font-weight: 500;
 }
 
 .friendReq-Body-info-bt {
-    width: 50px;
-    height: 20px;
-    font-size: 11px;
+  width: 50px;
+  height: 20px;
+  font-size: 11px;
 }
 
 #friendReq-Body-inner {
-    width: 90%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
+  width: 90%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 
 }
+
 #friends-header {
   width: 100%;
   height: 35px;

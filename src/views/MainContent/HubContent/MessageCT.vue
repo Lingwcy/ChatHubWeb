@@ -1,73 +1,63 @@
 <script setup lang="ts">
-import { reactive, onMounted, onUnmounted, ref } from 'vue'
-import { UseUserInformationStore, UsePublicMsgStore, UseMsgStore, UseMsgbox } from '../../../store/index'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { UseUserInformationStore, UsePublicMsgStore, UseMsgbox, UseChatStore } from '../../../store/index'
 import { ElScrollbar, ElMessageBox, ElNotification } from 'element-plus'
 import { ChatHubService, createChatHubService } from '../../../services/ServicesCollector'
 import { appsetting } from '../../../store/index'
 import axios from '../../../common/axiosSetting'
 import Emoji from '../HubContent/Tools/Emoji.vue'
 import PicUpLoad from '../HubContent/Tools/PicUpload.vue'
-const appset = appsetting()
-const msgbox = UseMsgbox()
-const userInfo = UseUserInformationStore()
-const msgStore = UseMsgStore()
-const Pmsg = UsePublicMsgStore()
+const appset = appsetting() //系统设置库
+const msgbox = UseMsgbox() //消息盒子库
+const userInfo = UseUserInformationStore() //个人信息库
+const Pmsg = UsePublicMsgStore() //消息内容库
 
-const state = reactive({
-    userMsg: "",
-    messages: [],
-    messagesNames: [],
-    messagesHeader: [],
-    username: userInfo.userName,
-    jwtToken: userInfo.jwtToken,
-    toUserName: "",
-    PrivateMsg: ""
-});
+const chatStore = UseChatStore() //主Chat库
 
 
 
-let MSGmodel =
-{
-    name: "",
-    messages: [],
-    messagesNames: [],
-    messagesHeader: [],
-}
 
+//控制发送消息后聊天区域一直为底部
 const myScrollbar = ref()
 const scrollDown = () => {
     myScrollbar.value.forEach((element: { setScrollTop: (arg0: number) => void }) => {
         element.setScrollTop(99999)
     });
 }
-const test = (target: any) => {
-    Pmsg.Cmsg.forEach(element => {
-        if (element.name == target.paneName) {
-            MSGmodel = element
+/*
+    触发Tab-Click
+    作用：将目标用户的聊天信息从状态库中渲染到Tab聊天区域
+*/
+const printMessageFromTab = (target: any) => {
+    //从状态库中获取用户所点击的这个Tab
+    chatStore.targetUserTab.forEach((element,index) => {
+        if (element.tabName == target.paneName) {
+            chatStore.selectedTab = index;
+           // console.log(element)
+            //一但获取到这个tab。就将pmsg中的数据传递给tab进行渲染
+            Pmsg.Cmsg.forEach(pelement => {
+                if (pelement.targetUserName == target.paneName) {
+                    element.targetUserMessage = pelement
+                    
+                }
+            });
         }
-        msgStore.editableTabs.forEach(element => {
-            if ((element as any).name == MSGmodel.name) {
-                (element as any).xmsg = reactive(MSGmodel)
-            }
-        });
     });
     scrollDown()
-
 }
 
 
 //发起请求
-const verify = async function () {
+const verifyOnChat = async function () {
     //构造json querystring
     const config = {
         headers: {
-            Authorization: "Bearer " + state.jwtToken,//附带Jwt认证
+            Authorization: "Bearer " + userInfo.jwtToken,//附带Jwt认证
         }
     }
     await axios.get('api/font-login/verify', config)//认证
         .then(async _res => {
             ConnectHub()
-
         })
         .catch(err => {
             ElMessageBox.alert(err, '连接错误',
@@ -86,8 +76,8 @@ const ConnectHub = async function () {
     //公共消息接收器
     ChatHubService.HubConnection.on('publicMsgReceived', (HeaderImg, fromUserName, msg) => {
         Pmsg.Cmsg[0].messages.push(msg as never)
-        Pmsg.Cmsg[0].messagesNames.push(fromUserName as never)
-        Pmsg.Cmsg[0].messagesHeader.push(HeaderImg as never)
+        Pmsg.Cmsg[0].messageNames.push(fromUserName as never)
+        Pmsg.Cmsg[0].messageHeaders.push(HeaderImg as never)
         scrollDown()
     });
 
@@ -137,20 +127,19 @@ const ConnectHub = async function () {
         let existMsgStore = false
         //如果本地有存储库 直接放
         for (let i = 0; i < Pmsg.Cmsg.length; i++) {
-            if (Pmsg.Cmsg[i].name == fromUserName) {
+            if (Pmsg.Cmsg[i].targetUserName == fromUserName) {
                 existMsgStore = true
                 Pmsg.Cmsg[i].messages.push(msg as never)
-                Pmsg.Cmsg[i].messagesNames.push(fromUserName as never)
-                Pmsg.Cmsg[i].messagesHeader.push(HeaderImg as never)
+                Pmsg.Cmsg[i].messageNames.push(fromUserName as never)
+                Pmsg.Cmsg[i].messageHeaders.push(HeaderImg as never)
             }
         }
         if (!existMsgStore) {//如果没有这个库则创建
             Pmsg.Cmsg.push({
-
-                name: fromUserName,
+                targetUserName: fromUserName,
                 messages: [msg as never],
-                messagesNames: [fromUserName as never],
-                messagesHeader: [HeaderImg as never],
+                messageNames: [fromUserName as never],
+                messageHeaders: [HeaderImg as never],
             })
         }
         //消息发入接受端之后 在 messageBox 上渲染 且冒红点 =》 此实现位于MessageBox.vue
@@ -162,53 +151,44 @@ const ConnectHub = async function () {
 
 //手动发送
 const sendMsg = async function () {
-
     if (appset.input == "") return
-
-    if (MSGmodel.name == "world") {
+    let selectedIndex:number = chatStore.selectedTab;
+    if (chatStore.targetUserTab[selectedIndex].tabName == "world") {
         await ChatHubService.HubConnection.invoke("SendPublicMsg", userInfo.userName, appset.input);
-        appset.input = ""
-        scrollDown()
     } else {
-        await ChatHubService.HubConnection.invoke("SendPrivateMsg", MSGmodel.name, appset.input);
+        await ChatHubService.HubConnection.invoke("SendPrivateMsg", chatStore.targetUserTab[chatStore.selectedTab].tabName, appset.input);
         for (let i = 0; i < Pmsg.Cmsg.length; i++) {
-            if (Pmsg.Cmsg[i].name == MSGmodel.name) {
+            if (Pmsg.Cmsg[i].targetUserName == chatStore.targetUserTab[chatStore.selectedTab].tabName) {
                 Pmsg.Cmsg[i].messages.push(appset.input as never)
-                Pmsg.Cmsg[i].messagesNames.push(userInfo.userName as never)
-                Pmsg.Cmsg[i].messagesHeader.push(userInfo.userImg as never)
+                Pmsg.Cmsg[i].messageNames.push(userInfo.userName as never)
+                Pmsg.Cmsg[i].messageHeaders.push(userInfo.userImg as never)
             }
         }
-
-        await ChatHubService.HubConnection.invoke("MsgBoxFlasher", MSGmodel.name);
-        appset.input = ""
-        scrollDown()
-
+        //发送消息盒子提醒。刷新对方消息盒子
+        await ChatHubService.HubConnection.invoke("MsgBoxFlasher", chatStore.targetUserTab[chatStore.selectedTab].tabName);
     }
-
+    appset.input = ""
+    scrollDown()
 }
 //按键发送
 const txtMsgOnkeyPress = async function (e: { keyCode: number }) {
     if (appset.input.trim() == "") return
     if (e.keyCode != 13) return;
-    if (MSGmodel.name == "world") {
+    if (chatStore.targetUserTab[chatStore.selectedTab].tabName == "world") {
         await ChatHubService.HubConnection.invoke("SendPublicMsg", userInfo.userName, appset.input);
-        appset.input = ""
-        scrollDown()
     } else {
-        await ChatHubService.HubConnection.invoke("SendPrivateMsg", MSGmodel.name, appset.input);
+        await ChatHubService.HubConnection.invoke("SendPrivateMsg", chatStore.targetUserTab[chatStore.selectedTab].tabName, appset.input);
         for (let i = 0; i < Pmsg.Cmsg.length; i++) {
-            if (Pmsg.Cmsg[i].name == MSGmodel.name) {
+            if (Pmsg.Cmsg[i].targetUserName == chatStore.targetUserTab[chatStore.selectedTab].tabName) {
                 Pmsg.Cmsg[i].messages.push(appset.input as never)
-                Pmsg.Cmsg[i].messagesNames.push(userInfo.userName as never)
-                Pmsg.Cmsg[i].messagesHeader.push(userInfo.userImg as never)
+                Pmsg.Cmsg[i].messageNames.push(userInfo.userName as never)
+                Pmsg.Cmsg[i].messageHeaders.push(userInfo.userImg as never)
             }
         }
-
-        await ChatHubService.HubConnection.invoke("MsgBoxFlasher", MSGmodel.name);
-        appset.input = ""
-        scrollDown()
-
+        await ChatHubService.HubConnection.invoke("MsgBoxFlasher", chatStore.targetUserTab[chatStore.selectedTab].tabName);
     }
+    appset.input = ""
+    scrollDown()
 }
 
 
@@ -218,7 +198,7 @@ const editableTabsValue = ref('1')
 //选中删除Tab
 const removeTab = (targetName: any) => {
     msgStore.editableTabs.forEach((value, index, array) => {
-        
+
         if ((value as any).name == targetName) {
             array.splice(index, 1)
         }
@@ -237,20 +217,20 @@ const getofflinemsg = () => {
                 let existMsgStore = false
                 //如果本地有存储库 直接放
                 for (let i = 0; i < Pmsg.Cmsg.length; i++) {
-                    if (Pmsg.Cmsg[i].name == result[x].sender) {
+                    if (Pmsg.Cmsg[i].targetUserName == result[x].sender) {
                         existMsgStore = true
                         Pmsg.Cmsg[i].messages.push(result[x].sendMessage as never)
-                        Pmsg.Cmsg[i].messagesNames.push(result[x].sender as never)
-                        Pmsg.Cmsg[i].messagesHeader.push(result[x].senderImg as never)
+                        Pmsg.Cmsg[i].messageNames.push(result[x].sender as never)
+                        Pmsg.Cmsg[i].messageHeaders.push(result[x].senderImg as never)
                     }
                 }
                 if (!existMsgStore) {//如果没有这个库则创建
                     Pmsg.Cmsg.push({
 
-                        name: result[x].sender,
+                        targetUserName: result[x].sender,
                         messages: [result[x].sendMessage as never],
-                        messagesNames: [result[x].sender as never],
-                        messagesHeader: [result[x].senderImg as never],
+                        messageNames: [result[x].sender as never],
+                        messageHeaders: [result[x].senderImg as never],
                     })
                 }
             }
@@ -260,17 +240,21 @@ const getofflinemsg = () => {
         })
 }
 
-onMounted(function () {
-    verify()
-    if (msgStore.editableTabs.length < 1) {
-        msgStore.editableTabs.push({
-            title: "世界频道",
-            name: "world",
-            content: '世界频道',
-            xmsg: ""
-        } as never)
-    }
 
+onMounted(function () {
+    verifyOnChat()
+    if (chatStore.targetUserTab.length < 1) {
+        chatStore.targetUserTab.push({
+            tabTitle: "世界频道",
+            tabName: "world",
+            targetUserMessage: {
+                targetUserName: '',
+                messages: [],
+                messageNames: [],
+                messageHeaders: []
+            },
+        })
+    }
     getofflinemsg()
 
 
@@ -282,20 +266,22 @@ onUnmounted(() => {
 </script>
 <template>
     <div id="MCT-Container">
-        <el-tabs v-model="editableTabsValue" type="card" class="msgTabs" closable @tab-remove="removeTab" @tab-click="test">
-            <el-tab-pane v-for="item in msgStore.editableTabs" :key="(item as any).name " :label="(item as any).title" :name="(item as any).name">
+        <el-tabs v-model="editableTabsValue" type="card" class="msgTabs" closable @tab-remove="removeTab"
+            @tab-click="printMessageFromTab">
+            <el-tab-pane v-for="item in chatStore.targetUserTab" :key="item.tabName" :label="item.tabTitle"
+                :name="item.tabName">
                 <div id="MCT-Container-RESVContent">
                     <el-scrollbar ref="myScrollbar">
-                        <div id="messageRES" v-for="(_msg, index) in (item as any).xmsg.messagesHeader" :key="index">
+                        <div id="messageRES" v-for="(_msg, index) in item.targetUserMessage.messageHeaders" :key="index">
                             <div id="messageRES-Header">
-                                <span style="margin-left: 3px;">{{ (item as any).xmsg.messagesNames[index] }}</span>
-                                <img v-bind:src="'src/images/systemHeader/' + (item as any).xmsg.messagesHeader[index]"
+                                <span style="margin-left: 3px;">{{ item.targetUserMessage.messageNames[index] }}</span>
+                                <img v-bind:src="'src/images/systemHeader/' + item.targetUserMessage.messageHeaders[index]"
                                     id="UserMsg-img" />
                             </div>
                             <div id="messageRES-Content">
                                 <div id="messageRES-Content-center">
                                     <span id="messageRES-Content-center-msg">
-                                        {{ (item as any).xmsg.messages[index] }}
+                                        {{ item.targetUserMessage.messages[index] }}
 
                                     </span>
                                 </div>

@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { onMounted,reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import axios from '../../../../common/axiosSetting';
 import { ElMessage } from 'element-plus'
-import { UseUserInformationStore, UseMsgbox, UsePublicMsgStore, UseMsgStore } from '../../../../store/index'
+import { UseUserInformationStore, UseMsgbox, UsePublicMsgStore, UseChatStore } from '../../../../store/index'
 const Pmsg = UsePublicMsgStore()
-const msgstore = UseMsgStore()
 const userInfo = UseUserInformationStore()
 const MsgBox = UseMsgbox()
-const DetailTargetModel=reactive({
-    value:''
+const chatStore = UseChatStore()
+const DetailTargetModel = reactive({
+    value: ''
 })
 const DetailVisible = ref(false)
 onMounted(function () {
@@ -28,7 +28,7 @@ const getFriendsReq = () => {
 
             friendsReq = res.data.data.split('$')
             for (let i = 0; i < friendsReq.length - 1; i++) {
-                friendsReqJson[i]= JSON.parse(friendsReq[i])
+                friendsReqJson[i] = JSON.parse(friendsReq[i])
             }
         })
 }
@@ -48,78 +48,75 @@ const getMsgBox = () => {
         })
 }
 
-const TurnFriendsToMessageBox = (friends:any) => {
+const TurnFriendsToMessageBox = (friends: any) => {
     if (friends.isNew == 1) {
         friends.isNew = 0
     }
     axios.put('api/friends/msg-items-redbob/' + friends.targetfont + '/' + userInfo.userName)
     let flag1 = false//判断消息存储库
     Pmsg.Cmsg.forEach(element => {
-        if (element.name == friends.targetfont) {
+        if (element.targetUserName == friends.targetfont) {
             flag1 = true
 
 
-            for (let i = 0; i < msgstore.editableTabs.length; i++) {
-                if (msgstore.editableTabs[i].name == friends.targetfont) {
+            for (let i = 0; i < chatStore.targetUserTab.length; i++) {
+                if (chatStore.targetUserTab[i].tabName == friends.targetfont) {
                     return
                 }
             }
-
-            msgstore.editableTabs.push({
-                title: friends.targetfont,
-                name: friends.targetfont,
-                content: '新增的消息链',
-                xmsg: reactive(element)
-            } as never) 
+            chatStore.targetUserTab.push({
+                tabTitle: friends.targetfont,
+                tabName: friends.targetfont,
+                targetUserMessage: reactive(element)
+            })
         }
 
     });
     if (flag1) return
     Pmsg.Cmsg.push(
         {
-            name: friends.targetfont,
+            targetUserName: friends.targetfont,
             messages: [],
-            messagesNames: [],
-            messagesHeader: [],
+            messageNames: [],
+            messageHeaders: [],
         }
     )
-    msgstore.editableTabs.push({
-        title: friends.targetfont,
-        name: friends.targetfont,
-        content: '新增的消息链',
-        xmsg: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length - 1])
-    } as never)
+    chatStore.targetUserTab.push({
+        tabTitle: friends.targetfont,
+        tabName: friends.targetfont,
+        targetUserMessage: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length - 1])
+    })
 }
 
 
 //获取一个好友的详细信息
-const GetDetailInformation = (name:any) => {
-  axios.get("api/user/user/" +(name))
-    .then(res => {
-      if (res.data.errors != null) {
-        ElMessage({
-          message: '用户数据获取失败!.',
-          type: 'error',
+const GetDetailInformation = (name: any) => {
+    axios.get("api/user/user/" + (name))
+        .then(res => {
+            if (res.data.errors != null) {
+                ElMessage({
+                    message: '用户数据获取失败!.',
+                    type: 'error',
+                })
+                return;
+            }
+            if (res.data.data) {
+                DetailTargetModel.value = JSON.parse(res.data.data)
+
+
+            }
         })
-        return;
-      }
-      if (res.data.data) {
-        DetailTargetModel.value=JSON.parse(res.data.data)
-        
+        .catch(error => [
+            ElMessage({
+                message: '用户数据获取失败!.' + error,
+                type: 'error',
+            })
 
-      }
-    })
-    .catch(error => [
-      ElMessage({
-        message: '用户数据获取失败!.' + error,
-        type: 'error',
-      })
-
-    ])
+        ])
 }
 
 
-const handleCommand = (command:any) => {
+const handleCommand = (command: any) => {
     let commands = command.split(',')
     if (commands[0] == "show") {
         GetDetailInformation(commands[1])
@@ -130,7 +127,7 @@ const handleCommand = (command:any) => {
             .then(res => {
                 if (res.data.errors != null) {
                     ElMessage({
-                        message: '删除失败!.' + res.data.errors ,
+                        message: '删除失败!.' + res.data.errors,
                         type: 'error',
                     })
                     return
@@ -153,7 +150,6 @@ const handleCommand = (command:any) => {
 }
 </script>
 <template>
-
     <div v-for="(req, _index) in MsgBox.MsgItems">
 
         <div class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)">
@@ -193,10 +189,11 @@ const handleCommand = (command:any) => {
         <template #header>
             <div class="DetailInfo-header">
                 <div class="DetailInfo-header-img">
-                    <img :src="'../../../../src/images/systemHeader/'+DetailTargetModel.value.HeaderImg" alt="">
+                    <img :src="'../../../../src/images/systemHeader/' + DetailTargetModel.value.HeaderImg" alt="">
                 </div>
                 <div class="DetailInfo-header-content">
-                    <span v-if="DetailTargetModel.value.NickName" class="DetailInfo-header-content-font1">{{ DetailTargetModel.value.NickName }}</span>
+                    <span v-if="DetailTargetModel.value.NickName" class="DetailInfo-header-content-font1">{{
+                        DetailTargetModel.value.NickName }}</span>
                     <span v-else class="DetailInfo-header-content-font1">{{ DetailTargetModel.value.Username }}</span>
                     <span class="DetailInfo-header-content-font2">{{ DetailTargetModel.value.Job }}</span>
                     <span class="DetailInfo-header-content-font3">暂无个性签名</span>
@@ -211,19 +208,18 @@ const handleCommand = (command:any) => {
                 <el-descriptions-item label="邮箱">
                     <el-tag size="small">{{ DetailTargetModel.value.Email }}</el-tag>
                 </el-descriptions-item>
-                <el-descriptions-item label="个人简介">{{ DetailTargetModel.value.Desc}}</el-descriptions-item>
+                <el-descriptions-item label="个人简介">{{ DetailTargetModel.value.Desc }}</el-descriptions-item>
             </el-descriptions>
         </div>
         <template #footer>
             <div id="addUser-footer">
                 <el-button @click="Headvisible = false" style="width: 150px;">分享</el-button>
-                <el-button type="primary" @click="Headvisible = false"  style="width: 150px;">
+                <el-button type="primary" @click="Headvisible = false" style="width: 150px;">
                     发送消息
                 </el-button>
             </div>
         </template>
     </el-dialog>
-
 </template>
 <style>
 .DetailInfo-header {
