@@ -1,7 +1,7 @@
 #!/usr/bin/expect -f  
   
 # 启动ssh-agent  
-spawn eval 'ssh-agent -s'  
+spawn eval `ssh-agent -s` 
 expect "SSH_AUTH_SOCK="
   
 # 添加私钥到ssh-agent，自动输入密码  
