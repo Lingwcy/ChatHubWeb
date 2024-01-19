@@ -2,8 +2,8 @@
 import { onMounted, reactive, ref } from 'vue';
 import axios from '../../../../common/axiosSetting';
 import { ElMessage } from 'element-plus'
-import { UseUserInformationStore, UseMsgbox, UsePublicMsgStore, UseChatStore } from '../../../../store/index'
-const Pmsg = UsePublicMsgStore()
+import { UseUserInformationStore, UseMsgbox, UseMsgStore, UseChatStore } from '../../../../store/index'
+const Pmsg = UseMsgStore()
 const userInfo = UseUserInformationStore()
 const MsgBox = UseMsgbox()
 const chatStore = UseChatStore()
@@ -54,7 +54,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
     }
     axios.put('api/friends/msg-items-redbob/' + friends.targetfont + '/' + userInfo.userName)
     let flag1 = false//判断消息存储库
-    Pmsg.Cmsg.forEach(element => {
+    Pmsg.messageItems.forEach(element => {
         if (element.targetUserName == friends.targetfont) {
             flag1 = true
 
@@ -73,7 +73,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
 
     });
     if (flag1) return
-    Pmsg.Cmsg.push(
+    Pmsg.messageItems.push(
         {
             targetUserName: friends.targetfont,
             messages: [],
@@ -84,7 +84,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
     chatStore.targetUserTab.push({
         tabTitle: friends.targetfont,
         tabName: friends.targetfont,
-        targetUserMessage: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length - 1])
+        targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
     })
 }
 

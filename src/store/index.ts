@@ -71,12 +71,14 @@ export const UseFriendsStore = defineStore("friendstore", {
     }
 })
 
+
+import { IMsgStore } from '../models/interface/IMessageStore';
 //貌似将公共消息与私人消息都存储到了这里...
-export const UsePublicMsgStore = defineStore('Pmsg', {
-    state: () => {
+export const UseMsgStore = defineStore('msg', {
+    state: ():IMsgStore => {
         return {
             //公共消息name一律为world,私人消息name则为目标用户名称
-            Cmsg: [
+            messageItems: [
                 {
                     targetUserName: 'world',
                     messages: [],
@@ -96,16 +98,6 @@ export const UsePublicMsgStore = defineStore('Pmsg', {
         ]
     }
 })
-
-//聊天区Tab栏
-export const UseMsgStore = defineStore('Smsg', {
-    state: () => {
-        return {
-            editableTabs: []
-        }
-    },
-})
-
 
 export const appsetting = defineStore('appset', {
     state: () => {
@@ -129,30 +121,14 @@ export const UseMsgbox = defineStore('MsgBox', {
     },
 })
 
-interface IChatStore {
-    targetUserTab: TargetUserTab[]
-    selectedTab: number
-}
-//存储与用户正在聊天的Tab信息
-interface TargetUserTab {
-    tabTitle: string;
-    tabName: string;
-    targetUserMessage: TargetUserMessage;
-}
-//存储目标聊天用户的相关信息。名称，聊天内容...
-interface TargetUserMessage {
-    targetUserName: string,
-    messages: string[],
-    messageNames: string[],
-    messageHeaders: string[],
-}
+import { IChatStore } from '../models/interface/IChatStore';
 export const UseChatStore = defineStore('Chat', {
     state: (): IChatStore => {
         return {
             targetUserTab: [{
                 tabTitle: "世界频道",
                 tabName: "world",
-                targetUserMessage:{
+                targetUserMessage: {
                     targetUserName: '',
                     messages: [],
                     messageNames: [],
@@ -162,11 +138,9 @@ export const UseChatStore = defineStore('Chat', {
             selectedTab: 0
         }
     },
-    actions:()=>{
-
-    }
 })
 
 const store = createPinia()
 store.use(piniaPluginPersist)
 export default store
+

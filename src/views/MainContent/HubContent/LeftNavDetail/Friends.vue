@@ -2,11 +2,10 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from '../../../../common/axiosSetting';
-import { UseUserInformationStore, UseFriendsStore, UsePublicMsgStore, UseMsgStore, UseChatStore } from '../../../../store/index'
+import { UseUserInformationStore, UseFriendsStore, UseMsgStore, UseChatStore } from '../../../../store/index'
 const userInfo = UseUserInformationStore()
 const fristore = UseFriendsStore()
-const Pmsg = UsePublicMsgStore()
-const msgStore = UseMsgStore()
+const Pmsg = UseMsgStore()
 const chatStore = UseChatStore()
 const dialogVisible = ref(false)
 let friendsReq = []
@@ -155,11 +154,9 @@ const getFriendsList = async () => {
 
 const TurnFriendsToMessageBox = (friends: any) => {
   let flag1 = false//判断消息存储库
-  Pmsg.Cmsg.forEach(element => {
+  Pmsg.messageItems.forEach(element => {
     if (element.targetUserName == friends.FriendName) {
       flag1 = true
-
-
       for (let i = 0; i < chatStore.targetUserTab.length; i++) {
         if (chatStore.targetUserTab[i].tabName == friends.FriendName) {
           return
@@ -175,7 +172,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
 
   });
   if (flag1) return
-  Pmsg.Cmsg.push(
+  Pmsg.messageItems.push(
     {
       targetUserName: friends.FriendName,
       messages: [],
@@ -186,7 +183,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
   chatStore.targetUserTab.push({
     tabTitle: friends.FriendName,
     tabName: friends.FriendName,
-    targetUserMessage: reactive(Pmsg.Cmsg[Pmsg.Cmsg.length - 1])
+    targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
   })
 }
 const acceptFriendsReq = (TargetModel:any) => {
