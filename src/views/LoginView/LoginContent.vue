@@ -1,12 +1,18 @@
 <script lang="ts" setup>
-document.body.style.overflow="hidden"
+document.body.style.overflow = "hidden"
 
 
 
 </script>
 <template>
     <div id="Logincontainer">
-        <div id="LoginContentContainer">
+        <el-col :xs="24" :sm="24" :md="0" :lg="0" :xl="0" class="Logincontainer-Phone hidden-md-and-up">
+            <div id="title-phone1">欢迎回来!</div>
+            <div id="title-phone2">很高兴再次见到您！</div>
+            <router-view></router-view>
+        </el-col>
+        <el-col :xs="0" :sm="0" :md="24" :lg="24" :xl="24" class="Logincontainer-Window hidden-sm-and-down">
+            <div id="LoginContentContainer">
             <div id="leftScan">
                 <div class="leftScan-content">
                     <div class="leftScan-img">
@@ -17,7 +23,7 @@ document.body.style.overflow="hidden"
                 </div>
             </div>
             <div id="rightLogin">
-                <div id = "rightLogin-header">
+                <div id="rightLogin-header">
                     <div id="rightLogin-header-title1">欢迎回来</div>
                     <div id="rightLogin-header-title2">很高兴再次见到您！</div>
                 </div>
@@ -30,9 +36,44 @@ document.body.style.overflow="hidden"
                 </div>
             </div>
         </div>
+        </el-col>
     </div>
 </template>
 <style>
+#title-phone1{
+    margin-top: 250px;
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: whitesmoke;
+}
+#title-phone2{
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: whitesmoke;
+    color: #a7a7a8
+}
+
+#Logincontainer{
+    width: 100%;
+    height: 100%;
+}
+.Logincontainer-Phone{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+.Logincontainer-Window{
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
 #rightLogin-content-footer {
     width: 50%;
     height: 15%;
@@ -50,6 +91,7 @@ document.body.style.overflow="hidden"
     background-color: rgb(225, 226, 228);
 
 }
+
 .leftScan-font1 {
     margin-top: 5px;
     font-size: 25px;
@@ -86,15 +128,6 @@ document.body.style.overflow="hidden"
     margin-top: 30px;
     color: whitesmoke;
 }
-
-#Logincontainer {
-    width: 100%;
-    height: 100%;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
 .el-input:hover {
     --el-input-hover-border-color: null;
 }
@@ -132,7 +165,8 @@ document.body.style.overflow="hidden"
 
 
 }
-.leftScan-content{
+
+.leftScan-content {
     box-sizing: border-box;
     display: flex;
     justify-content: center;
@@ -140,6 +174,7 @@ document.body.style.overflow="hidden"
     flex-direction: column;
     width: 80%;
 }
+
 #rightLogin {
     border-radius: 10px;
     width: 60%;
@@ -169,32 +204,36 @@ document.body.style.overflow="hidden"
 
 #rightLogin-content {
     width: 100%;
-    height: 70%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 #rightLogin-header {
-    height: 30%;
+    margin-top: 40PX;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
-#rightLogin-header-title1{
+
+#rightLogin-header-title1 {
     margin: 10px;
     font-size: 27px;
     font-weight: bolder;
     color: white;
 }
-#rightLogin-header-title2{
+
+#rightLogin-header-title2 {
     font-size: 16px;
     color: rgb(206, 206, 206)
 }
+
 #rightLogin-content-main {
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -204,11 +243,10 @@ document.body.style.overflow="hidden"
 #rightLogin-content-main-center {
     display: flex;
     flex-direction: column;
-    height: 90%;
+    height: 100%;
     width: 100%;
 }
 
-#loginBt {
+.loginBt {
     width: 350px;
-}
-</style>
+}</style>

@@ -1,3 +1,11 @@
+import { Friend,UserRequest } from '../services/FriendsService';
+
+export interface IUseFriendsStore{
+    $reset(): unknown;
+    Friends: Friend[],
+    RequestList: UserRequest[]
+}
+
 declare export interface IChatStore {
     targetUserTab: TargetUserTab[]
     selectedTab: number

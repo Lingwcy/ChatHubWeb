@@ -1,4 +1,5 @@
 import { defineStore, createPinia } from 'pinia'
+import { IChatStore, IUseFriendsStore } from './Istore';
 import piniaPluginPersist from 'pinia-plugin-persist';
 import axios from 'axios'
 
@@ -9,7 +10,7 @@ axios.defaults.baseURL = 'https://localhost:5001/';//基础Url
 export const UseUserInformationStore = defineStore("userInfo", {
     state: () => {
         return {
-            userId: "",
+            userId: '',
             userName: "未登录",
             userPsw: "",
             jwtToken: "",
@@ -51,11 +52,10 @@ export const UseUserInformationStore = defineStore("userInfo", {
 })
 
 export const UseFriendsStore = defineStore("friendstore", {
-    state: () => {
+    state: ():IUseFriendsStore => {
         return {
-            Friends: [
-
-            ]
+            Friends: [],
+            RequestList:[]
         }
     },
     actions: {
@@ -121,7 +121,6 @@ export const UseMsgbox = defineStore('MsgBox', {
     },
 })
 
-import { IChatStore } from '../models/interface/IChatStore';
 export const UseChatStore = defineStore('Chat', {
     state: (): IChatStore => {
         return {

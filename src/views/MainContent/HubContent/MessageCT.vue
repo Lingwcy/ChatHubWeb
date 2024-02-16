@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue'
 import { UseUserInformationStore, UseChatStore } from '../../../store/index'
-import { ElScrollbar, ElMessageBox } from 'element-plus'
+import { ElScrollbar } from 'element-plus'
 import { ChatHubService, createChatHubService } from '../../../services/ServicesCollector'
 import { appsetting } from '../../../store/index'
-import axios from '../../../common/axiosSetting'
+//import axios from '../../../common/axiosSetting'
 import Emoji from '../HubContent/Tools/Emoji.vue'
 import PicUpLoad from '../HubContent/Tools/PicUpload.vue'
 const appset = appsetting() //系统设置库
@@ -30,22 +30,6 @@ const OnClickChatTab = (target: any) => {
 //发起请求
 const verifyOnChat = async function () {
     //构造json querystring
-    const config = {
-        headers: {
-            Authorization: "Bearer " + userInfo.jwtToken,//附带Jwt认证
-        }
-    }
-    await axios.get('api/font-login/verify', config)//认证
-        .then(async _res => {
-            ChatHubService.startHub()
-        })
-        .catch(err => {
-            ElMessageBox.alert(err, '连接错误',
-                {
-                    confirmButtonText: '确认',
-                    type: 'error',
-                })
-        })
 }
 
 //手动发送

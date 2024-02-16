@@ -1,7 +1,12 @@
-
+.Logincontainer-Phone{
+    background-color: #303133;
+}
 #nav{
     background-color: #19191d;
     transition: all 0.3s ease-in-out;
+}
+.error-button{
+    background-color: #19191d;
 }
 .linkBlock{
     color: rgb(255, 255, 255);

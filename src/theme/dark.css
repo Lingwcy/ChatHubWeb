@@ -1,11 +1,20 @@
 
-
+.Logincontainer-Phone{
+    background-color: #303133;
+}
 #nav{
     background-color: #303133;
     transition: all 0.3s ease-in-out;
     border-bottom: 1px solid #c45656 ;
 }
-
+.error-button{
+    background-color: #303133;
+    transition: all 0.1s ease-in-out;
+    border-bottom: 1px solid #c45656 ;
+}
+.error-button:hover{
+    background-color: #c45656;
+}
 .linkBlock{
     color: #e9e9eb;
     transition: all 0.3s ease-in-out;

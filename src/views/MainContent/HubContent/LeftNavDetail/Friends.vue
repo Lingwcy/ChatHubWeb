@@ -1,31 +1,19 @@
 <script  setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from '../../../../common/axiosSetting';
+import { FriendService, createFriendsService } from '../../../../services/ServicesCollector';
 import { UseUserInformationStore, UseFriendsStore, UseMsgStore, UseChatStore } from '../../../../store/index'
 const userInfo = UseUserInformationStore()
 const fristore = UseFriendsStore()
 const Pmsg = UseMsgStore()
 const chatStore = UseChatStore()
 const dialogVisible = ref(false)
-let friendsReq = []
-let friendsReqJson = reactive({}) as any
-onMounted(function () {
-})
-
-
-
-//加载好友请求
+createFriendsService();
+//加载好友请求 ok
 const getFriendsReq = () => {
   dialogVisible.value = true
-  axios.get('api/friends/frined-request-list/' + userInfo.userName + '')
-    .then(res => {
-
-      friendsReq = res.data.data.split('$')
-      for (let i = 0; i < friendsReq.length - 1; i++) {
-        friendsReqJson[i] = JSON.parse(friendsReq[i]);
-      }
-    })
+  FriendService.GetUserFriendsRquest(userInfo.userName, fristore);
 }
 
 
@@ -34,7 +22,6 @@ let reqmsg = {
   mark: "",
   msg: "",
 }
-axios.defaults.headers.common['Authorization'] = "Bearer " + userInfo.jwtToken //向每一个请求携带JWT
 const AddFriends = () => {
   ElMessageBox.prompt('请输入需要添加的好友昵称:', '添加为好友', {
     confirmButtonText: '查找',
@@ -44,29 +31,11 @@ const AddFriends = () => {
       /\S/,
   })
     .then(async ({ value }) => {
-      await axios.get('api/friends/friends-find/' + value + '/' + userInfo.userName + '')
-        .then(res => {
-          if (res.data.errors != null) {
-            ElMessage({
-              type: 'error',
-              message: `用户不存在或已经是好友!${res.data.errors}`,
-            })
-            return
-          }
-          if (res.data.data == "3") {
-            ElMessage({
-              type: 'success',
-              message: `找到用户为:${value}`,
-            })
-            sendFridendsRequst(value, userInfo.userName)
-          }
-        })
-        .catch(_res => {
-          ElMessage({
-            type: 'error',
-            message: `用户不存在或已经是好友!`,
-          })
-        })
+      let payload = {
+        targetName: value,
+        userName: userInfo.userName,
+      }
+      FriendService.FindFriend(payload)
     })
     .catch((_error) => {
       ElMessage({
@@ -139,17 +108,7 @@ const sendFridendsRequst = async (TagetName: any, FromName: any) => {
 }
 
 const getFriendsList = async () => {
-  await axios.get('api/friends/friends-all/' + userInfo.userId)
-    .then(res => {
-      fristore.$reset()
-      let fri = res.data.data.split("$")
-      for (let i = 0; i < fri.length - 1; i++) {
-        fristore.Friends.push(JSON.parse(fri[i]) as never)
-      }
-    })
-    .catch(_err => {
-
-    })
+  FriendService.GetUserFriends(userInfo.userId,fristore);
 }
 
 const TurnFriendsToMessageBox = (friends: any) => {
@@ -186,7 +145,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
     targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
   })
 }
-const acceptFriendsReq = (TargetModel:any) => {
+const acceptFriendsReq = (TargetModel: any) => {
   axios.post('api/friends/friend-accept', TargetModel)
     .then(res => {
       if (res.data.errors != null) {
@@ -204,9 +163,9 @@ const acceptFriendsReq = (TargetModel:any) => {
         })
         getFriendsList()
 
-        for (let key in friendsReqJson) {
-          if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
-            delete friendsReqJson[key]
+        for (let key in fristore.RequestList) {
+          if (fristore.RequestList[key]["UserId"] == TargetModel["UserId"]) {
+            delete fristore.RequestList[key]
           }
         }
       }
@@ -218,7 +177,7 @@ const acceptFriendsReq = (TargetModel:any) => {
       })
     })
 }
-const rejectFriendsReq = (TargetModel:any) => {
+const rejectFriendsReq = (TargetModel: any) => {
   axios.delete('api/friends/frined-req-remove', {
     data: TargetModel
   })
@@ -228,9 +187,9 @@ const rejectFriendsReq = (TargetModel:any) => {
           type: 'success',
           message: `已拒绝请求!`,
         })
-        for (let key in friendsReqJson) {
-          if (friendsReqJson[key]["UserId"] == TargetModel["UserId"]) {
-            delete friendsReqJson[key]
+        for (let key in fristore.RequestList) {
+          if (fristore.RequestList[key]["UserId"] == TargetModel["UserId"]) {
+            delete fristore.RequestList[key]
           }
         }
 
@@ -270,7 +229,7 @@ getFriendsList()
 
 
   <el-dialog v-model="dialogVisible" title="好友请求" width="300px" draggable>
-    <div v-for="(req, index) in friendsReqJson">
+    <div v-for="(req, index) in fristore.RequestList">
       <div class="FriendsRequestContent">
         <div id="friendReq-Header">
           <img v-bind:src="'../../../src/images/systemHeader/' + req.UserImg" id="friendReq-Header-img" />
@@ -284,9 +243,9 @@ getFriendsList()
 
             <div class="friendReq-Body-info2">
               <el-button class="friendReq-Body-info-bt" round
-                v-on:click="acceptFriendsReq(friendsReqJson[index])">同意</el-button>
+                v-on:click="acceptFriendsReq(fristore.RequestList[index])">同意</el-button>
               <el-button class="friendReq-Body-info-bt" round
-                v-on:click="rejectFriendsReq(friendsReqJson[index])">拒绝</el-button>
+                v-on:click="rejectFriendsReq(fristore.RequestList[index])">拒绝</el-button>
             </div>
           </div>
         </div>

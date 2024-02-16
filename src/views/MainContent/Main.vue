@@ -22,7 +22,7 @@ const loadingInstance = ElLoading.service(mainLoading )
         width: 100%;
         display: flex;
         justify-content:center;
-        height: 94.5vh;
+        height: 98.4vh;
 
     }
 

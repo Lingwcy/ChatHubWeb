@@ -1,136 +1,124 @@
-import {createRouter,createWebHashHistory} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 // 1. 定义路由组件.
 // 也可以从其他文件导入
 
 //路由懒加载
-const Setting=()=>import('../views/MainContent/Setting.vue')
-const About =()=>import('../views/MainContent/About.vue')
-const Hub =()=>import('../views/MainContent/Hub.vue')
-const LoinContent=()=>import('../views/LoginView/LoginContent.vue')
-const Account=()=>import('../views/LoginView/Login.vue')
-const Register=()=>import('../views/LoginView/Register.vue')
-const Phone=()=>import('../views/LoginView/Phone.vue')
+const Setting = () => import('../views/MainContent/Setting.vue')
+const About = () => import('../views/MainContent/About.vue')
+const Hub = () => import('../views/MainContent/Hub.vue')
+const LoinContent = () => import('../views/LoginView/LoginContent.vue')
+const Account = () => import('../views/LoginView/Login.vue')
+const Register = () => import('../views/LoginView/Register.vue')
+const Phone = () => import('../views/LoginView/Phone.vue')
 
 
-const Friends=()=>import('../views/MainContent/HubContent/LeftNavDetail/Friends.vue')
-const Groups=()=>import('../views/MainContent/HubContent/LeftNavDetail/Groups.vue')
-const Msgbox=()=>import('../views/MainContent/HubContent/LeftNavDetail/MessageBox.vue')
-const UserSetting=()=>import('../views/MainContent/Setting/UserSetting.vue')
-const LocalSetting=()=>import('../views/MainContent/Setting/LocalSetting.vue')
+const Friends = () => import('../views/MainContent/HubContent/LeftNavDetail/Friends.vue')
+const Groups = () => import('../views/MainContent/HubContent/LeftNavDetail/Groups.vue')
+const Msgbox = () => import('../views/MainContent/HubContent/LeftNavDetail/MessageBox.vue')
+const UserSetting = () => import('../views/MainContent/Setting/UserSetting.vue')
+const LocalSetting = () => import('../views/MainContent/Setting/LocalSetting.vue')
 
+//system
+const Error = () => import('../views/System/Error.vue');
 
 
 const routes = [
     {
-        path:"/",
-        //重定向
-        redirect:'/Login/Account'
+        path: "/",
+        redirect: '/Login/Account'
     },
-    { 
+    {
+        path: '/error/:type?', 
+        name: 'ErrorPage',
+        component: Error,
+    },
+    {
         path: '/Hub',
-        name:'Hub',
+        name: 'Hub',
         component: Hub,
-        beforeEnter:async (to:any,from:any,next:any) =>{
-            const jwt =localStorage.getItem("jwt")
-            const config = {
-                headers:{
-                    Authorization: "Bearer "+jwt,//附带Jwt认证
-                }}
-            await axios.get('https://localhost:5001/api/font-login/verify',config)
-            .then(so=>{
-                next()
-            })
-            .catch(err=>{
-                ElMessageBox.alert('请登陆', '登陆',
-                {
-                    confirmButtonText: '确认',
-                })
-                router.push('/')
-            })
-            
-        },
-        children:[
+        children: [
             {
-                path:'Friends',
-                component:Friends
+                path: 'Friends',
+                component: Friends
             },
             {
-                path:'Groups',
-                component:Groups
+                path: 'Groups',
+                component: Groups
             },
             {
-                path:'Message',
-                component:Msgbox
+                path: 'Message',
+                component: Msgbox
             }
         ]
     },
-    { 
-      path: '/Login',
-      component: LoinContent,
-      children:[
-        {
-            path:'Account',
-            component:Account
-        },
-        {
-            path:'Register',
-            component:Register 
-        },
-        {
-            path:'Phone',
-            component:Phone
-        }
-      ],
-      beforeEnter:async (to:any,from:any,next:any) =>{
-        if (window.location.href.indexOf("#reloaded") == -1) {
+    {
+        path: '/Login',
+        component: LoinContent,
+        children: [
+            {
+                path: 'Account',
+                component: Account
+            },
+            {
+                path: 'Register',
+                component: Register
+            },
+            {
+                path: 'Phone',
+                component: Phone
+            }
+        ],
+        beforeEnter: async (to: any, from: any, next: any) => {
+            if (window.location.href.indexOf("#reloaded") == -1) {
 
-            window.location.href = window.location.href + "#reloaded";
-    
-            window.location.reload();
-    
-       }
+                window.location.href = window.location.href + "#reloaded";
+
+                window.location.reload();
+
+            }
 
             next()
         },
     },
     {
-        path:'/About',
-        component:About
+        path: '/About',
+        component: About
     },
     {
-        path:'/Setting',
-        component:Setting,
-        children:[
+        path: '/Setting',
+        component: Setting,
+        children: [
             {
-                path:'User',
-                component:UserSetting
+                path: 'User',
+                component: UserSetting
             },
             {
-                path:'Local',
-                component:LocalSetting
+                path: 'Local',
+                component: LocalSetting
             },
 
         ],
-        beforeEnter:async (to:any,from:any,next:any) =>{
-            const jwt =localStorage.getItem("jwt")
+        beforeEnter: async (to: any, from: any, next: any) => {
+            const jwt = localStorage.getItem("jwt")
             const config = {
-                headers:{
-                    Authorization: "Bearer "+jwt,//附带Jwt认证
-                }}
-            await axios.get('https://localhost:5001/api/font-login/verify',config)
-            .then(so=>{
-                next()
-            })
-            .catch(err=>{
-                ElMessageBox.alert('请登陆', '登陆',
-                {
-                    confirmButtonText: '确认',
+                headers: {
+                    Authorization: "Bearer " + jwt,//附带Jwt认证
+                }
+            }
+            await axios.get('https://localhost:5001/api/font-login/verify', config)
+                .then(so => {
+                    next()
                 })
-                router.push('/')
-            })
-            
+                .catch(err => {
+                    ElMessageBox.alert('请登陆', '登陆',
+                        {
+                            confirmButtonText: '确认',
+                        })
+                    router.push('/')
+                })
+
         },
     }
 
@@ -140,9 +128,9 @@ const routes = [
 // 你可以在这里输入更多的配置，但我们在这里
 // 暂时保持简单
 const router = createRouter({
-  // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-  history: createWebHashHistory(),
-  routes, // `routes: routes` 的缩写
+    // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+    history: createWebHashHistory(),
+    routes, // `routes: routes` 的缩写
 })
 
 //全球守卫 在每一次跳转都会触发
