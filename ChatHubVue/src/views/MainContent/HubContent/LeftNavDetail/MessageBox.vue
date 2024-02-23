@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { createMessageService, createUserService } from '../../../../services/ServicesCollector';
-import { UseUserInformationStore, UseMsgbox, UseMsgStore, UseChatStore, UseServiceStore } from '../../../../store/index'
+import { UseUserInformationStore, UseMsgbox, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
 createMessageService();
 createUserService();
 const service = UseServiceStore();
@@ -9,6 +9,7 @@ const Pmsg = UseMsgStore()
 const userInfo = UseUserInformationStore()
 const MsgBox = UseMsgbox()
 const chatStore = UseChatStore()
+const friendStore = UseFriendsStore()
 const DetailVisible = ref(false)
 onMounted(function () {
     //http载入msgbox

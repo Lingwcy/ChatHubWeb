@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap';
 document.body.style.overflow = "hidden"
-gsap.to(".box",{x:200})
 </script>
 <template>
     <el-scrollbar height="100vh">
@@ -28,7 +27,6 @@ gsap.to(".box",{x:200})
                     </svg>
                 </button>
             </div>
-            <div class="box"></div>
         </div>
     </el-scrollbar>
 </template>

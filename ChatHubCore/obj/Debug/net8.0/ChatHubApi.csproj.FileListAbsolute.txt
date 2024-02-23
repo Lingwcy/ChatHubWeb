@@ -222,3 +222,4 @@ C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\refint\
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.pdb
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.genruntimeconfig.cache
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ref\ChatHubApi.dll
+C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.sourcelink.json

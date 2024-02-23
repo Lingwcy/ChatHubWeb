@@ -11,6 +11,7 @@ export class UserApi{
             result => {
                 if(result.data.code == 1){
                     this.FriendStore.TargetUserProfile = JSON.parse(result.data.data)
+                    console.log(this.FriendStore.TargetUserProfile)
                     return true;
                 }else if(result.data.code == 2){
                     ElMessage({

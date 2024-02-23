@@ -1,11 +1,19 @@
 
-# ChatHubWeb(### 实时通信 Web 平台)  
+# ChatHubWeb(实时通信 Web 平台)  
 我的毕设项目,目前还在开发
   
-[<img src="https://img.shields.io/badge/License-MIT-yellow.svg">](https://github.com/Lingwcy/ChatHubWeb/blob/main/LICENSE)  
+[<img src="https://img.shields.io/badge/License-MIT-yellow.svg">](https://github.com/Lingwcy/ChatHubWeb/blob/main/LICENSE) 
 
-![image](ProjectImage/main.png)
-![image](ProjectImage/login.png)
+![image](ProjectImage/首页1.png)
+![image](ProjectImage/首页2.png)
+![image](ProjectImage/登录-PC.png)
+![image](ProjectImage/登录-PE.png)
+![image](ProjectImage/主界面1.png)
+![image](ProjectImage/主界面2.png)
+![image](ProjectImage/好友资料.png)
+
+
+
 
 
 
