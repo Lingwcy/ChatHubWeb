@@ -1,0 +1,15 @@
+2024-02-23 18:18:15.890 +08:00 [INF] User profile is available. Using 'C:\Users\LEGION\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-23 18:18:16.558 +08:00 [INF] Now listening on: https://localhost:5001
+2024-02-23 18:18:16.560 +08:00 [INF] Now listening on: http://localhost:5085
+2024-02-23 18:18:16.567 +08:00 [INF] Application started. Press Ctrl+C to shut down.
+2024-02-23 18:18:16.571 +08:00 [INF] Hosting environment: Development
+2024-02-23 18:18:16.572 +08:00 [INF] Content root path: C:\Users\LEGION\Desktop\RebuildChat\ChatHubApi
+2024-02-23 18:18:19.636 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - null null
+2024-02-23 18:18:20.027 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - 200 null text/html;charset=utf-8 397.7363ms
+2024-02-23 18:18:20.761 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - null null
+2024-02-23 18:18:20.761 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - null null
+2024-02-23 18:18:20.772 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - 200 13756 application/javascript; charset=utf-8 11.1674ms
+2024-02-23 18:18:20.823 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 62.9561ms
+2024-02-23 18:18:20.955 +08:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - null null
+2024-02-23 18:18:21.121 +08:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 166.0639ms
+2024-02-23 18:18:54.020 +08:00 [INF] Application is shutting down...
