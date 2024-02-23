@@ -1,12 +1,13 @@
 
-![image](main.png)
-![image](login.png)
-
-# ChatHubWeb  
+# ChatHubWeb(### 实时通信 Web 平台)  
 我的毕设项目,目前还在开发
-### 实时通信 Web 客户端  
   
 [<img src="https://img.shields.io/badge/License-MIT-yellow.svg">](https://github.com/Lingwcy/ChatHubWeb/blob/main/LICENSE)  
+
+![image](ProjectImage/main.png)
+![image](ProjectImage/login.png)
+
+
 
 以下内容AI生成 
 
