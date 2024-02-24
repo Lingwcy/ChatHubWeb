@@ -3,7 +3,8 @@ import MessageCT from './HubContent/MessageCT.vue'
 import LeftNav from './HubContent/LeftNav.vue'
 import { reactive, ref, onBeforeMount } from 'vue';
 import Hub from '../../views/PhonePage/Hub.vue'
-
+import { appsetting } from '../../store';
+const appset =appsetting();
 onBeforeMount(() => {
 })
 let ChangeLeftNavDetail = reactive({
@@ -22,7 +23,11 @@ const ChangeLowerLeftNavDetail = function () {
         ChangeLeftNavDetail.flag = 0
     }
 }
+const ChangeTopNavBar = function(){
+    if(appset.NavBarShow){appset.NavBarShow = false}
+    else appset.NavBarShow = true
 
+}
 document.body.style.overflow = "hidden"
 </script>
 <template>
@@ -33,6 +38,7 @@ document.body.style.overflow = "hidden"
         <div id="MainHub">
             <div id="LeftNav">
                 <div id="LeftNav-sticker">
+                    <el-button v-on:click="ChangeTopNavBar"></el-button>
                     <div id="LeftNavDetail-lower" v-on:click="ChangeLowerLeftNavDetail">
                         <svg v-if="ChangeLeftNavDetail.flag == 0" t="1667291870133" class="icon" viewBox="0 0 1024 1024"
                             version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5038" width="40" height="40">
@@ -83,7 +89,7 @@ document.body.style.overflow = "hidden"
 }
 
 #LeftNavDetail {
-    transition: all 0.5s ease-in-out;
+    transition: all 0.2s ease-in-out;
     border-right: 1px #e9e9eb solid;
 }
 

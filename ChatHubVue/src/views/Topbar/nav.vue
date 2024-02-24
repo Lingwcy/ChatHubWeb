@@ -102,7 +102,7 @@ const cancelEvent = () => {
     width: 120px;
     margin-left: 50px;
     display: flex;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 .Icon-phone {
     margin-left: 30px;

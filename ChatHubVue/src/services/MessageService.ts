@@ -2,7 +2,8 @@ import { ElMessage } from "element-plus";
 import { getMessageBox,postRedbob,deleteMessageBox } from "../common/api";
 interface RedbobParmas{
     username:string,
-    targetname:string
+    targetname:string,
+    xusername:string
 }
 export class Message {
     private MessageBoxStore:any;
@@ -10,7 +11,8 @@ export class Message {
         this.MessageBoxStore = msgBoxStore;
     }
     public async GetMessageBox(username: string): Promise<boolean> {
-        return await getMessageBox({ username }).then(result => {
+        let xusername:string= username
+        return await getMessageBox({ username,xusername }).then(result => {
             if (result.data.code == 1) {
                 this.MessageBoxStore.$reset()
                 let data = JSON.parse(result.data.data)
@@ -53,8 +55,8 @@ export class Message {
             }
         );
     }
-    public async DeleteMessageBoxItem(id:number): Promise<boolean> {
-        return await deleteMessageBox({id}).then(
+    public async DeleteMessageBoxItem(id:number,xuername:string): Promise<boolean> {
+        return await deleteMessageBox({id,xuername}).then(
             result => {
                 if(result.data.code == 1){
                     this.MessageBoxStore.MsgItems.forEach((value:any, index:any, array:any) => {

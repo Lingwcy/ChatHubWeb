@@ -96,7 +96,8 @@ export const appsetting = defineStore('appset', {
         return {
             input: "",
             ServerAddress: "https://localhost:5001",
-            ServerHubAddress: "https://localhost:5001/MyHub"
+            ServerHubAddress: "https://localhost:5001/MyHub",
+            NavBarShow:true
         }
     },
 })

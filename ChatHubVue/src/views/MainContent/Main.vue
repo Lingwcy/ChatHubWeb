@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ElLoading } from 'element-plus'
 import { onBeforeMount } from 'vue'
-import { UseServiceStore, UseUserInformationStore, UseMsgStore, UseChatStore, UseMsgbox } from '../../store';
+import { UseServiceStore, UseUserInformationStore, UseMsgStore,appsetting, UseChatStore, UseMsgbox } from '../../store';
 import { ChatHub } from '../../services/HubService';
 import { Message } from '../../services/MessageService';
 import navVue from '../Topbar/nav.vue';
+
+
+const userInfoStore = UseUserInformationStore();
+const msgStore = UseMsgStore();
+const chatStore = UseChatStore();
+const msgboxStore = UseMsgbox();
+const service = UseServiceStore();
+const appset = appsetting();
 onBeforeMount(function () {
-  const userInfoStore = UseUserInformationStore();
-  const msgStore = UseMsgStore();
-  const chatStore = UseChatStore();
-  const msgboxStore = UseMsgbox();
-  const service = UseServiceStore();
   loadingInstance.close()
   //判断出data则为老用户，在登录之前加载服务
   const data = localStorage.getItem('服务数据');
@@ -32,10 +35,12 @@ const loadingInstance = ElLoading.service(mainLoading)
 </script>
 <template>
   <div id="mainApp">
-    <div id="NavBar">
-      <nav-vue id="nav"></nav-vue>
-    </div>
-    <router-view></router-view>
+    <el-container direction="vertical">
+      <el-collapse-transition>
+        <nav-vue v-show="appset.NavBarShow" id="nav"></nav-vue>
+      </el-collapse-transition>
+      <router-view></router-view>
+    </el-container>
   </div>
 </template>
 <style scoped>
@@ -45,14 +50,17 @@ const loadingInstance = ElLoading.service(mainLoading)
   display: flex;
   flex-direction: column;
 }
-#NavBar{
+
+#NavBar {
   width: 100%;
   background-color: black;
   display: flex;
+  height: 70px;
   justify-content: center;
 }
-#nav{
-  width: 96%;
+
+#nav {
+  width: 100%;
   height: 70px;
 }
 </style>

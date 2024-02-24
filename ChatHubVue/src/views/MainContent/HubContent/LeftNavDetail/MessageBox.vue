@@ -25,7 +25,8 @@ const TurnFriendsToMessageBox = (friends: any) => {
     if (friends.isNew == 1) {
         let servicePayLoad = {
             username: userInfo.userName,
-            targetname: friends.targetfont
+            targetname: friends.targetfont,
+            xusername: userInfo.userName
         }
         service.Message?.PostRedbob(servicePayLoad)
         friends.isNew = 0
@@ -77,7 +78,7 @@ const handleCommand = (command: any) => {
         DetailVisible.value = true
     }
     else if (commands[0] == "delete") {
-        service.Message?.DeleteMessageBoxItem(commands[1]);
+        service.Message?.DeleteMessageBoxItem(commands[1],userInfo.userName);
     }
 }
 </script>

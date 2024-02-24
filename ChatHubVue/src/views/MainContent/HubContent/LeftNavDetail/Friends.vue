@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {createFriendsService } from '../../../../services/ServicesCollector';
 import { UseUserInformationStore,UseServiceStore, UseFriendsStore, UseMsgStore, UseChatStore } from '../../../../store/index'
+import { UserRequest } from '../../../../services/FriendsService';
 const userInfo = UseUserInformationStore()
 const service = UseServiceStore();
 const fristore = UseFriendsStore()
@@ -30,6 +31,7 @@ const AddFriends = () => {
       let payload = {
         targetName: value,
         userName: userInfo.userName,
+        xusername: userInfo.userName
       }
       let flag = service.Friend?.FindFriend(payload)
       if(flag == undefined){ return;}
@@ -84,14 +86,16 @@ const sendFridendsRequst = async (TagetName: any, FromName: any) => {
       targetName: TagetName,
       userName: FromName,
       ReqMsg: reqmsg.msg,
-      mark: reqmsg.mark
+      mark: reqmsg.mark,
+      xusername: FromName
     }
+    console.log(payload)
     service.Friend?.SendFriendRequest(payload);
   })
 }
 
 const getFriendsList = async () => {
-  service.Friend?.GetUserFriends(userInfo.userId, fristore);
+  service.Friend?.GetUserFriends(userInfo.userId,userInfo.userName, fristore);
 }
 
 const TurnFriendsToMessageBox = (friends: any) => {
@@ -128,7 +132,8 @@ const TurnFriendsToMessageBox = (friends: any) => {
     targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
   })
 }
-const acceptFriendsReq = (TargetModel: any) => {
+const acceptFriendsReq = (TargetModel: UserRequest) => {
+  TargetModel.xusername = TargetModel.TargetName
   let flag = service.Friend?.AcceptFriendRequest(TargetModel)
   if(flag == undefined) return ;
   flag.then(res => {
@@ -142,7 +147,8 @@ const acceptFriendsReq = (TargetModel: any) => {
     }
   })
 }
-const rejectFriendsReq = (TargetModel: any) => {
+const rejectFriendsReq = (TargetModel: UserRequest) => {
+  TargetModel.xusername = TargetModel.TargetName
   let flag = service.Friend?.RejectFriendRequest(TargetModel)
   if(flag == undefined) return ;
   flag.then(res => {

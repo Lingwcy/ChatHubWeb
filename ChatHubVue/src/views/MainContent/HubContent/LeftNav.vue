@@ -50,7 +50,6 @@ const confirm =()=>{
 </script>
 <template>
     <div id="LeftNav-Container">
-
         <div class="LeftNav-Container-items">
             <div id="UserMsg">
                 <el-popconfirm 

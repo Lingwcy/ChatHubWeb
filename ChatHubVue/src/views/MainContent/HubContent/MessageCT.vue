@@ -153,7 +153,7 @@ const removeTab = (targetName: any) => {
     min-width: 627px;
     overflow-x: hidden;
     overflow-y: hidden;
-    height: 95vh;
+    height: 100vh;
 }
 
 .msgTabs {

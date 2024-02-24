@@ -11,6 +11,7 @@ export interface UserRequest {
     TargetImg: string;
     remark: string;
     ReqMsg: string;
+    xusername:string
 }
 export interface Friend {
     Id: number,
@@ -25,14 +26,17 @@ interface SendRequestParams {
     ReqMsg: string,
     userName: string,
     targetName: string,
+    xusername:string
 }
 interface FindFriendParams {
     targetName: string,
     userName: string,
+    xusername:string
 }
 export class Friends {
     public async GetUserFriendsRquest(userName: string, friendsStore: IUseFriendsStore): Promise<boolean> {
-        return await getFriendRequest({ userName }).then(result => {
+        let xusername:string = userName
+        return await getFriendRequest({ userName,xusername }).then(result => {
             if (result.data.code == 1) {
                 friendsStore.RequestList = [];
                 let data: UserRequest[] = JSON.parse(result.data.data);
@@ -54,8 +58,9 @@ export class Friends {
         })
     }
 
-    public async GetUserFriends(userId: string, friendsStore: IUseFriendsStore): Promise<boolean> {
-        return await getFriends({ userId }).then(result => {
+    public async GetUserFriends(userId: string,username:string, friendsStore: IUseFriendsStore): Promise<boolean> {
+        let xusername:string = username
+        return await getFriends({ userId,xusername }).then(result => {
             if (result.data.code == 1) {
                 friendsStore.$reset()
                 let data: Friend[] = JSON.parse(result.data.data);
@@ -133,7 +138,7 @@ export class Friends {
         })
     }
 
-    public async AcceptFriendRequest(params: any): Promise<boolean> {
+    public async AcceptFriendRequest(params: UserRequest): Promise<boolean> {
         return await acceptRequest(params).then(result => {
             if (result.data.code == 1) {
                 ElMessage({
@@ -156,7 +161,7 @@ export class Friends {
         })
     }
 
-    public async RejectFriendRequest(params: any): Promise<boolean> {
+    public async RejectFriendRequest(params: UserRequest): Promise<boolean> {
         return await rejectRequest(params).then(result => {
             if (result.data.code == 1) {
                 ElMessage({

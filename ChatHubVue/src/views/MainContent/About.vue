@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import gsap from 'gsap';
+
 document.body.style.overflow = "hidden"
 </script>
 <template>
@@ -27,6 +27,7 @@ document.body.style.overflow = "hidden"
                     </svg>
                 </button>
             </div>
+            
         </div>
     </el-scrollbar>
 </template>

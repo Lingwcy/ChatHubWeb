@@ -166,7 +166,8 @@ export class ChatHub {
     //从后端获取离线消息并存储到Pinia
     /*只获取不渲染*/
     public async GetUserOfflineMessage(username: string): Promise<boolean> {
-        return await getOfflineMessage({ username }).then(res => {
+        let xusername:string = username;
+        return await getOfflineMessage({ username,xusername }).then(res => {
             if (res.data.code == 1) {
                 let result = res.data.data
                 //userInfo.unReadMsg = res.data.data.length > 0 ? false : true

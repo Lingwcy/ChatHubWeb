@@ -85,6 +85,13 @@ http.interceptors.response.use(
                 duration: 3 * 1000
             })
         }
+        if (res.status == 403) {
+            ElMessage({
+                message: '权限不足',
+                type: 'error',
+                duration: 3 * 1000
+            })
+        }
         if (res.status == 401) {
             ElMessage({
                 message: '用户未登录',
