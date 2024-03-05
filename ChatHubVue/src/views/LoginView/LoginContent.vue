@@ -45,7 +45,6 @@ document.body.style.overflow = "hidden"
     font-size: 25px;
     margin-bottom: 10px;
     font-weight: 600;
-    color: whitesmoke;
 }
 #title-phone2{
     font-size: 16px;
@@ -97,7 +96,6 @@ document.body.style.overflow = "hidden"
     font-size: 25px;
     margin-bottom: 10px;
     font-weight: 600;
-    color: whitesmoke;
 }
 
 .leftScan-font2 {
@@ -223,12 +221,10 @@ document.body.style.overflow = "hidden"
     margin: 10px;
     font-size: 27px;
     font-weight: bolder;
-    color: white;
 }
 
 #rightLogin-header-title2 {
     font-size: 16px;
-    color: rgb(206, 206, 206)
 }
 
 #rightLogin-content-main {

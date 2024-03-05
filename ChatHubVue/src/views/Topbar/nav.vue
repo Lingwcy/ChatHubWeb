@@ -4,7 +4,8 @@ import RTnavMenu from './RTnavMenu.vue'
 import { useRouter } from 'vue-router'
 import logo from '../Compoents/logo.vue'
 import '../../../node_modules/element-plus/theme-chalk/display.css'
-
+import { UseTheme } from '../../store'
+let themeStore = UseTheme();
 const bgValue = ref(true)
 let changeBg= function(){
     let a = document.getElementById("themeSwitch") as any
@@ -66,7 +67,6 @@ const cancelEvent = () => {
             <div class="Icon">
                 <logo logo-type="NavWindow"></logo>
             </div>
-            <div id="Space"></div>
             <div id="rtNav">
                 <RTnavMenu></RTnavMenu>
             </div>
@@ -74,6 +74,9 @@ const cancelEvent = () => {
     </div>
 </template>
 <style>
+#container{
+    width: 100%;
+}
 .phoneNavItems{
     margin-left: 10px;
 }
@@ -92,17 +95,15 @@ const cancelEvent = () => {
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: space-between;
 }
 
-#container {
-}
 
 .Icon {
     height: 50px;
     width: 120px;
-    margin-left: 50px;
+    margin-left: 15px;
     display: flex;
-    margin-top: 10px;
 }
 .Icon-phone {
     margin-left: 30px;
@@ -112,14 +113,9 @@ const cancelEvent = () => {
 }
 
 
-#Space {
-    width: 65%;
-    height: 100%;
-}
 
 #rtNav {
     height: 100%;
-    min-width: 400px;
 }
 
 #rtNavMenu {

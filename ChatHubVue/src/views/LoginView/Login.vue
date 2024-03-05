@@ -8,14 +8,15 @@ import { UseUserInformationStore, UseServiceStore, appsetting } from '../../stor
 import { loginForm } from '../../models/data/Form'
 import { createAuthService, createChatHubService } from "../../services/ServicesCollector";
 const loginFormRef = ref<FormInstance>();
-onMounted(function () {
-  createAuthService();
-})
 const router = useRouter()
 //创建用户状态库变量
 const service = UseServiceStore();
 const userInfo = UseUserInformationStore()
 const appset = appsetting();
+onMounted(function () {
+  createAuthService();
+})
+
 localStorage.setItem('ServerHubAdress', appset.ServerHubAddress);
 //提交表单
 const submitForm = (formType: FormInstance | undefined) => {
@@ -78,7 +79,6 @@ const login = async function () {
     }
   })
   loadingInstance.close()
-
 }
 
 

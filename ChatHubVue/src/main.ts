@@ -17,9 +17,9 @@ const Password = ""
 
 
 const Mains = createApp(Main)
+Mains.use(store)
 Mains.use(ElementUI)
 Mains.use(router)
-Mains.use(store)
 Mains.provide('global', {
 	Token,
 	Username,
@@ -27,8 +27,6 @@ Mains.provide('global', {
 	FrinedsList: [],
 })
 Mains.mount('#MainContent')
-
-
 
 
 

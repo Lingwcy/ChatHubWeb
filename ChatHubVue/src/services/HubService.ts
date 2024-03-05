@@ -60,7 +60,7 @@ export class ChatHub {
     }
     private ChatMethodInitial() {
         //公共消息接收器
-        this.HubConnection.on('publicMsgReceived', (HeaderImg: string, fromUserName: string, msg: string) => {
+        this.HubConnection.on('PublicMsgReceived', (HeaderImg: string, fromUserName: string, msg: string) => {
             this.PmsgStore.messageItems[0].messages.push(msg)
             this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
             this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)

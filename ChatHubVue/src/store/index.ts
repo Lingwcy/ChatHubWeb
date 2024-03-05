@@ -97,7 +97,7 @@ export const appsetting = defineStore('appset', {
             input: "",
             ServerAddress: "https://localhost:5001",
             ServerHubAddress: "https://localhost:5001/MyHub",
-            NavBarShow:true
+            NavBarShow:true,
         }
     },
 })
@@ -112,7 +112,21 @@ export const UseMsgbox = defineStore('MsgBox', {
         }
     },
 })
+//主题仓库
+export const UseTheme = defineStore('Theme', {
+    state: () => {
+        return {
+            Icon:{
+                Maxmize:"/src/images/icon/dark/放大.svg",
+                SwitchTheme:{
+                    isDark:false,
+                    url:"sss"
+                }
+            }
 
+        }
+    },
+})
 export const UseChatStore = defineStore('Chat', {
     state: (): IChatStore => {
         return {

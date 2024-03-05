@@ -1,8 +1,21 @@
 .Logincontainer-Phone{
     background-color: #303133;
 }
+#rightLogin-header-title1{
+    color: var(--gray-dark);
+}
+#title-phone1{
+    color: var(--gray-dark);
+}
+#title-phone2{
+    color: var(--gray-dark);
+}
 #nav{
-    background-color: black;
+    background-color: var(--gray-lighter);
+    transition: all 0.3s ease-in-out;
+}
+#LeftNav{
+    background-color: var(--gray-lighter);
     transition: all 0.3s ease-in-out;
 }
 .error-button{
@@ -33,7 +46,7 @@
 
 }
 #LoginContentContainer{
-    background-color: #313139;
+    background-color: var(--stone-white);
     opacity: 0.95;
     border-radius: 10px;
 }

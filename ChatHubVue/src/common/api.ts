@@ -5,7 +5,7 @@ import {post,get,delete_,put} from "./axios";
 export const postLogin = (params: any) =>post('/Auth/login',params);
 export const postRegister = (params: any) =>post('/Auth/register',params);
 export const getVerify = () =>get('/Auth/verify')
-
+export const postAESKey = (data:any,config: any) =>post('/Auth/AES',data,config);
 
 //Friends
 export const getFriendRequest = (params: {userName:string,xusername:string}) => get('/Friends/Request',{params});

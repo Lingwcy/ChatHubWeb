@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { UseChatStore} from '../../../store/index'
+import { UseChatStore } from '../../../store/index'
 import { ElScrollbar } from 'element-plus'
 //import {ChatHubService} from '../../../services/ServicesCollector'
-import { appsetting,UseServiceStore } from '../../../store/index'
+import { appsetting, UseServiceStore } from '../../../store/index'
 import Emoji from '../HubContent/Tools/Emoji.vue'
 import PicUpLoad from '../HubContent/Tools/PicUpload.vue'
 const appset = appsetting() //系统设置库
@@ -58,6 +58,7 @@ const removeTab = (targetName: any) => {
 }
 
 </script>
+
 <template>
     <div id="MCT-Container">
         <el-tabs v-model="editableTabsValue" type="card" class="msgTabs" closable @tab-remove="removeTab"
@@ -66,11 +67,12 @@ const removeTab = (targetName: any) => {
                 :name="item.tabName">
                 <div id="MCT-Container-RESVContent">
                     <el-scrollbar ref="myScrollbar">
-                        <div id="messageRES" v-for="(_msg, index) in item.targetUserMessage.messageHeaders" :key="index">
+                        <div id="messageRES" v-for="(_msg, index) in item.targetUserMessage.messageHeaders"
+                            :key="index">
                             <div id="messageRES-Header">
                                 <span style="margin-left: 3px;">{{ item.targetUserMessage.messageNames[index] }}</span>
                                 <img v-bind:src="'src/images/systemHeader/' + item.targetUserMessage.messageHeaders[index]"
-                                    id="UserMsg-img" />
+                                    id="UserMsgHeader" />
                             </div>
                             <div id="messageRES-Content">
                                 <div id="messageRES-Content-center">
@@ -105,6 +107,7 @@ const removeTab = (targetName: any) => {
                             <div class="tools-item">
                                 <el-popover placement="top" :width="500" trigger="click">
                                     <pic-up-load></pic-up-load>
+
                                     <template #reference>
                                         <el-button
                                             style="height: 35px; width: 35px; margin-bottom: 10px; background-color: whitesmoke; ">
@@ -140,6 +143,7 @@ const removeTab = (targetName: any) => {
 
     </div>
 </template>
+
 <style>
 .tools-item {
     width: 10%;
@@ -154,6 +158,12 @@ const removeTab = (targetName: any) => {
     overflow-x: hidden;
     overflow-y: hidden;
     height: 100vh;
+}
+
+#UserMsgHeader {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
 }
 
 .msgTabs {

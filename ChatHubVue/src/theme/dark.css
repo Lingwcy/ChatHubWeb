@@ -1,11 +1,26 @@
-
+#title-phone1{
+    color: whitesmoke;
+}
+#rightLogin-header-title1{
+    color: var(--stone-white);
+}
+#rightLogin-header-title2 {
+    font-size: 16px;
+    color: rgb(206, 206, 206)
+}
+.leftScan-font1{
+    color: rgb(206, 206, 206)
+}
 .Logincontainer-Phone{
     background-color: #303133;
 }
 #nav{
-    background-color: #303133;
+    background-color: #212122;
     transition: all 0.3s ease-in-out;
-    border-bottom: 1px solid #c45656 ;
+}
+#LeftNav{
+    background-color: #19191d;
+    transition: all 0.3s ease-in-out;
 }
 .error-button{
     background-color: #303133;
