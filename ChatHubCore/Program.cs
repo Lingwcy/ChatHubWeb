@@ -1,5 +1,6 @@
 using ChatHubApi;
 using ChatHubApi.Authorization;
+using ChatHubApi.Hub;
 using ChatHubApi.Middleware;
 using ChatHubApi.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -142,5 +143,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseCrypto();
 app.MapControllers();
-app.MapHub<construct.Web.Entry.MyHub>("/MyHub");
+app.MapHub<MyHub>("/MyHub");
 app.Run();

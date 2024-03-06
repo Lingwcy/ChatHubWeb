@@ -33,7 +33,7 @@ http.interceptors.request.use(
         } else {
             config.headers!!['token'] = token || ''
         }
-        config.data = crypto.encryptByAES(JSON.stringify(config.data))
+        config.data = crypto.encrypt(JSON.stringify(config.data))
         console.log(config.data)
         return config;
     },

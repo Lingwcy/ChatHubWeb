@@ -53,5 +53,12 @@ namespace ChatHubApi.System.Entity.Font
         [Required, MaxLength(50)]
         [SugarColumn(ColumnDescription = "连接id")]
         public string conId { get; set; }
+
+        /// <summary>
+        /// Hub KEY
+        /// </summary>
+        [Required, MaxLength(255)]
+        [SugarColumn(ColumnDescription = "中心key")]
+        public string key { get; set; }
     }
 }

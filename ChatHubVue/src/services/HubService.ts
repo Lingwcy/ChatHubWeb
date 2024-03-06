@@ -1,4 +1,5 @@
 import * as SignalR from '@microsoft/signalr';
+import { crypto } from '../Crypto/crypto';
 import { ElMessage, ElNotification } from 'element-plus'
 import { getMessageBox, getOfflineMessage } from '../common/api';
 export class ChatHub {
@@ -48,7 +49,7 @@ export class ChatHub {
             this.IsLogin = true;
             this.ChatMethodInitial();
             this.GetUserOfflineMessage(this.UserInfoStore.userName);
-            console.log(this.UserJwt);
+            await this.HubConnection.invoke("SendHubKey", this.UserInfoStore.userName, crypto.gkey);
         } catch (err) {
             ElNotification({
                 title: '系统错误',
@@ -89,7 +90,8 @@ export class ChatHub {
         });
         //私人消息接收器
         /*这里需要做到的：将消息渲染到聊天区域 */
-        this.HubConnection.on('PrivateMsgReceived', (HeaderImg: string, fromUserName: string, msg: string) => {
+        this.HubConnection.on('PrivateMsgReceived', (HeaderImg: string, fromUserName: string, Encryptomsg: string) => {
+            let msg = crypto.decrypt(Encryptomsg);
             ElNotification({
                 title: '新的消息',
                 message: `${fromUserName} : ${msg}`,
@@ -150,7 +152,8 @@ export class ChatHub {
         if (this.ChatStore.targetUserTab[selectedIndex].tabName == "world") {
             await this.HubConnection.invoke("SendPublicMsg", this.UserInfoStore.userName, msg);
         } else {
-            await this.HubConnection.invoke("SendPrivateMsg", this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName, msg);
+            let pmsg = crypto.encrypt(msg)
+            await this.HubConnection.invoke("SendPrivateMsg",this.UserInfoStore.userName ,this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName, pmsg);
             for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                 if (this.PmsgStore.messageItems[i].targetUserName == this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName) {
                     this.PmsgStore.messageItems[i].messages.push(msg)
@@ -166,20 +169,20 @@ export class ChatHub {
     //从后端获取离线消息并存储到Pinia
     /*只获取不渲染*/
     public async GetUserOfflineMessage(username: string): Promise<boolean> {
-        let xusername:string = username;
-        return await getOfflineMessage({ username,xusername }).then(res => {
+        let xusername: string = username;
+        return await getOfflineMessage({ username, xusername }).then(res => {
             if (res.data.code == 1) {
-                let result = res.data.data
+                let result = JSON.parse(res.data.data);
                 //userInfo.unReadMsg = res.data.data.length > 0 ? false : true
                 for (let x = 0; x < result.length; x++) {
                     let existMsgStore = false
                     //如果本地有存储库 直接放
                     for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
-                        if (this.PmsgStore.messageItems[i].targetUserName == result[x].sender) {
+                        if (this.PmsgStore.messageItems[i].targetUserName == result[x].Sender) {
                             existMsgStore = true
-                            this.PmsgStore.messageItems[i].messages.push(result[x].sendMessage)
-                            this.PmsgStore.messageItems[i].messageNames.push(result[x].sender)
-                            this.PmsgStore.messageItems[i].messageHeaders.push(result[x].senderImg)
+                            this.PmsgStore.messageItems[i].messages.push(result[x].SendMessage)
+                            this.PmsgStore.messageItems[i].messageNames.push(result[x].Sender)
+                            this.PmsgStore.messageItems[i].messageHeaders.push(result[x].SenderImg)
                         }
                     }
                     if (!existMsgStore) {//如果没有这个库则创建

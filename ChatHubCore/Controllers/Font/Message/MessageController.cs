@@ -52,7 +52,7 @@ namespace construct.Application.System.FontServices.Message
                 }
             }
 
-            _db.Deleteable<sysMessageRecord>().Where(a => a.Receiver == username).ExecuteCommand();
+             _db.Deleteable<sysMessageRecord>().Where(a => a.Receiver == username).ExecuteCommand();
             return Ok(new Response(1,res,"操作成功!"));
         }
 

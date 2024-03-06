@@ -4,11 +4,12 @@ using SqlSugar;
 using System.Text;
 using ChatHubApi.System.Entity.Font;
 using Microsoft.Extensions.Logging;
-using ChatHubApi;
+using ChatHubApi.Untils;
+using Microsoft.IdentityModel.Tokens;
 
-namespace construct.Web.Entry
+namespace ChatHubApi.Hub
 {
-    public class MyHub: Hub<IHub>
+    public class MyHub : Hub<IHub>
     {
         private readonly ISqlSugarClient _db;
         private readonly ILogger<MyHub> _logger;
@@ -29,13 +30,13 @@ namespace construct.Web.Entry
             var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
             var conId = Context.ConnectionId;
             await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name).ExecuteCommandAsync();
-            await _db.Insertable<sysOnlineUser>(new sysOnlineUser
+            await _db.Insertable(new sysOnlineUser
             {
-                conId= conId,
-                name=name,
-                userid=id,
-                createtime= DateTime.Now,
-           }).ExecuteCommandAsync();
+                conId = conId,
+                name = name,
+                userid = id,
+                createtime = DateTime.Now,
+            }).ExecuteCommandAsync();
             _logger.LogInformation($"[+] 用户：{name} => ID {id}");
         }
 
@@ -44,7 +45,7 @@ namespace construct.Web.Entry
             var name = Context.User?.Claims.First(a => a.Type == "UserName").Value;
             var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
             var conId = Context.ConnectionId;
-            await _db.Deleteable<sysOnlineUser>().Where(e => e.name==name && e.conId==conId).ExecuteCommandAsync();
+            await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name && e.conId == conId).ExecuteCommandAsync();
             if (e != null)
             {
                 _logger.LogWarning($"[-] 用户：{name} => ID {id} 异常断开 {e.Message}");
@@ -54,17 +55,29 @@ namespace construct.Web.Entry
                 _logger.LogInformation($"[-] 用户：{name} => ID {id}");
             }
         }
-
-
-        public async Task SendPublicMsg(string FromName,string msg)
+        public void SendHubKey(string FromName, string Key)
         {
-            sysFontUser user =await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == FromName);      
-            string ConnId= this.Context.ConnectionId;
-            await Clients.All.PublicMsgReceived(user.HeaderImg, user.Username, msg);
-           //await this.Clients.All.SendAsync("publicMsgReceived",user.HeaderImg, user.Username, msg);
+            var user = _db.Queryable<sysOnlineUser>().First(x => x.name == FromName);
+            if (user == null) { Context.Abort(); return; }
+            user.key = Key;
+            _db.Updateable<sysOnlineUser>(user).Where(x=>x.conId == Context.ConnectionId).ExecuteCommand();
         }
-        public async Task SendPrivateMsg(string toUserName,string message)
+
+        public async Task SendPublicMsg(string FromName, string msg)
         {
+            sysFontUser user = await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == FromName);
+            string ConnId = Context.ConnectionId;
+            await Clients.All.PublicMsgReceived(user.HeaderImg, user.Username, msg);
+        }
+        public async Task SendPrivateMsg(string FromName ,string toUserName, string message)
+        {
+            //拿到发送者的key
+            string key = _db.Queryable<sysOnlineUser>().First(x => x.name == FromName).key;
+            //用发送者的key进行解密
+            var resmsg = Crypto.DecryptByAES(message, key, key);
+            _logger.LogError($"{FromName} => {toUserName} : {resmsg}");
+
+           
             //获取发送的客户端
             sysOnlineUser CurrentUser = await _db.Queryable<sysOnlineUser>().FirstAsync(a => a.conId == Context.ConnectionId);
             string HeadImg = (await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == CurrentUser.name)).HeaderImg;
@@ -84,15 +97,18 @@ namespace construct.Web.Entry
                     }
 
                 }
-                if(message==string.Empty) { return ; }
-                sysMessageRecord mr = new() { CreateTime = DateTime.Now, Sender = CurrentUser.name, Receiver = toUserName ,SendMessage=message,SenderImg=HeadImg};
-                _db.Insertable<sysMessageRecord>(mr).ExecuteCommand();
+                if (message == string.Empty) { return; }
+                sysMessageRecord mr = new() { CreateTime = DateTime.Now, Sender = CurrentUser.name, Receiver = toUserName, SendMessage = message, SenderImg = HeadImg };
+                _db.Insertable(mr).ExecuteCommand();
                 return;
             }
 
+
+            //用接收者的key进行加密
+            var EncryptMsg = Crypto.EncryptByAES(resmsg, TargetUser.key, TargetUser.key);
+
             //如果在线就直接发送信息 CurrentUser.name 为发送者
-            await Clients.Client(TargetUser.conId).PrivateMsgReceived(HeadImg, CurrentUser.name, message);
-            //await Clients.Client(TargetUser.conId).SendAsync("PrivateMsgReceived", HeadImg,CurrentUser.name, message);
+            await Clients.Client(TargetUser.conId).PrivateMsgReceived(HeadImg, CurrentUser.name, EncryptMsg);
         }
 
         public async Task SendFriendsRequest(string toUserName)
@@ -100,14 +116,13 @@ namespace construct.Web.Entry
             //获取发送的客户端
             sysOnlineUser CurrentUser = await _db.Queryable<sysOnlineUser>().FirstAsync(a => a.conId == Context.ConnectionId);
             var TargetUser = await _db.Queryable<sysOnlineUser>().FirstAsync(a => a.name == toUserName);
-            if(TargetUser==null)
+            if (TargetUser == null)
             {
                 return;
             }
 
             //如果在线就直接发送信息
             await Clients.Client(TargetUser.conId).FriendsRequestReceived(CurrentUser.name);
-            //await Clients.Client(TargetUser.conId).SendAsync("FriendsRequestReceived", CurrentUser.name);
         }
 
 
@@ -115,29 +130,29 @@ namespace construct.Web.Entry
         {
             //获取发送的客户端
             sysOnlineUser CurrentUser = await _db.Queryable<sysOnlineUser>().FirstAsync(a => a.conId == Context.ConnectionId);
-            string currentImg =( await _db.Queryable<sysFontUser>().FirstAsync(a=>a.Username== CurrentUser.name)).HeaderImg;
-          
+            string currentImg = (await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == CurrentUser.name)).HeaderImg;
+
             var TargetUser = await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == toUserName);
             if (TargetUser == null)
             {
                 return;
             }
-            var exist =await _db.Queryable<sysMsgBox>().FirstAsync(a => a.username == TargetUser.Username && a.targetfont == CurrentUser.name);
+            var exist = await _db.Queryable<sysMsgBox>().FirstAsync(a => a.username == TargetUser.Username && a.targetfont == CurrentUser.name);
             if (exist == null)
             {
                 sysMsgBox res = new sysMsgBox()
                 {
-                    username= TargetUser.Username,
-                    targetfont= CurrentUser.name,
-                    targetImage= currentImg,
-                    isNew=1,
+                    username = TargetUser.Username,
+                    targetfont = CurrentUser.name,
+                    targetImage = currentImg,
+                    isNew = 1,
                 };
                 _db.Insertable(res).ExecuteCommand();
             }
             else
             {
                 var result = _db.Updateable<sysMsgBox>()
-                .SetColumns(it => new sysMsgBox {isNew=1})//类只能在表达示里面不能提取
+                .SetColumns(it => new sysMsgBox { isNew = 1 })//类只能在表达示里面不能提取
                 .Where(a => a.username == TargetUser.Username && a.targetfont == CurrentUser.name)
                 .ExecuteCommand();
             }

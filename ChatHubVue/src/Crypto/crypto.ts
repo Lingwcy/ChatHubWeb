@@ -27,7 +27,7 @@ export interface CrypotoType {
         this.gkey = result;
     }
 
-    encryptByAES(input: string): string {  
+    encrypt(input: string): string {  
         if (input == null || input.trim() === '') {  
             return input;  
         }   
@@ -44,21 +44,15 @@ export interface CrypotoType {
     }
 
 
-    /* 加密 */
-    encrypt(word: any): string {
-        const srcs = CryptoJS.enc.Utf8.parse(word)
-        const encrypted = CryptoJS.AES.encrypt(srcs, this.key, { iv: this.iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 })
-        return encrypted.ciphertext.toString()
-    }
 
-    /* 解密 */
-    decrypt(word: any): string {
-        const encryptedHexStr = CryptoJS.enc.Hex.parse(word)
-        const srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr)
-        const decrypt = CryptoJS.AES.decrypt(srcs, this.key, { iv: this.iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 })
-        const decryptedStr = decrypt.toString(CryptoJS.enc.Utf8)
-        return decryptedStr.toString()
-    }
+    decrypt(ciphertext: string): string {  
+        const bytes = CryptoJS.AES.decrypt(ciphertext, CryptoJS.enc.Utf8.parse(this.gkey), {  
+            iv: CryptoJS.enc.Utf8.parse(this.gkey),  
+            mode: CryptoJS.mode.CBC,  
+            padding: CryptoJS.pad.Pkcs7  
+        });  
+        return bytes.toString(CryptoJS.enc.Utf8);  
+    }  
 }
 
 export let crypto = new Crypoto(); 
