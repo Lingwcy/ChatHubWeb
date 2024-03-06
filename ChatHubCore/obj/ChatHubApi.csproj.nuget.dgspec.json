@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\ChatHubApi.csproj": {}
+    "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\ChatHubApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\ChatHubApi.csproj": {
+    "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\ChatHubApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\ChatHubApi.csproj",
+        "projectUniqueName": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\ChatHubApi.csproj",
         "projectName": "ChatHubApi",
-        "projectPath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\ChatHubApi.csproj",
+        "projectPath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\ChatHubApi.csproj",
         "packagesPath": "C:\\Users\\LEGION\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\obj\\",
+        "outputPath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\LEGION\\AppData\\Roaming\\NuGet\\NuGet.Config",

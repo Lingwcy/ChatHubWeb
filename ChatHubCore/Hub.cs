@@ -3,18 +3,20 @@ using Microsoft.AspNetCore.SignalR;
 using SqlSugar;
 using System.Text;
 using ChatHubApi.System.Entity.Font;
+using Microsoft.Extensions.Logging;
+using ChatHubApi;
 
 namespace construct.Web.Entry
 {
-    public class MyHub: Hub
+    public class MyHub: Hub<IHub>
     {
         private readonly ISqlSugarClient _db;
-        private readonly JwtSecurityTokenHandler _jwtHandler;
+        private readonly ILogger<MyHub> _logger;
 
-        public MyHub(ISqlSugarClient db,JwtSecurityTokenHandler jwthandler)
+        public MyHub(ISqlSugarClient db, ILogger<MyHub> logger)
         {
             _db = db;
-            _jwtHandler = jwthandler;
+            _logger = logger;
         }
 
         /// <summary>
@@ -23,12 +25,8 @@ namespace construct.Web.Entry
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
-
-            var token = Context.GetHttpContext()?.Request.Query["access_token"];
-            var claims = _jwtHandler.ReadJwtToken(token).Claims.ToList();
-            //var claims = JWTEncryption.ReadJwtToken(token)?.Claims;
-            var name = claims.FirstOrDefault(e => e.Type == "UserName")?.Value;
-            var id = claims.FirstOrDefault(e => e.Type == "UserId")?.Value;
+            var name = Context.User?.Claims.First(a => a.Type == "UserName").Value;
+            var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
             var conId = Context.ConnectionId;
             await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name).ExecuteCommandAsync();
             await _db.Insertable<sysOnlineUser>(new sysOnlineUser
@@ -38,18 +36,23 @@ namespace construct.Web.Entry
                 userid=id,
                 createtime= DateTime.Now,
            }).ExecuteCommandAsync();
-            Console.WriteLine($"{name} 加入了");
+            _logger.LogInformation($"[+] 用户：{name} => ID {id}");
         }
 
         public override async Task OnDisconnectedAsync(Exception e)
         {
-            var token = Context.GetHttpContext()?.Request.Query["access_token"];
-            var claims = _jwtHandler.ReadJwtToken(token).Claims.ToList();
-            var name = claims.FirstOrDefault(e => e.Type == "UserName")?.Value;
-            var id = claims.FirstOrDefault(e => e.Type == "UserId")?.Value;
+            var name = Context.User?.Claims.First(a => a.Type == "UserName").Value;
+            var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
             var conId = Context.ConnectionId;
-            Console.WriteLine($"{ name} 离开了");
             await _db.Deleteable<sysOnlineUser>().Where(e => e.name==name && e.conId==conId).ExecuteCommandAsync();
+            if (e != null)
+            {
+                _logger.LogWarning($"[-] 用户：{name} => ID {id} 异常断开 {e.Message}");
+            }
+            else
+            {
+                _logger.LogInformation($"[-] 用户：{name} => ID {id}");
+            }
         }
 
 
@@ -57,7 +60,8 @@ namespace construct.Web.Entry
         {
             sysFontUser user =await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == FromName);      
             string ConnId= this.Context.ConnectionId;
-           await this.Clients.All.SendAsync("publicMsgReceived",user.HeaderImg, user.Username, msg);
+            await Clients.All.PublicMsgReceived(user.HeaderImg, user.Username, msg);
+           //await this.Clients.All.SendAsync("publicMsgReceived",user.HeaderImg, user.Username, msg);
         }
         public async Task SendPrivateMsg(string toUserName,string message)
         {
@@ -86,8 +90,9 @@ namespace construct.Web.Entry
                 return;
             }
 
-            //如果在线就直接发送信息
-            await Clients.Client(TargetUser.conId).SendAsync("PrivateMsgReceived", HeadImg,CurrentUser.name, message);
+            //如果在线就直接发送信息 CurrentUser.name 为发送者
+            await Clients.Client(TargetUser.conId).PrivateMsgReceived(HeadImg, CurrentUser.name, message);
+            //await Clients.Client(TargetUser.conId).SendAsync("PrivateMsgReceived", HeadImg,CurrentUser.name, message);
         }
 
         public async Task SendFriendsRequest(string toUserName)
@@ -101,7 +106,8 @@ namespace construct.Web.Entry
             }
 
             //如果在线就直接发送信息
-            await Clients.Client(TargetUser.conId).SendAsync("FriendsRequestReceived", CurrentUser.name);
+            await Clients.Client(TargetUser.conId).FriendsRequestReceived(CurrentUser.name);
+            //await Clients.Client(TargetUser.conId).SendAsync("FriendsRequestReceived", CurrentUser.name);
         }
 
 
@@ -141,7 +147,8 @@ namespace construct.Web.Entry
             {
                 return;
             }
-            await Clients.Client(online.conId).SendAsync("MsgBoxFlasherReceived", CurrentUser.name);
+            await Clients.Client(online.conId).MsgBoxFlasherReceived(CurrentUser.name);
+            //await Clients.Client(online.conId).SendAsync("MsgBoxFlasherReceived", CurrentUser.name);
         }
 
 

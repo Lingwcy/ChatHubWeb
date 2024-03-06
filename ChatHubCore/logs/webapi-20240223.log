@@ -388,768 +388,270 @@ System.Exception: 机房炸了
    at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
    at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
 [2024-02-23 20:45:58.440 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=wcy - 500 null text/plain; charset=utf-8 174.9775ms
-[2024-02-23 21:27:35.041 +08:00  INF]  User profile is available. Using 'C:\Users\LEGION\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
-[2024-02-23 21:27:35.521 +08:00  INF]  Now listening on: https://localhost:5001
-[2024-02-23 21:27:35.524 +08:00  INF]  Now listening on: http://localhost:5085
-[2024-02-23 21:27:35.528 +08:00  INF]  Application started. Press Ctrl+C to shut down.
-[2024-02-23 21:27:35.530 +08:00  INF]  Hosting environment: Development
-[2024-02-23 21:27:35.531 +08:00  INF]  Content root path: C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore
-[2024-02-23 21:27:38.073 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - null null
-[2024-02-23 21:27:38.683 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - 200 null text/html;charset=utf-8 620.8591ms
-[2024-02-23 21:27:38.753 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - null null
-[2024-02-23 21:27:38.769 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - 200 13756 application/javascript; charset=utf-8 15.424ms
-[2024-02-23 21:27:39.652 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - null null
-[2024-02-23 21:27:39.759 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 107.8679ms
-[2024-02-23 21:27:39.957 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - null null
-[2024-02-23 21:27:40.192 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 235.1495ms
-[2024-02-23 22:16:09.633 +08:00  INF]  User profile is available. Using 'C:\Users\LEGION\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
-[2024-02-23 22:16:10.340 +08:00  INF]  Now listening on: https://localhost:5001
-[2024-02-23 22:16:10.344 +08:00  INF]  Now listening on: http://localhost:5085
-[2024-02-23 22:16:10.349 +08:00  INF]  Application started. Press Ctrl+C to shut down.
-[2024-02-23 22:16:10.352 +08:00  INF]  Hosting environment: Development
-[2024-02-23 22:16:10.355 +08:00  INF]  Content root path: C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore
-[2024-02-23 22:16:13.562 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - null null
-[2024-02-23 22:16:14.251 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - 200 null text/html;charset=utf-8 700.592ms
-[2024-02-23 22:16:14.253 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - null null
-[2024-02-23 22:16:14.272 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - 200 13756 application/javascript; charset=utf-8 19.1465ms
-[2024-02-23 22:16:15.126 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - null null
-[2024-02-23 22:16:15.203 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 77.1684ms
-[2024-02-23 22:16:15.384 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - null null
-[2024-02-23 22:16:15.568 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 183.6716ms
-[2024-02-23 22:18:59.069 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:18:59.084 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:18:59.087 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 18.447ms
-[2024-02-23 22:18:59.090 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:18:59.100 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:18:59.231 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:18:59'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:18:59.257 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:18:59'.
-[2024-02-23 22:18:59.264 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:18:59.292 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:18:59.853 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:18:59.867 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 565.6612ms
-[2024-02-23 22:18:59.870 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:18:59.875 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 784.5439ms
-[2024-02-23 22:19:41.403 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY3NTE0NiwiZXhwIjoxNzA4NjkzMTQ2fQ.vPofRLYC6ZChPknDttXm4G7TbRAuAde44VvCYSLPHdw - null null
-[2024-02-23 22:19:41.411 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:41.418 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:19:41.530 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:19:41.537 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:41.541 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 10.5123ms
-[2024-02-23 22:19:41.548 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:19:41.570 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:41.577 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:41'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:19:41.588 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:41'.
-[2024-02-23 22:19:41.591 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:19:41.600 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:19:41.696 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:19:41.701 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 90.2238ms
-[2024-02-23 22:19:41.704 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:19:41.707 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 160.9651ms
-[2024-02-23 22:19:45.286 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Auth/login - null null
-[2024-02-23 22:19:45.294 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:45.298 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Auth/login - 204 null null 12.017ms
-[2024-02-23 22:19:45.306 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Auth/login - application/json 36
-[2024-02-23 22:19:45.315 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:45.318 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:45'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:19:45.325 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:45'.
-[2024-02-23 22:19:45.327 +08:00  INF]  Executing endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
-[2024-02-23 22:19:45.334 +08:00  INF]  Route matched with {action = "login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] login(construct.Application.System.Services.Login.Model.FontLoginInput) on controller construct.Application.System.Services.Login.AuthController (ChatHubApi).
-[2024-02-23 22:19:45.382 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:19:45.386 +08:00  INF]  Executed action construct.Application.System.Services.Login.AuthController.login (ChatHubApi) in 47.2882ms
-[2024-02-23 22:19:45.390 +08:00  INF]  Executed endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
-[2024-02-23 22:19:45.392 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Auth/login - 200 null application/json; charset=utf-8 86.0558ms
-[2024-02-23 22:19:48.683 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:19:48.691 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:48.695 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 12.3612ms
-[2024-02-23 22:19:48.700 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:19:48.709 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:19:48.711 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:48'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:19:48.719 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:19:48'.
-[2024-02-23 22:19:48.724 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:19:48.727 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:19:48.745 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:19:48.750 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 16.7932ms
-[2024-02-23 22:19:48.755 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:19:48.759 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 58.8157ms
-[2024-02-23 22:20:08.511 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODU3NDI2NSwiZXhwIjoxNzA4NTkyMjY1fQ.oKfB6bkj8S4FqTpmP3ejMDvJzlWw46QdILvFQMncvAE - null null
-[2024-02-23 22:20:08.518 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:08.522 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:20:08.667 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:20:08.673 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:08.674 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - 204 null null 7.7449ms
-[2024-02-23 22:20:08.729 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:20:08.735 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:08.739 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:08'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:08.745 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:08'.
-[2024-02-23 22:20:08.749 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:20:08.751 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:20:08.766 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:08.769 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 13.8034ms
-[2024-02-23 22:20:08.772 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:20:08.775 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - 200 null application/json; charset=utf-8 45.8265ms
-[2024-02-23 22:20:08.904 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:20:08.909 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:08.910 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - 204 null null 6.4735ms
-[2024-02-23 22:20:08.915 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:20:08.923 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:08.925 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:08'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:08.934 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:08'.
-[2024-02-23 22:20:08.937 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:20:08.939 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:08.963 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:08.966 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 20.6147ms
-[2024-02-23 22:20:08.970 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:20:08.973 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - 200 null application/json; charset=utf-8 57.9352ms
-[2024-02-23 22:20:12.020 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:12.025 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:12.028 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - 204 null null 8.5162ms
-[2024-02-23 22:20:12.033 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:12.040 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:12.042 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:12'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:12.047 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:12'.
-[2024-02-23 22:20:12.049 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:12.055 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:12.073 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:12.076 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 16.9963ms
-[2024-02-23 22:20:12.079 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:12.081 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - 200 null application/json; charset=utf-8 48.495ms
-[2024-02-23 22:20:12.945 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - null null
-[2024-02-23 22:20:12.949 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:12.951 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - 204 null null 6.335ms
-[2024-02-23 22:20:12.955 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Friends/Redbob - application/json 40
-[2024-02-23 22:20:12.964 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:12.967 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:12'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:12.972 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:12'.
-[2024-02-23 22:20:12.975 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:20:12.981 +08:00  INF]  Route matched with {action = "Redbob", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Redbob(construct.Application.System.FontServices.Friends.Model.sendRedBobModel) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:13.009 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:13.012 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi) in 26.4638ms
-[2024-02-23 22:20:13.015 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:20:13.017 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Friends/Redbob - 200 null application/json; charset=utf-8 62.769ms
-[2024-02-23 22:20:22.456 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:20:22.460 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODU3NDI2NSwiZXhwIjoxNzA4NTkyMjY1fQ.oKfB6bkj8S4FqTpmP3ejMDvJzlWw46QdILvFQMncvAE - 101 null null 13949.1324ms
-[2024-02-23 22:20:23.303 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODU3NDI2NSwiZXhwIjoxNzA4NTkyMjY1fQ.oKfB6bkj8S4FqTpmP3ejMDvJzlWw46QdILvFQMncvAE - null null
-[2024-02-23 22:20:23.309 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:23.311 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:20:23.426 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:20:23.433 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:23.435 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - 204 null null 8.9316ms
-[2024-02-23 22:20:23.440 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:20:23.447 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:23.450 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:23'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:23.457 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:23'.
-[2024-02-23 22:20:23.460 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:20:23.463 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:20:23.493 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:23.496 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 26.7113ms
-[2024-02-23 22:20:23.500 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:20:23.503 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - 200 null application/json; charset=utf-8 63.5061ms
-[2024-02-23 22:20:25.888 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Auth/login - null null
-[2024-02-23 22:20:25.894 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:25.898 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Auth/login - 204 null null 9.7388ms
-[2024-02-23 22:20:25.907 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Auth/login - application/json 39
-[2024-02-23 22:20:25.916 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:25.919 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:25'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:25.927 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:25'.
-[2024-02-23 22:20:25.932 +08:00  INF]  Executing endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
-[2024-02-23 22:20:25.934 +08:00  INF]  Route matched with {action = "login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] login(construct.Application.System.Services.Login.Model.FontLoginInput) on controller construct.Application.System.Services.Login.AuthController (ChatHubApi).
-[2024-02-23 22:20:25.950 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:25.952 +08:00  INF]  Executed action construct.Application.System.Services.Login.AuthController.login (ChatHubApi) in 12.9013ms
-[2024-02-23 22:20:25.955 +08:00  INF]  Executed endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
-[2024-02-23 22:20:25.959 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Auth/login - 200 null application/json; charset=utf-8 52.2426ms
-[2024-02-23 22:20:28.144 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:28.153 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:28.156 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - 204 null null 12.3541ms
-[2024-02-23 22:20:28.168 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:28.173 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:28.177 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:28'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:28.187 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:28'.
-[2024-02-23 22:20:28.189 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:28.193 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:28.217 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:28.221 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 20.2304ms
-[2024-02-23 22:20:28.227 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:28.231 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - 200 null application/json; charset=utf-8 63.2307ms
-[2024-02-23 22:20:43.357 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:20:43.364 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:43.366 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - 204 null null 8.3843ms
-[2024-02-23 22:20:43.370 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:20:43.377 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:43.379 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:43'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:43.385 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/22/2024 08:57:45', Current time (UTC): '02/23/2024 14:20:43'.
-[2024-02-23 22:20:43.387 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:20:43.390 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:43.406 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:43.410 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 15.7187ms
-[2024-02-23 22:20:43.413 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:20:43.415 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - 200 null application/json; charset=utf-8 45.6251ms
-[2024-02-23 22:20:49.741 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:49.746 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:49.748 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - 204 null null 7.3898ms
-[2024-02-23 22:20:49.754 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:20:49.759 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:20:49.762 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:20:49'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:20:49.770 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:20:49'.
-[2024-02-23 22:20:49.773 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:49.775 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:20:49.793 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:20:49.796 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 15.519ms
-[2024-02-23 22:20:49.800 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:20:49.803 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - 200 null application/json; charset=utf-8 49.4751ms
-[2024-02-23 22:21:37.527 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:21:37.532 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:21:37.535 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - 204 null null 8.5839ms
-[2024-02-23 22:21:37.538 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:21:37.546 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:21:37.551 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:21:37'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:21:37.560 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:21:37'.
-[2024-02-23 22:21:37.564 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:21:37.569 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:21:37.589 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:21:37.593 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 17.1387ms
-[2024-02-23 22:21:37.600 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:21:37.605 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - 200 null application/json; charset=utf-8 67.4607ms
-[2024-02-23 22:22:42.994 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:22:43.001 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:43.003 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 9.0923ms
-[2024-02-23 22:22:43.008 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:22:43.015 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:43.017 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:43'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:22:43.024 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:43'.
-[2024-02-23 22:22:43.027 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:22:43.031 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:22:43.047 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:22:43.053 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 17.6348ms
-[2024-02-23 22:22:43.057 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:22:43.059 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 51.1478ms
-[2024-02-23 22:22:44.795 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - null null
-[2024-02-23 22:22:44.801 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:44.803 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - 204 null null 8.6171ms
-[2024-02-23 22:22:44.806 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Friends/Redbob - application/json 40
-[2024-02-23 22:22:44.816 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:44.819 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:44'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:22:44.824 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:44'.
-[2024-02-23 22:22:44.827 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:22:44.829 +08:00  INF]  Route matched with {action = "Redbob", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Redbob(construct.Application.System.FontServices.Friends.Model.sendRedBobModel) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:22:44.848 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:22:44.851 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi) in 17.6122ms
-[2024-02-23 22:22:44.856 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:22:44.859 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Friends/Redbob - 200 null application/json; charset=utf-8 53.6556ms
-[2024-02-23 22:22:47.275 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:22:47.286 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:47.287 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 12.3866ms
-[2024-02-23 22:22:47.301 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:22:47.312 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:22:47.316 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:47'.
-   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
-[2024-02-23 22:22:47.321 +08:00  INF]  Bearer was not authenticated. Failure message: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '02/23/2024 12:59:06', Current time (UTC): '02/23/2024 14:22:47'.
-[2024-02-23 22:22:47.323 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:22:47.327 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:22:47.388 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:22:47.391 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 60.8316ms
-[2024-02-23 22:22:47.393 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:22:47.396 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 95.3058ms
-[2024-02-23 22:23:12.704 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:23:12.706 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY3NTE0NiwiZXhwIjoxNzA4NjkzMTQ2fQ.vPofRLYC6ZChPknDttXm4G7TbRAuAde44VvCYSLPHdw - 101 null null 211303.0065ms
-[2024-02-23 22:23:14.026 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:23:14.031 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:14.033 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:23:14.195 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:23:14.208 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:14.209 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 13.9698ms
-[2024-02-23 22:23:14.226 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:23:14.249 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:14.274 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:23:14.283 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:23:14.300 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:23:14.307 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 19.2749ms
-[2024-02-23 22:23:14.319 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:23:14.328 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 102.2863ms
-[2024-02-23 22:23:14.573 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:23:14.580 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:14.584 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 10.7997ms
-[2024-02-23 22:23:14.610 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:23:14.615 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:14.620 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:23:14.627 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:23:14.647 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:23:14.651 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 17.8959ms
-[2024-02-23 22:23:14.658 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:23:14.663 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 53.261ms
-[2024-02-23 22:23:17.984 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:23:17.990 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:17.993 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 9.5934ms
-[2024-02-23 22:23:18.009 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:23:18.014 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:23:18.015 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:23:18.018 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:23:18.028 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:23:18.032 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 9.3338ms
-[2024-02-23 22:23:18.035 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:23:18.038 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 29.1879ms
-[2024-02-23 22:24:00.019 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:24:00.022 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 45996.2733ms
-[2024-02-23 22:24:01.532 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:24:01.537 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:01.540 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:24:01.693 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:24:01.698 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:01.701 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 8.333ms
-[2024-02-23 22:24:01.705 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:24:01.711 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:01.713 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:24:01.717 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:24:01.731 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:24:01.733 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 11.9701ms
-[2024-02-23 22:24:01.737 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:24:01.740 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 35.5572ms
-[2024-02-23 22:24:01.992 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:24:01.997 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:02.000 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 8.8411ms
-[2024-02-23 22:24:02.004 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:24:02.013 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:02.017 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:24:02.019 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:24:02.037 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:24:02.042 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 18.8604ms
-[2024-02-23 22:24:02.050 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:24:02.053 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 48.4471ms
-[2024-02-23 22:24:26.803 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:24:26.808 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:26.810 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 6.6131ms
-[2024-02-23 22:24:26.813 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:24:26.821 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:24:26.823 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:24:26.827 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:24:26.834 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:24:26.837 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 6.851ms
-[2024-02-23 22:24:26.841 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:24:26.843 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 30.8029ms
-[2024-02-23 22:26:51.120 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:26:51.123 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 169591.7656ms
-[2024-02-23 22:26:51.284 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:26:51.293 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODU3NDI2NSwiZXhwIjoxNzA4NTkyMjY1fQ.oKfB6bkj8S4FqTpmP3ejMDvJzlWw46QdILvFQMncvAE - 101 null null 387989.4103ms
-[2024-02-23 22:26:52.820 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5ODAyNSwiZXhwIjoxNzA4NzE2MDI1fQ.CK6tH1WmxbOGtu_wBAm2ZaApWejT-RckP8sl_0b0Xxs - null null
-[2024-02-23 22:26:52.824 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:52.826 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:26:52.902 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:26:52.908 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:52.912 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - 204 null null 10.3928ms
-[2024-02-23 22:26:52.913 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:26:52.920 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:26:52.926 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:52.933 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:52.936 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:26:52.944 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:26:52.955 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:26:52.977 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:26:52.981 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 16.9488ms
-[2024-02-23 22:26:52.987 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:26:52.991 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - 200 null application/json; charset=utf-8 71.4261ms
-[2024-02-23 22:26:53.122 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:26:53.145 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.147 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 25.133ms
-[2024-02-23 22:26:53.153 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:26:53.162 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.165 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:26:53.169 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:26:53.192 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:26:53.197 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 23.1845ms
-[2024-02-23 22:26:53.200 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:26:53.207 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 54.9361ms
-[2024-02-23 22:26:53.212 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:26:53.220 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.222 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - 204 null null 10.0687ms
-[2024-02-23 22:26:53.228 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:26:53.236 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.239 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:26:53.241 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:26:53.258 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:26:53.261 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 15.7368ms
-[2024-02-23 22:26:53.264 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:26:53.270 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - 200 null application/json; charset=utf-8 41.9216ms
-[2024-02-23 22:26:53.413 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:26:53.418 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.420 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 6.8437ms
-[2024-02-23 22:26:53.423 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:26:53.432 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:53.434 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:26:53.436 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:26:53.452 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:26:53.455 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 14.2091ms
-[2024-02-23 22:26:53.458 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:26:53.461 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 37.9879ms
-[2024-02-23 22:26:55.391 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:26:55.395 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:55.397 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 6.024ms
-[2024-02-23 22:26:55.399 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:26:55.408 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:26:55.410 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:26:55.412 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:26:55.421 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:26:55.425 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 8.8604ms
-[2024-02-23 22:26:55.428 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:26:55.431 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 31.4295ms
-[2024-02-23 22:28:32.246 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:28:32.249 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 99336.1331ms
-[2024-02-23 22:28:32.324 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:28:32.327 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5ODAyNSwiZXhwIjoxNzA4NzE2MDI1fQ.CK6tH1WmxbOGtu_wBAm2ZaApWejT-RckP8sl_0b0Xxs - 101 null null 99507.1542ms
-[2024-02-23 22:28:34.321 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5ODAyNSwiZXhwIjoxNzA4NzE2MDI1fQ.CK6tH1WmxbOGtu_wBAm2ZaApWejT-RckP8sl_0b0Xxs - null null
-[2024-02-23 22:28:34.340 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.374 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:28:34.516 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:28:34.522 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.525 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=junjie - 204 null null 9.1585ms
-[2024-02-23 22:28:34.533 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - null null
-[2024-02-23 22:28:34.540 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.544 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:28:34.547 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:28:34.567 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:34.570 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 17.1304ms
-[2024-02-23 22:28:34.575 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:28:34.578 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=junjie - 200 null application/json; charset=utf-8 45.7194ms
-[2024-02-23 22:28:34.710 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:28:34.715 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.717 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=2 - 204 null null 6.9102ms
-[2024-02-23 22:28:34.722 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - null null
-[2024-02-23 22:28:34.729 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.732 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:28:34.734 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:28:34.750 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:34.754 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 14.4537ms
-[2024-02-23 22:28:34.756 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:28:34.760 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=2 - 200 null application/json; charset=utf-8 37.6337ms
-[2024-02-23 22:28:34.942 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:28:34.948 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:34.950 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:28:35.170 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:28:35.176 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:35.180 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 11.2157ms
-[2024-02-23 22:28:35.224 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:28:35.233 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:35.240 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:28:35.243 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:28:35.271 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:35.275 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 22.7476ms
-[2024-02-23 22:28:35.279 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:28:35.285 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 61.1264ms
-[2024-02-23 22:28:35.502 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:28:35.507 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:35.509 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 7.291ms
-[2024-02-23 22:28:35.512 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:28:35.520 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:35.522 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:28:35.525 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:28:35.545 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:35.548 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 19ms
-[2024-02-23 22:28:35.551 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:28:35.553 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 40.9959ms
-[2024-02-23 22:28:37.779 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:28:37.784 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:37.785 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 6.4676ms
-[2024-02-23 22:28:37.788 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:28:37.797 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:37.798 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:37.801 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:28:37.808 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:37.812 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 7.8496ms
-[2024-02-23 22:28:37.816 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:37.818 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 30.2142ms
-[2024-02-23 22:28:39.874 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:28:39.879 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:39.880 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:39.883 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:28:39.893 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:39.896 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 8.3904ms
-[2024-02-23 22:28:39.900 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:39.903 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 29.4303ms
-[2024-02-23 22:28:50.565 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:28:50.572 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:50.576 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 10.6114ms
-[2024-02-23 22:28:50.582 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:28:50.589 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:50.592 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:28:50.595 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:28:50.610 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:50.616 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 17.2384ms
-[2024-02-23 22:28:50.619 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:28:50.622 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 40.7121ms
-[2024-02-23 22:28:52.381 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:28:52.386 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:52.392 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 11.8213ms
-[2024-02-23 22:28:52.395 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:28:52.403 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:52.405 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:28:52.408 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:28:52.428 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:52.431 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 18.4184ms
-[2024-02-23 22:28:52.437 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:28:52.441 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 46.4893ms
-[2024-02-23 22:28:54.082 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:28:54.091 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:54.093 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 10.6853ms
-[2024-02-23 22:28:54.095 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:28:54.105 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:28:54.108 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:54.113 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:28:54.123 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:28:54.128 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 9.4301ms
-[2024-02-23 22:28:54.130 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:28:54.134 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 38.8391ms
-[2024-02-23 22:29:38.392 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:29:38.397 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:29:38.398 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/User/QueryByUserName?targetname=junjie - 204 null null 6.0628ms
-[2024-02-23 22:29:38.405 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - null null
-[2024-02-23 22:29:38.413 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:29:38.416 +08:00  INF]  Executing endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:29:38.420 +08:00  INF]  Route matched with {action = "QueryByUserName", controller = "User"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QueryByUserName(System.String) on controller ChatHubApi.Controllers.AdminServices.User.UserController (ChatHubApi).
-[2024-02-23 22:29:38.429 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:29:38.431 +08:00  INF]  Executed action ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi) in 7.499ms
-[2024-02-23 22:29:38.436 +08:00  INF]  Executed endpoint 'ChatHubApi.Controllers.AdminServices.User.UserController.QueryByUserName (ChatHubApi)'
-[2024-02-23 22:29:38.439 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/User/QueryByUserName?targetname=junjie - 200 null application/json; charset=utf-8 33.8025ms
-[2024-02-23 22:30:05.932 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:05.938 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:05.940 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/api/font-login/verify - 204 null null 7.8809ms
-[2024-02-23 22:30:05.943 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:05.953 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:05.955 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
- ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
-   --- End of inner exception stack trace ---
-[2024-02-23 22:30:05.964 +08:00  INF]  Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-[2024-02-23 22:30:05.966 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/font-login/verify - 404 0 null 23.4388ms
-[2024-02-23 22:30:05.971 +08:00  INF]  Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5001/api/font-login/verify, Response status code: 404
-[2024-02-23 22:30:06.374 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:30:06.377 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 91434.353ms
-[2024-02-23 22:30:07.241 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:30:07.247 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:07.249 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:30:07.326 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:30:07.384 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:07.391 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 64.6199ms
-[2024-02-23 22:30:07.401 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:30:07.416 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:07.419 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:30:07.422 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:30:07.441 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:07.445 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 16.4638ms
-[2024-02-23 22:30:07.451 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:30:07.454 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 52.7921ms
-[2024-02-23 22:30:07.628 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:07.632 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:07.634 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 6.7028ms
-[2024-02-23 22:30:07.638 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:07.646 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:07.649 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:07.652 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:07.671 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:07.674 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 17.4731ms
-[2024-02-23 22:30:07.676 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:07.679 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 41.309ms
-[2024-02-23 22:30:11.716 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:11.723 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:11.724 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/api/font-login/verify - 204 null null 7.9201ms
-[2024-02-23 22:30:11.729 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:11.737 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:11.739 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
- ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
-   --- End of inner exception stack trace ---
-[2024-02-23 22:30:11.753 +08:00  INF]  Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-[2024-02-23 22:30:11.756 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/font-login/verify - 404 0 null 28.0639ms
-[2024-02-23 22:30:11.762 +08:00  INF]  Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5001/api/font-login/verify, Response status code: 404
-[2024-02-23 22:30:11.826 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:11.833 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:11.836 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
- ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
-   --- End of inner exception stack trace ---
-[2024-02-23 22:30:11.845 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:30:11.850 +08:00  INF]  Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-[2024-02-23 22:30:11.852 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 4610.8768ms
-[2024-02-23 22:30:11.856 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/font-login/verify - 499 null null 29.138ms
-[2024-02-23 22:30:11.875 +08:00  INF]  Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5001/api/font-login/verify, Response status code: 499
-[2024-02-23 22:30:12.579 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - null null
-[2024-02-23 22:30:12.587 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:12.589 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/api/font-login/verify - null null
-[2024-02-23 22:30:12.590 +08:00  INF]  Executing endpoint '/MyHub'
-[2024-02-23 22:30:12.596 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:12.604 +08:00  INF]  Failed to validate the token.
-Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
- ---> Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
-   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
-   --- End of inner exception stack trace ---
-[2024-02-23 22:30:12.615 +08:00  INF]  Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
-The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
-[2024-02-23 22:30:12.620 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/api/font-login/verify - 404 0 null 30.6207ms
-[2024-02-23 22:30:12.634 +08:00  INF]  Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:5001/api/font-login/verify, Response status code: 404
-[2024-02-23 22:30:12.669 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:30:12.676 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:12.681 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 11.4641ms
-[2024-02-23 22:30:12.689 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
-[2024-02-23 22:30:12.707 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:12.709 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:30:12.716 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
-[2024-02-23 22:30:12.741 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:12.748 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 15.1658ms
-[2024-02-23 22:30:12.751 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
-[2024-02-23 22:30:12.755 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 65.1188ms
-[2024-02-23 22:30:29.341 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:29.346 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:29.348 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 7.3275ms
-[2024-02-23 22:30:29.351 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:29.359 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:29.361 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:29.364 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:29.382 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:29.387 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 19.0756ms
-[2024-02-23 22:30:29.390 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:29.392 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 41.4434ms
-[2024-02-23 22:30:30.069 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:30:30.075 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:30.078 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 8.3796ms
-[2024-02-23 22:30:30.081 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
-[2024-02-23 22:30:30.091 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:30.094 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:30:30.097 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:30.112 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:30.115 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 13.3336ms
-[2024-02-23 22:30:30.119 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
-[2024-02-23 22:30:30.124 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 42.7989ms
-[2024-02-23 22:30:33.094 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/Request?userName=wcy - null null
-[2024-02-23 22:30:33.103 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:33.105 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/Request?userName=wcy - 204 null null 11.2993ms
-[2024-02-23 22:30:33.133 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/Request?userName=wcy - null null
-[2024-02-23 22:30:33.139 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:33.143 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Request (ChatHubApi)'
-[2024-02-23 22:30:33.149 +08:00  INF]  Route matched with {action = "Request", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Request(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:33.173 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:33.178 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.Request (ChatHubApi) in 24.024ms
-[2024-02-23 22:30:33.181 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Request (ChatHubApi)'
-[2024-02-23 22:30:33.184 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/Request?userName=wcy - 200 null application/json; charset=utf-8 51.3574ms
-[2024-02-23 22:30:43.149 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:43.153 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:43.154 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=wcy - 204 null null 5.4735ms
-[2024-02-23 22:30:43.158 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - null null
-[2024-02-23 22:30:43.164 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:43.165 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:43.168 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:43.181 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:43.183 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 12.2774ms
-[2024-02-23 22:30:43.186 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:43.188 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=wcy - 200 null application/json; charset=utf-8 30.77ms
-[2024-02-23 22:30:46.408 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:30:46.415 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:46.417 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/MessageBox?username=junjie - 204 null null 8.7341ms
-[2024-02-23 22:30:46.421 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - null null
-[2024-02-23 22:30:46.428 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:46.431 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:46.433 +08:00  INF]  Route matched with {action = "MessageBox", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] MessageBox(System.String) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:46.448 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:46.451 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi) in 14.6919ms
-[2024-02-23 22:30:46.456 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.MessageBox (ChatHubApi)'
-[2024-02-23 22:30:46.458 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/MessageBox?username=junjie - 200 null application/json; charset=utf-8 37.3319ms
-[2024-02-23 22:30:47.177 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - null null
-[2024-02-23 22:30:47.182 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:47.184 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/Redbob - 204 null null 7.2825ms
-[2024-02-23 22:30:47.188 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Friends/Redbob - application/json 40
-[2024-02-23 22:30:47.194 +08:00  INF]  CORS policy execution successful.
-[2024-02-23 22:30:47.198 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:30:47.201 +08:00  INF]  Route matched with {action = "Redbob", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Redbob(construct.Application.System.FontServices.Friends.Model.sendRedBobModel) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
-[2024-02-23 22:30:47.217 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
-[2024-02-23 22:30:47.221 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi) in 15.5235ms
-[2024-02-23 22:30:47.224 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.Redbob (ChatHubApi)'
-[2024-02-23 22:30:47.227 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Friends/Redbob - 200 null application/json; charset=utf-8 39.3971ms
-[2024-02-23 22:30:51.149 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 22:30:51.152 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIyIiwiVXNlck5hbWUiOiJqdW5qaWUiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5ODAyNSwiZXhwIjoxNzA4NzE2MDI1fQ.CK6tH1WmxbOGtu_wBAm2ZaApWejT-RckP8sl_0b0Xxs - 101 null null 136830.3413ms
-[2024-02-23 23:01:51.640 +08:00  INF]  Executed endpoint '/MyHub'
-[2024-02-23 23:01:51.649 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODY5Nzk4NSwiZXhwIjoxNzA4NzE1OTg1fQ.a1VRqW3oSQDZ-YRQZsCEEh91-DhVFa3W6KV4b3Ey288 - 101 null null 1899069.4329ms
+[2024-02-23 23:44:38.703 +08:00  INF]  User profile is available. Using 'C:\Users\LEGION\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+[2024-02-23 23:44:39.134 +08:00  INF]  Now listening on: https://localhost:5001
+[2024-02-23 23:44:39.137 +08:00  INF]  Now listening on: http://localhost:5085
+[2024-02-23 23:44:39.141 +08:00  INF]  Application started. Press Ctrl+C to shut down.
+[2024-02-23 23:44:39.144 +08:00  INF]  Hosting environment: Development
+[2024-02-23 23:44:39.145 +08:00  INF]  Content root path: C:\Users\LEGION\Desktop\RebuildChat\ChatHubApi
+[2024-02-23 23:44:42.247 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - null null
+[2024-02-23 23:44:42.752 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - 200 null text/html;charset=utf-8 512.7219ms
+[2024-02-23 23:44:42.759 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - null null
+[2024-02-23 23:44:42.794 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_framework/aspnetcore-browser-refresh.js - 200 13756 application/javascript; charset=utf-8 35.0204ms
+[2024-02-23 23:44:43.728 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/_vs/browserLink - null null
+[2024-02-23 23:44:43.813 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/_vs/browserLink - 200 null text/javascript; charset=UTF-8 85.1226ms
+[2024-02-23 23:44:44.019 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - null null
+[2024-02-23 23:44:44.224 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 205.6518ms
+[2024-02-23 23:45:08.381 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Auth/login - null null
+[2024-02-23 23:45:08.392 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:08.398 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Auth/login - 204 null null 17.8381ms
+[2024-02-23 23:45:08.401 +08:00  INF]  Request starting HTTP/2 POST https://localhost:5001/Auth/login - application/json 36
+[2024-02-23 23:45:08.413 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:08.574 +08:00  INF]  Executing endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
+[2024-02-23 23:45:08.606 +08:00  INF]  Route matched with {action = "login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] login(construct.Application.System.Services.Login.Model.FontLoginInput) on controller construct.Application.System.Services.Login.AuthController (ChatHubApi).
+[2024-02-23 23:45:09.246 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:45:09.261 +08:00  INF]  Executed action construct.Application.System.Services.Login.AuthController.login (ChatHubApi) in 644.4847ms
+[2024-02-23 23:45:09.266 +08:00  INF]  Executed endpoint 'construct.Application.System.Services.Login.AuthController.login (ChatHubApi)'
+[2024-02-23 23:45:09.269 +08:00  INF]  Request finished HTTP/2 POST https://localhost:5001/Auth/login - 200 null application/json; charset=utf-8 868.1643ms
+[2024-02-23 23:45:09.311 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:45:09.317 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:09.321 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:45:09.419 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:45:09.426 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:09.427 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 8.3334ms
+[2024-02-23 23:45:09.432 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:45:09.457 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:09.465 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:45:09.476 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:45:09.557 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:45:09.562 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 72.4535ms
+[2024-02-23 23:45:09.565 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:45:09.573 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 141.3562ms
+[2024-02-23 23:45:12.352 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:45:12.361 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:12.363 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 11.8773ms
+[2024-02-23 23:45:12.367 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:45:12.379 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:45:12.381 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:45:12.387 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:45:12.429 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:45:12.431 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 40.8623ms
+[2024-02-23 23:45:12.434 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:45:12.438 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 70.3607ms
+[2024-02-23 23:46:31.645 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:46:31.651 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:31.654 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:46:31.657 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:46:31.671 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:31.675 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 18.3936ms
+[2024-02-23 23:46:31.678 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:46:31.690 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:31.694 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:46:31.698 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:46:31.724 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:46:31.732 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 25.5423ms
+[2024-02-23 23:46:31.739 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:46:31.745 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 66.9705ms
+[2024-02-23 23:46:31.774 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:46:31.794 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:31.796 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 22.6822ms
+[2024-02-23 23:46:31.802 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:46:31.816 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:31.821 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:46:31.827 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:46:31.846 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:46:31.849 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 14.0151ms
+[2024-02-23 23:46:31.854 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:46:31.858 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 57.2664ms
+[2024-02-23 23:46:50.909 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:46:50.916 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:46:50.917 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:50.922 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:50.925 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:46:50.927 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 10.4051ms
+[2024-02-23 23:46:50.934 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:46:50.948 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:50.950 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:46:50.954 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:46:50.982 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:46:50.985 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:46:50.988 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:50.991 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 31.0833ms
+[2024-02-23 23:46:50.993 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 11.4311ms
+[2024-02-23 23:46:50.996 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:46:50.997 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:46:51.008 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 75.0031ms
+[2024-02-23 23:46:51.015 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:46:51.026 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:46:51.030 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:46:51.049 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:46:51.052 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 15.5582ms
+[2024-02-23 23:46:51.057 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:46:51.062 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 66.0981ms
+[2024-02-23 23:47:20.964 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:47:20.964 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:47:20.967 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 30058.0757ms
+[2024-02-23 23:47:20.970 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 49324.9396ms
+[2024-02-23 23:47:20.975 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:47:20.987 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 131676.3699ms
+[2024-02-23 23:47:21.930 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:47:21.935 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:47:21.937 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:47:22.036 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:47:22.052 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:47:22.055 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 19.9308ms
+[2024-02-23 23:47:22.059 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:47:22.068 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:47:22.071 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:47:22.077 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:47:22.098 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:47:22.101 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 19.4184ms
+[2024-02-23 23:47:22.106 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:47:22.109 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 50.3418ms
+[2024-02-23 23:47:22.298 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:47:22.303 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:47:22.305 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 7.798ms
+[2024-02-23 23:47:22.308 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:47:22.316 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:47:22.320 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:47:22.324 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:47:22.342 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:47:22.344 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 15.4245ms
+[2024-02-23 23:47:22.348 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:47:22.350 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 42.1016ms
+[2024-02-23 23:49:00.361 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:49:00.361 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:00.372 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:00.377 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:00.380 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:49:00.382 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 20.4963ms
+[2024-02-23 23:49:00.392 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:00.401 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:00.403 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:00.406 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:49:00.424 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:49:00.426 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:49:00.431 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:00.434 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 21.7159ms
+[2024-02-23 23:49:00.436 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 12.5553ms
+[2024-02-23 23:49:00.439 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:49:00.441 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:00.453 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:00.455 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 63.4769ms
+[2024-02-23 23:49:00.458 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:49:00.465 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:49:00.478 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:49:00.481 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 11.9292ms
+[2024-02-23 23:49:00.484 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:49:00.486 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 46.7978ms
+[2024-02-23 23:49:53.204 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:53.208 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:53.210 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 7.1094ms
+[2024-02-23 23:49:53.214 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:53.223 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:53.226 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:53.228 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:49:53.246 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:49:53.249 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 18.0003ms
+[2024-02-23 23:49:53.252 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:53.255 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 42.2684ms
+[2024-02-23 23:49:59.221 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:59.226 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:59.227 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 6.4849ms
+[2024-02-23 23:49:59.231 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:49:59.238 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:49:59.241 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:59.245 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:49:59.259 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:49:59.261 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 12.9094ms
+[2024-02-23 23:49:59.265 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:49:59.268 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 37.2035ms
+[2024-02-23 23:50:56.707 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:50:56.707 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:50:56.711 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 116349.3196ms
+[2024-02-23 23:50:56.714 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 214783.9745ms
+[2024-02-23 23:50:57.576 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:50:57.581 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:50:57.583 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:50:57.666 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:50:57.672 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:50:57.675 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 9.7193ms
+[2024-02-23 23:50:57.679 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:50:57.692 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:50:57.694 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:50:57.697 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:50:57.713 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:50:57.716 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 15.2576ms
+[2024-02-23 23:50:57.720 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:50:57.724 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 44.6068ms
+[2024-02-23 23:50:57.881 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:50:57.885 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:50:57.887 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 6.8764ms
+[2024-02-23 23:50:57.890 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:50:57.898 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:50:57.901 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:50:57.903 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:50:57.918 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:50:57.920 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 13.4771ms
+[2024-02-23 23:50:57.923 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:50:57.926 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 35.4956ms
+[2024-02-23 23:56:52.804 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:56:52.810 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:56:52.813 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 8.5623ms
+[2024-02-23 23:56:52.817 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:56:52.830 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:56:52.835 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:56:52.838 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:56:52.871 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:56:52.874 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 30.9657ms
+[2024-02-23 23:56:52.877 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:56:52.879 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 62.7834ms
+[2024-02-23 23:57:56.490 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:57:56.494 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:57:56.497 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 6.6687ms
+[2024-02-23 23:57:56.503 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:57:56.510 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:57:56.512 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:57:56.514 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:57:56.581 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:57:56.584 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 64.7622ms
+[2024-02-23 23:57:56.587 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:57:56.589 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 86.1782ms
+[2024-02-23 23:58:54.283 +08:00  INF]  Executed endpoint '/MyHub'
+[2024-02-23 23:58:54.285 +08:00  INF]  Request finished HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - 101 null null 476709.8128ms
+[2024-02-23 23:58:55.176 +08:00  INF]  Request starting HTTP/1.1 GET https://localhost:5001/MyHub?access_token=eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiIxIiwiVXNlck5hbWUiOiJ3Y3kiLCJSb2xlIjoiVXNlciIsIm5iZiI6MTcwODcwMzEwOSwiZXhwIjoxNzA4NzIxMTA5fQ.PsdBGwwf9umwvbor1cUqeZgiF-eZXfKLk5mN4H9hzcg - null null
+[2024-02-23 23:58:55.184 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:58:55.187 +08:00  INF]  Executing endpoint '/MyHub'
+[2024-02-23 23:58:55.280 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:58:55.290 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:58:55.293 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Message/offline?username=wcy - 204 null null 12.4288ms
+[2024-02-23 23:58:55.301 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - null null
+[2024-02-23 23:58:55.308 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:58:55.311 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:58:55.313 +08:00  INF]  Route matched with {action = "offline", controller = "Message"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] offline(System.String) on controller construct.Application.System.FontServices.Message.MessageController (ChatHubApi).
+[2024-02-23 23:58:55.353 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:58:55.356 +08:00  INF]  Executed action construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi) in 39.2809ms
+[2024-02-23 23:58:55.359 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Message.MessageController.offline (ChatHubApi)'
+[2024-02-23 23:58:55.368 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Message/offline?username=wcy - 200 null application/json; charset=utf-8 67.2458ms
+[2024-02-23 23:58:55.493 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:58:55.497 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:58:55.498 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 5.8155ms
+[2024-02-23 23:58:55.501 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:58:55.510 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:58:55.513 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:58:55.517 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:58:55.530 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:58:55.534 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 13.29ms
+[2024-02-23 23:58:55.537 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:58:55.539 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 37.5031ms
+[2024-02-23 23:59:59.481 +08:00  INF]  Request starting HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:59:59.489 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:59:59.496 +08:00  INF]  Request finished HTTP/2 OPTIONS https://localhost:5001/Friends/queryAll?userId=1 - 204 null null 15.3279ms
+[2024-02-23 23:59:59.502 +08:00  INF]  Request starting HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - null null
+[2024-02-23 23:59:59.522 +08:00  INF]  CORS policy execution successful.
+[2024-02-23 23:59:59.525 +08:00  INF]  Executing endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:59:59.530 +08:00  INF]  Route matched with {action = "QueryAll", controller = "Friends"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult] QueryAll(Int64) on controller construct.Application.System.FontServices.Friends.FriendsController (ChatHubApi).
+[2024-02-23 23:59:59.583 +08:00  INF]  Executing OkObjectResult, writing value of type 'ChatHubApi.System.Response'.
+[2024-02-23 23:59:59.588 +08:00  INF]  Executed action construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi) in 47.3535ms
+[2024-02-23 23:59:59.592 +08:00  INF]  Executed endpoint 'construct.Application.System.FontServices.Friends.FriendsController.QueryAll (ChatHubApi)'
+[2024-02-23 23:59:59.595 +08:00  INF]  Request finished HTTP/2 GET https://localhost:5001/Friends/queryAll?userId=1 - 200 null application/json; charset=utf-8 93.3101ms

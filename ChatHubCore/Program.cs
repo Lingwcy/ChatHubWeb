@@ -1,3 +1,4 @@
+using ChatHubApi;
 using ChatHubApi.Authorization;
 using ChatHubApi.Middleware;
 using ChatHubApi.System;
@@ -54,6 +55,26 @@ options => {
             ValidateIssuer = false,
             ClockSkew = TimeSpan.Zero,
         };
+        options.Events = new JwtBearerEvents
+        {
+            /*
+             OnMessageReceived事件处理程序在JwtBearer中间件开始处理请求之前执行，允许你根据特定条件自定义令牌的获取方式。
+            这对于处理非标准格式的令牌传递方式（如查询字符串或自定义HTTP头）非常有用
+            此处作用：在获取到HUB的请求后提前将TOKEN写入context，以便HUB对claims进行自动解析
+             */
+            OnMessageReceived = context =>
+            {
+
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/MyHub")))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 builder.Services.AddAuthorization(o =>
 {
@@ -97,24 +118,29 @@ builder.Services.AddCors(opt =>
     opt.AddDefaultPolicy(builder => builder.WithOrigins(urls).AllowAnyHeader().AllowAnyMethod());
 });
 var app = builder.Build();
-app.UseExceptionHandling();
-// http管道配置
+app.Use(next => new RequestDelegate(
+    async context =>
+    {
+        context.Request.EnableBuffering();
+        await next(context);
+    }));
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
+// http管道配置
+app.Use(async (context, next) =>
+{
+    await next.Invoke();
+});
+app.UseExceptionHandling();
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCrypto();
 app.MapControllers();
 app.MapHub<construct.Web.Entry.MyHub>("/MyHub");
-
-app.Use(async (context, next) =>
-{
-    Console.WriteLine("aaa");
-    await next.Invoke();
-});
 app.Run();

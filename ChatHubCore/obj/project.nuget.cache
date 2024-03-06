@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3/kF6W4opU/Ktk7TmnlPX28rjaaC0Ogn+e2YT36KeszBzCoE0SXrtrG3AFvZtQCuoLWX3zDxRmf/wbUmejKO9w==",
+  "dgSpecHash": "fkVrbLAA+E3WpjQzUfUg2HurcSNTZHBagjf1gA36/v4gelba1S6ZaF98VePa0FQS/cW/2zixSJ8bEECZW1n72w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\ChatHubApi.csproj",
+  "projectFilePath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\ChatHubApi\\ChatHubApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LEGION\\.nuget\\packages\\mapster\\7.4.0\\mapster.7.4.0.nupkg.sha512",
     "C:\\Users\\LEGION\\.nuget\\packages\\mapster.core\\1.2.1\\mapster.core.1.2.1.nupkg.sha512",

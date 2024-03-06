@@ -2,6 +2,7 @@
 using ChatHubApi.System.Entity.Font;
 using construct.Application.System.FontServices.Friends.Model;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 using System.Text;
@@ -35,6 +36,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpGet]
+        [Authorize(policy: "SelfOnly")]
         public async Task<ActionResult> Query(string targetName, string username)
         {
             if (targetName == username)
@@ -66,6 +68,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpGet]
+        [Authorize(policy: "SelfOnly")]
         public async Task<ActionResult> QueryAll(long userId)
         {
             sysFontUser user =await _db.Queryable<sysFontUser>().FirstAsync(a=>a.id== userId);
@@ -89,6 +92,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpPost]
+        [Authorize(policy: "SelfOnly")]
         public async Task<IActionResult> SendRequest([FromBody] sendRequestModel md)
         {
             sysFontUser TUser = await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == md.targetName);
@@ -117,6 +121,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpGet]
+        [Authorize(policy:"SelfOnly")]
         public new async Task<IActionResult> Request(string username)
         {
             StringBuilder sb = new StringBuilder();
@@ -134,6 +139,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpDelete]
+        [Authorize(policy: "SelfOnly")]
         public new IActionResult Request([FromQuery]sysFriendsRequest friendsReq)
         {
             sysFriendsRequest res =friendsReq.Adapt<sysFriendsRequest>();
@@ -149,6 +155,7 @@ namespace construct.Application.System.FontServices.Friends
         /// <returns></returns>
         /// 
         [HttpPost]
+        [Authorize(policy: "SelfOnly")]
         public async Task<IActionResult> AcceptRequest([FromBody]sysFriendsRequest friendsReq)
         {
             //创建一个双向好友 =>同时添加两条数据

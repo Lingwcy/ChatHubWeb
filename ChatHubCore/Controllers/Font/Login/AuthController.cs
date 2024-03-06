@@ -39,7 +39,7 @@ namespace construct.Application.System.Services.Login
         /// <param name="loginInput"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> login(FontLoginInput loginInput)
+        public async Task<IActionResult> login([FromBody]FontLoginInput loginInput)
         {
             sysFontUser user = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == loginInput.userName && a.Password==loginInput.passworld);
             if (user == null) return Ok(new Response(code:2,message: "用户名或密码错误！", data:new object()));
@@ -136,6 +136,13 @@ namespace construct.Application.System.Services.Login
         [HttpGet]
         public ActionResult Verify()
         {
+            return Ok(new Response(code: 1, new object(), string.Empty));
+        }
+
+        [HttpPost]
+        public ActionResult AES()
+        {
+            
             return Ok(new Response(code: 1, new object(), string.Empty));
         }
     }
