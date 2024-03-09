@@ -6,6 +6,7 @@ import { ElScrollbar } from 'element-plus'
 import { appsetting, UseServiceStore } from '../../../store/index'
 import Emoji from '../HubContent/Tools/Emoji.vue'
 import PicUpLoad from '../HubContent/Tools/PicUpload.vue'
+import { createGroupService } from '../../../services/ServicesCollector'
 const appset = appsetting() //系统设置库
 const service = UseServiceStore();
 const chatStore = UseChatStore() //主Chat库

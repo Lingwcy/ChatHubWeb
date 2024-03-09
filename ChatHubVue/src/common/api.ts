@@ -24,3 +24,7 @@ export const deleteMessageBox = (params:any) => delete_('/Message/messageBoxItem
 
 //User
 export const getUserInfo = (params:{targetname:string}) => get('/User/QueryByUserName',{params})
+
+
+//Group
+export const getGroupFromName = (params:{groupName:string}) => get('/Group/GetByName',{params})

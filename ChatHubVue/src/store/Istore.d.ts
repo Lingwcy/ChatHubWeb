@@ -1,5 +1,6 @@
 import { Auth } from '../services/AuthService';
 import { Friends,UserRequest } from '../services/FriendsService';
+import { GroupService } from '../services/GroupService';
 import { ChatHub } from '../services/HubService';
 import { Message } from '../services/MessageService';
 import { UserApi } from '../services/UserService';
@@ -36,4 +37,5 @@ interface IService {
     Friend:Friends| undefined,
     Message:Message| undefined,
     User:UserApi | undefined
+    Group:GroupService | undefined
 }

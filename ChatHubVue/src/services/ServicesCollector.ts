@@ -3,6 +3,7 @@ import { Auth } from "./AuthService";
 import { Friends } from "./FriendsService";
 import { Message } from "./MessageService";
 import { UserApi } from "./UserService";
+import { GroupService } from "./GroupService";
 import { UseChatStore, UseMsgStore, UseMsgbox, UseServiceStore, UseUserInformationStore,UseFriendsStore } from "../store";
 const service = UseServiceStore();
 const userInfoStore = UseUserInformationStore();
@@ -26,5 +27,8 @@ export function createMessageService() {
 }
 export function createUserService(){
     service.User = new UserApi(friendStore);
+}
+export function createGroupService(){
+    service.Group = new GroupService();
 }
 

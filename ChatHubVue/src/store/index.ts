@@ -98,6 +98,9 @@ export const appsetting = defineStore('appset', {
             ServerAddress: "https://localhost:5001",
             ServerHubAddress: "https://localhost:5001/MyHub",
             NavBarShow:true,
+            CompoentsEvent:{
+                isAddOpen:false
+            }
         }
     },
 })
@@ -153,7 +156,8 @@ export const UseServiceStore = defineStore('service', {
             ChatHub: undefined,
             Friend: undefined,
             Message: undefined,
-            User: undefined
+            User: undefined,
+            Group:undefined,
         }
     },
     persist: {
