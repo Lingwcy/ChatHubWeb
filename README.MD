@@ -44,6 +44,7 @@ ChatHubWeb 是一个基于 Web 的实时通信客户端，专为与 ChatHub 实�
 #### 目录
 - ChatHubCore .NET8 Web Api 后端
 - ChatHubVue 前台
+- ChatHubAdminVue 后台[pure-admin]
 - Mysql.sql 数据库结构
 
 #### 如何运行  

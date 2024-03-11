@@ -5,6 +5,7 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -41,14 +42,15 @@ public class UserController : ControllerBase
     /// <returns></returns>
     /// 
     [HttpPost]
-    public async Task<ActionResult<int>> Add(AddUserInput input)
+    public async Task<IActionResult> Add([FromBody]AddUserInput input)
     {
         var isExist = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == input.Username);
-        if (isExist != null) return NotFound();
+        if (isExist != null)
+            return Ok(new Response(3, null, "找不到此数据"));
 
         var user = input.Adapt<sysFontUser>();
 
-        return _db.Insertable<sysFontUser>(user).ExecuteCommand();
+        return Ok(new Response(_db.Insertable<sysFontUser>(user).ExecuteCommand() > 0 ? 1 : 2,null,"操作成功"));
 
     }
 
@@ -132,28 +134,28 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// 获取所有用户       
+    /// 获取所有用户 
+    /// version 2.0
     /// </summary>
     /// <param name="name">用户名</param>
     /// <returns></returns>
     /// 
-    [HttpPost]
-    public ActionResult<string> GetAll()
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] SearchModel? md)
     {
-        var res = _db.Queryable<sysFontUser>().ToList();
-        StringBuilder json = new StringBuilder();
-        foreach (var item in res)
+        if(md != null)
         {
-            json.Append(JsonSerializer.Serialize(item, new JsonSerializerOptions()
-            {
-                // 整齐打印
-                WriteIndented = true,
-                //重新编码，解决中文乱码问题
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-            }) + "$");
+            var query = _db.Queryable<sysFontUser>()
+            .WhereIF(!string.IsNullOrEmpty(md.username), it => it.Username.Contains(md.username))
+            .WhereIF(!string.IsNullOrEmpty(md.phone), it => it.Phone.Contains(md.phone));
+            var users = await query.ToListAsync();
+
+            return Ok(new Response(1, users, "搜索成功"));
         }
 
-        return json.ToString();
+
+        var res = _db.Queryable<sysFontUser>().ToList();
+        return Ok(new Response(1, res, "获取成功"));
     }
 
 

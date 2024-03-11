@@ -23,51 +23,53 @@ namespace ChatHubApi.Controllers.AdminServices.User.Model
         /// <summary>
         /// 性别-男_1、女_2
         /// </summary>
-        public virtual string Sex { get; set; }
+        public virtual string? Sex { get; set; }
 
         /// <summary>
         /// 姓名
         /// </summary>
-        public virtual string HeaderImg { get; set; }
+        public virtual string? HeaderImg { get; set; }
 
 
         /// <summary>
         /// 头像
         /// </summary>
-        public virtual string Email { get; set; }
+        public virtual string? Email { get; set; }
 
         /// <summary>
         /// 手机号
         /// </summary>
-        public virtual string City { get; set; }
+        public virtual string? City { get; set; }
 
         /// <summary>
         /// 邮箱
         /// </summary>
-        public virtual string Age { get; set; }
+        public virtual string? Age { get; set; }
 
         /// <summary>
         /// 状态-正常_0、停用_1、删除_2
         /// </summary>
-        public virtual string Job { get; set; }
+        public virtual string? Job { get; set; }
 
         /// <summary>
         /// 状态-在线_0、离线_1、异常_2
         /// </summary>
-        public virtual int Status { get; set; } = 1;
+        public virtual int? Status { get; set; } = 1;
 
-        public virtual int id { get; set; }
+        public virtual int? id { get; set; }
 
-        public virtual string Phone { get; set; }
+        public virtual string? Phone { get; set; }
 
-        public virtual string NickName { get; set; }
+        public virtual string? NickName { get; set; }
 
-        public virtual string Birth { get; set; }
+        public virtual string? Birth { get; set; }
 
-        public virtual string Desc { get; set; }
+        public virtual string? Desc { get; set; }
 
     }
 
+
+    public record SearchModel(string? username,string? phone);
 
     public class AddUserInput : UserInput
     {
@@ -88,6 +90,18 @@ namespace ChatHubApi.Controllers.AdminServices.User.Model
         /// </summary>
         [Required(ErrorMessage = "头像不能为空")]
         public override string HeaderImg { get; set; }
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        [Required(ErrorMessage = "昵称不能为空")]
+        public override string? NickName { get; set; }
+
+        public override string? Phone { get; set; }
+
+        public override string? Email { get; set; }
+
+        public override int? Status { get;set; }
+
     }
 
 

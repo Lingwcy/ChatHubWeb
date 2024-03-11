@@ -113,7 +113,7 @@ builder.Services.AddSignalR(options =>
 //jwt¹¤¾ß
 builder.Services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
 //¿çÓòÅäÖÃ
-string[] urls = new[] { builder.Configuration["Cors"], "http://localhost:5173", "https://localhost:5001/","*" };
+string[] urls = new[] { builder.Configuration["Cors"], "http://localhost:5173", "https://localhost:5001/", "http://localhost:8848", "*" };
 builder.Services.AddCors(opt =>
 {
     opt.AddDefaultPolicy(builder => builder.WithOrigins(urls).AllowAnyHeader().AllowAnyMethod());
@@ -141,7 +141,7 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCrypto();
+//app.UseCrypto();
 app.MapControllers();
 app.MapHub<MyHub>("/MyHub");
 app.Run();
