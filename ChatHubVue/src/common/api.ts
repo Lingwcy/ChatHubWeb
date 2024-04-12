@@ -11,7 +11,9 @@ export const postAESKey = (data:any,config: any) =>post('/Auth/AES',data,config)
 export const getFriendRequest = (params: {userName:string,xusername:string}) => get('/Friends/Request',{params});
 export const getFriends = (params: {userId:string,xusername:string}) => get('/Friends/queryAll',{params});
 export const postFriendRequest = (params:any) => post('/Friends/sendRequest',params);
-export const findFriend = (params:{targetName:string, userName:string,xusername:string}) => get('/Friends/query',{params})
+export const findFriendTree = (params:{userId:string,xusername:string}) => get('/Friends/querytree',{params})
+export const findFriend = (params:{targetName:string, userName:string,xusername:string}) => get('/Friends/query',{params}) //不放回
+export const findFriends = (params:{targetName:string, userName:string,xusername:string}) => get('/Friends/querys',{params}) //放回数据
 export const acceptRequest = (parmas:any) => post('/Friends/acceptRequest',parmas);
 export const rejectRequest = (params:any) => delete_('/Friends/request',{params})
 

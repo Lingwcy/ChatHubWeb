@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus";
-import { getFriendRequest, getFriends, postFriendRequest, findFriend,acceptRequest, rejectRequest } from "../common/api";
+import { getFriendRequest,findFriendTree, getFriends, postFriendRequest, findFriend,acceptRequest, rejectRequest, findFriends } from "../common/api";
 import { IUseFriendsStore } from "../store/Istore";
 
 export interface UserRequest {
@@ -11,7 +11,21 @@ export interface UserRequest {
     TargetImg: string;
     remark: string;
     ReqMsg: string;
+    TargetGroupId:number
     xusername:string
+}
+export interface AcceptRequest{
+    UserImg: string;
+    UserId: number;
+    UserName: string;
+    TargetId: number;
+    TargetName: string;
+    TargetImg: string;
+    remark: string;
+    ReqMsg: string;
+    TargetGroupId:number
+    AccepterGroupId:number
+    xusername:string 
 }
 export interface Friend {
     Id: number,
@@ -26,11 +40,16 @@ interface SendRequestParams {
     ReqMsg: string,
     userName: string,
     targetName: string,
+    TargetGroupId:number
     xusername:string
 }
 interface FindFriendParams {
     targetName: string,
     userName: string,
+    xusername:string
+}
+interface FindFriendTreeParams {
+    userId: string,
     xusername:string
 }
 export class Friends {
@@ -62,7 +81,7 @@ export class Friends {
         let xusername:string = username
         return await getFriends({ userId,xusername }).then(result => {
             if (result.data.code == 1) {
-                friendsStore.$reset()
+                friendsStore.Friends=[];
                 let data: Friend[] = JSON.parse(result.data.data);
                 let i = 0;
                 data.forEach(element => {
@@ -137,7 +156,44 @@ export class Friends {
             return false;
         })
     }
-
+    public async FindFriends(params: FindFriendParams,GroupStore:any): Promise<boolean> {
+        return await findFriends(params).then(result => {
+            if (result.data.code == 1) {
+                ElMessage({
+                    type: 'success',
+                    message: `查找成功`,
+                })
+                GroupStore.SearchUser = JSON.parse(result.data.data);
+                return true;
+            }
+            else if (result.data.code == 2) {
+                ElMessage({
+                    message: result.data.message,
+                    type: 'warning',
+                })
+                return false
+            }
+            return false;
+        }, error => {
+            ElMessage.error(error);
+            return false;
+        })
+    }
+    public async FindFriendTree(params: FindFriendTreeParams,FriendStore:any): Promise<boolean> {
+        return await findFriendTree(params).then(result => {
+            if (result.data.code == 1) {
+                FriendStore.FriendTree = JSON.parse(result.data.data)
+                return true;
+            }
+            else if (result.data.code == 2) {
+                return false
+            }
+            return false;
+        }, error => {
+            ElMessage.error(error);
+            return false;
+        })
+    }
     public async AcceptFriendRequest(params: UserRequest): Promise<boolean> {
         return await acceptRequest(params).then(result => {
             if (result.data.code == 1) {

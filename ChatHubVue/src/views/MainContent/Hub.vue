@@ -9,17 +9,17 @@ onBeforeMount(() => {
 })
 let ChangeLeftNavDetail = reactive({
     width: ref("300px"),
-    minwidth: ref("188px"),
+    //minwidth: ref("188px"),
     flag: ref(0)
 })
 const ChangeLowerLeftNavDetail = function () {
     if (ChangeLeftNavDetail.flag == 0) {
         ChangeLeftNavDetail.width = "0%"
-        ChangeLeftNavDetail.minwidth = "0px"
+        //ChangeLeftNavDetail.minwidth = "0px"
         ChangeLeftNavDetail.flag = 1
     } else {
         ChangeLeftNavDetail.width = "300px"
-        ChangeLeftNavDetail.minwidth = "188px"
+       // ChangeLeftNavDetail.minwidth = "188px"
         ChangeLeftNavDetail.flag = 0
     }
 }
@@ -64,6 +64,7 @@ document.body.style.overflow = "hidden"
     display: flex;
     align-items: center;
     height: 800px;
+    width: 60px;
     flex-direction: column;
 }
 
@@ -75,6 +76,7 @@ document.body.style.overflow = "hidden"
 #LeftNavDetail {
     transition: all 0.2s ease-in-out;
     border-right: 1px #e9e9eb solid;
+    background-color: #fafafa;
 }
 
 #LeftNav {

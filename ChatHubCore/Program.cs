@@ -139,9 +139,9 @@ app.Use(async (context, next) =>
 app.UseExceptionHandling();
 app.UseHttpsRedirection();
 app.UseCors();
+app.UseCrypto();
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseCrypto();
 app.MapControllers();
 app.MapHub<MyHub>("/MyHub");
 app.Run();

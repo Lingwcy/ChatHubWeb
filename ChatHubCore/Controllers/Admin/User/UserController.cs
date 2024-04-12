@@ -10,6 +10,7 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -36,7 +37,8 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// 增加用户       
+    /// 增加用户
+    /// verison 2.0
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
@@ -74,43 +76,43 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// 批量删除（通过传入name数组来搜索）      
+    /// 批量删除（通过传入name数组来搜索）   
+    /// VERSION 2.0
     /// </summary>
     /// <param name="dc">需要删除的姓名（用户名）数组</param>
     /// <returns></returns>
     /// 
-    [HttpDelete]
-    public Task DeletesByUserName([FromBody] dynamic dc)
+    [HttpPost]
+    public IActionResult Deletes([FromBody] int[] dc)
     {
 
-
-        JsonElement json = dc;
-        List<string> objs = JsonSerializer.Deserialize<List<string>>(json.ToString());
-        foreach (var item in objs)
+        foreach (var item in dc)
         {
-            _db.Deleteable<sysFontUser>().Where(a => a.Username == item).ExecuteCommand();
+            _db.Deleteable<sysFontUser>().Where(a => a.id == item).ExecuteCommand();
         }
 
-        return Task.CompletedTask;
+        return Ok(new Response(1,null,"调用成功"));
 
     }
 
 
+
     /// <summary>
-    /// 编辑用户       
+    /// 编辑用户
+    /// version 2.0
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     /// 
-    [HttpPut]
-    public async Task<ActionResult<int>> Update(EditUserInput input)
+    [HttpPost]
+    public async Task<IActionResult> Update([FromBody]EditUserInput input)
     {
         var isExist = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == input.Username);
-        if (isExist == null) return NotFound();
+        if (isExist == null) return Ok(new Response(3, null, "已经存在此用户"));
 
         var user = input.Adapt<sysFontUser>();
 
-        return _db.Updateable(user).WhereColumns(it => new { it.Username, }).ExecuteCommand();
+        return Ok(new Response(_db.Updateable(user).WhereColumns(it => new { it.Username, }).ExecuteCommand() > 0?1:2,null,"操作成功"));
 
     }
 
@@ -118,17 +120,18 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// 删除一个用户       
+    /// 删除一个用户
+    /// version 2.0
     /// </summary>
     /// <param name="name">删除的用户名</param>
     /// <returns></returns>
     /// 
-    [HttpDelete]
-    public async Task<ActionResult<int>> Delete(string name)
+    [HttpPost]
+    public async Task<IActionResult> Delete([FromBody]string name)
     {
         var isExist = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == name);
-        if (isExist == null) return NotFound();
-        return _db.Deleteable<sysFontUser>().Where(a => a.Username == name).ExecuteCommand();
+        if (isExist == null) return Ok(new Response(3, null, "找不到此用户"));
+        return Ok(new Response(_db.Deleteable<sysFontUser>().Where(a => a.Username == name).ExecuteCommand() > 0 ? 1 :2, null , "操作成功" ));
 
     }
 

@@ -1,10 +1,9 @@
 <script setup>
-import {reactive} from 'vue'
+import {reactive,ref} from 'vue'
 import { useRouter } from 'vue-router'
 import {UseUserInformationStore} from '../../../store/index'
 
 import { CaretBottom } from '@element-plus/icons-vue'
-
 
 const userInfo=UseUserInformationStore()
 const router =useRouter()
@@ -16,8 +15,6 @@ const state = reactive({
     toUserName:"",
     PrivateMsg:""
 });
-
-
 
 
 const DetailSelector=(index)=>{
@@ -37,6 +34,10 @@ const DetailSelector=(index)=>{
     }else if(index ==4){
         router.push({
             path:'/Setting/User'
+        })
+    }else if(index == 0){
+        router.push({
+            path:'/Hub/Contract'
         })
     }
 
@@ -70,13 +71,16 @@ const confirm =()=>{
             </div>
         </div>
 
-        <div class="LeftNav-Container-items" v-on:click="DetailSelector(3)">
+        <div class="LeftNav-Container-items" v-on:click="DetailSelector(3)" >
             <el-badge value="new" class="redpop" :max="99" :hidden="userInfo.unReadMsg">
             <img src="../../../images/icon/dark/消息-黑.svg" class="LeftNavItem"/>
         </el-badge>
         </div>
 
-        <div class="LeftNav-Container-items" v-on:click="DetailSelector(1)">
+        <div class="LeftNav-Container-items" v-on:click="DetailSelector(0) "   >
+            <img src="../../../images/icon/dark/好友-黑.svg" class="LeftNavItem"/>
+        </div>
+        <div class="LeftNav-Container-items" v-on:click="DetailSelector(1) "   >
             <img src="../../../images/icon/dark/好友-黑.svg" class="LeftNavItem"/>
         </div>
         <div class="LeftNav-Container-items" v-on:click="DetailSelector(2)">
@@ -91,13 +95,16 @@ const confirm =()=>{
     </div>
 </template>
 <style>
+.selected {  
+  background-color: #d3d3d4;  
+}  
 .LeftNavItem{
-    width:30px;
-    height:30px;
+    width:25px;
+    height:25px;
 }
     #LeftNav-Container{
        width: 80%;
-       height: 800px;
+       height: 700px;
        display: flex;
        flex-direction: column;
 
@@ -116,7 +123,7 @@ const confirm =()=>{
     .LeftNav-Container-items:hover{
         transition: all 0.3s ease;
         cursor: pointer;
-        background-color: #f2f3f5;   
+        background-color: #d3d3d4;   
         border-radius: 10px;    
     }
     #UserMsg{

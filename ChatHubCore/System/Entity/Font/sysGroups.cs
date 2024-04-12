@@ -1,5 +1,6 @@
 ﻿using SqlSugar;
 using System.ComponentModel;
+using System.Numerics;
 
 namespace ChatHubApi.System.Entity.Font
 {
@@ -24,10 +25,15 @@ namespace ChatHubApi.System.Entity.Font
         public int? CreatorUserId { get; set; }
 
         public bool IsDeleted { get; set; }
- 
+
+        public int MemberNumber { get; set; }
+        
+        public string GroupHeader { get; set; }
+
+        //创建人的映射
         [SugarColumn(IsIgnore = true)]
         public sysFontUser CreatorUser { get; set; }
-
+        //群组成员的映射
         [SugarColumn(IsIgnore = true)]
         public List<sysUserGroup> UserGroup { get; set; }
     }

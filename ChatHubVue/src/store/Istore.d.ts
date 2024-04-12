@@ -8,6 +8,7 @@ import { UserApi } from '../services/UserService';
 
 export interface IUseFriendsStore{
     $reset(): unknown;
+    FriendTree:FriendTree | undefined,
     Friends: Friend[],
     RequestList: UserRequest[]
     TargetUserProfile: IUserProfile | undefined
@@ -16,6 +17,24 @@ export interface IUseFriendsStore{
 declare export interface IChatStore {
     targetUserTab: TargetUserTab[]
     selectedTab: number
+}
+
+declare export interface IGroupStore{
+    SearchGroup:Group[]
+    SelectedGroup:Group
+    SearchUser:IUserProfile[]
+    SelectedUser:IUserProfile
+}
+
+declare export interface Group{
+    GroupId:number,
+    GroupName:string,
+    GroupDescription:string,
+    CreationDate:string,
+    CreatorUserId:number,
+    IsDeleted:boolean,
+    MemberNumber:number,
+    GroupHeader:string,
 }
 //存储与用户正在聊天的Tab信息
 interface TargetUserTab {

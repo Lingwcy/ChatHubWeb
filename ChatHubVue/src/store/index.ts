@@ -1,5 +1,5 @@
 import { defineStore, createPinia } from 'pinia'
-import { IChatStore, IService, IUseFriendsStore } from './Istore';
+import { IChatStore, IGroupStore, IService, IUseFriendsStore } from './Istore';
 import piniaPluginPersist from 'pinia-plugin-persist';
 import { IMsgStore } from '../models/interface/IMessageStore';
 
@@ -49,6 +49,10 @@ export const UseUserInformationStore = defineStore("userInfo", {
 export const UseFriendsStore = defineStore("friendstore", {
     state: (): IUseFriendsStore => {
         return {
+            FriendTree: {
+                OwnerId:0,
+                Units:[]
+            },
             Friends: [],
             RequestList: [],
             TargetUserProfile: undefined //在查看好友详细资料时挂载
@@ -97,9 +101,32 @@ export const appsetting = defineStore('appset', {
             input: "",
             ServerAddress: "https://localhost:5001",
             ServerHubAddress: "https://localhost:5001/MyHub",
-            NavBarShow:true,
-            CompoentsEvent:{
-                isAddOpen:false
+            NavBarShow: true,
+            CompoentsEvent: {
+                isAddOpen: false,
+                isAddDetail:{
+                    isOpen:false,
+                    mode:"user"//user OR group
+                },
+                isAcceptDetail:{
+                    selectedUser:{
+                        UserImg: "",
+                        UserId: 0,
+                        UserName: "",
+                        TargetId: 0,
+                        TargetName: "",
+                        TargetImg: "",
+                        remark: "",
+                        ReqMsg: "",
+                        TargetGroupId:0,
+                        AccepterGroupId:0,
+                        xusername:"" ,
+                    },
+                    isOpen:false
+                },
+                isFriendRequestMessageOpen:false,
+                isGroupRequestMessageOpen:false,
+                isFriendManagerSystemOpen:false,
             }
         }
     },
@@ -119,11 +146,11 @@ export const UseMsgbox = defineStore('MsgBox', {
 export const UseTheme = defineStore('Theme', {
     state: () => {
         return {
-            Icon:{
-                Maxmize:"/src/images/icon/dark/放大.svg",
-                SwitchTheme:{
-                    isDark:false,
-                    url:"sss"
+            Icon: {
+                Maxmize: "/src/images/icon/dark/放大.svg",
+                SwitchTheme: {
+                    isDark: false,
+                    url: "sss"
                 }
             }
 
@@ -147,7 +174,41 @@ export const UseChatStore = defineStore('Chat', {
         }
     },
 })
-
+export const UseGroupStore = defineStore('Group', {
+    state: (): IGroupStore => {
+        return {
+            SearchGroup: [
+                
+            ],
+            SearchUser:[],
+            SelectedGroup:{
+                GroupId: 0,
+                GroupName: '',
+                GroupDescription: '',
+                CreationDate: '',
+                CreatorUserId: 0,
+                IsDeleted: false,
+                MemberNumber: 0,
+                GroupHeader: ''
+            },
+            SelectedUser:{
+                id: 0,
+                Username: '',
+                HeaderImg: '',
+                Email: '',
+                City: '',
+                Sex: '',
+                Age: '',
+                Job: '',
+                Phone: '',
+                NickName: '',
+                Birth: '',
+                Desc: '',
+                status: 0
+            }
+        }
+    },
+})
 
 export const UseServiceStore = defineStore('service', {
     state: (): IService => {
@@ -157,7 +218,7 @@ export const UseServiceStore = defineStore('service', {
             Friend: undefined,
             Message: undefined,
             User: undefined,
-            Group:undefined,
+            Group: undefined,
         }
     },
     persist: {

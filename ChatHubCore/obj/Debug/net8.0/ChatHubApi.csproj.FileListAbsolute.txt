@@ -217,9 +217,9 @@ C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\staticw
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.ChatHubApi.props
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\scopedcss\bundle\ChatHubApi.styles.css
-C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.csproj.CopyComplete
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.dll
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\refint\ChatHubApi.dll
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.pdb
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.genruntimeconfig.cache
 C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ref\ChatHubApi.dll
+C:\Users\LEGION\Desktop\RebuildChat\chathub\ChatHubCore\obj\Debug\net8.0\ChatHubApi.csproj.Up2Date

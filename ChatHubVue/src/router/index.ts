@@ -19,7 +19,7 @@ const Groups = () => import('../views/MainContent/HubContent/LeftNavDetail/Group
 const Msgbox = () => import('../views/MainContent/HubContent/LeftNavDetail/MessageBox.vue')
 const UserSetting = () => import('../views/MainContent/Setting/UserSetting.vue')
 const LocalSetting = () => import('../views/MainContent/Setting/LocalSetting.vue')
-
+const Contract = () => import('../views/MainContent/HubContent/LeftNavDetail/Contract.vue')
 //system
 const Error = () => import('../views/System/Error.vue');
 
@@ -50,6 +50,10 @@ const routes = [
             {
                 path: 'Message',
                 component: Msgbox
+            },
+            {
+                path: 'Contract',
+                component: Contract
             }
         ]
     },

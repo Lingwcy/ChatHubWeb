@@ -10,6 +10,6 @@ namespace construct.Application.System.FontServices.Friends.Model
     {
     }
 
-    public record sendRequestModel (string targetName, string userName, string ReqMsg, string mark);
+    public record sendRequestModel (string targetName, string userName, string ReqMsg, string mark,int TargetGroupId);
     public record sendRedBobModel (string username, string targetname);
 }

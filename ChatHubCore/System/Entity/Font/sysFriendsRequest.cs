@@ -67,8 +67,13 @@ namespace ChatHubApi.System.Entity.Font
         /// <summary>
         /// 请求消息
         /// </summary>
-        [Required, MaxLength(50)]
+        [MaxLength(50)]
         [SugarColumn(ColumnDescription = "请求消息")]
         public string ReqMsg { get; set; }
+
+        /// <summary>
+        /// 将要添加进好友请求发送者的分组ID
+        /// </summary>
+        public int TargetGroupId {  get; set; }
     }
 }

@@ -82,11 +82,11 @@ namespace construct.Application.System.Services.Login
         /// <returns></returns>
         /// 
         [HttpPost]
-        public async Task<IActionResult> register(FontLoginInput loginInput)
+        public async Task<IActionResult> register([FromBody] FontLoginInput loginInput)
         {
             var Exist =await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == loginInput.userName);
             if(Exist != null) {
-                return NotFound();
+                return Ok(new Response(code: 3, message: "已经存在此用户！", data: new object()));
             }
             sysFontUser user = new sysFontUser()
             {
@@ -96,9 +96,7 @@ namespace construct.Application.System.Services.Login
                 Desc = "这个人还没有填写介绍",
                 status= ChatHubApi.System.Enum.Status.DISABLE,
             };
-            _db.Insertable(user).ExecuteCommand();
             string accessToken = string.Empty;
-
             if (!string.IsNullOrEmpty(user.Username) && !string.IsNullOrEmpty(user.Password))
             {
                 // 生成 token
@@ -106,27 +104,42 @@ namespace construct.Application.System.Services.Login
                 {
                     new Claim("UserId", user.id.ToString()),
                     new Claim("UserName", user.Username),
-                    new Claim("EmploymentDate", "2023-05-01"),
-                    new Claim("Admin","true"),
+                    new Claim("Role","User"),
                 };
                 var expiresAt = DateTime.UtcNow.AddMinutes(300);
                 accessToken = jwtService.CreateJwtToken(claims, expiresAt, _jwtHandler, _config);
-              
+
+            }
+            try
+            {
+                _db.Insertable(user).ExecuteCommand();
+                //初始化分组系统
+                sysRelationTree tree = new sysRelationTree();
+                int id  = await _db.Queryable<sysFontUser>().Where(x=>x.Username == user.Username ).Select(x=>x.id).FirstAsync();
+                tree.ownerId = id;
+                tree.name = "好友";
+                _db.Insertable(tree).ExecuteCommand();
+                var returnMsg = new
+                {
+                    userId = id,
+                    userName = user.Username,
+                    userPsw = user.Password,
+                    jwtToken = accessToken,
+                    userImg = user.HeaderImg,
+                };
+                return Ok(new Response(
+                code: 1,
+                data: returnMsg,
+                message: "注册成功"));
+            }
+            catch(Exception ex)
+            {
+                return Ok(new Response(
+                    code: 2,
+                    data: null,
+                    message: "系统异常" + ex.Message));
             }
 
-            var returnMsg = new
-            {
-                userId = user.id,
-                userName = user.Username,
-                userPsw = user.Password,
-                jwtToken = accessToken,
-                userImg = user.HeaderImg,
-            };
-            return Ok(JsonSerializer.Serialize(returnMsg, new JsonSerializerOptions()
-            {
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-            }));
         }
 
 

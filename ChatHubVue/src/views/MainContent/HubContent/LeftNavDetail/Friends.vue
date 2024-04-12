@@ -3,7 +3,7 @@ import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {createFriendsService } from '../../../../services/ServicesCollector';
 import { UseUserInformationStore,UseServiceStore, UseFriendsStore, UseMsgStore, UseChatStore } from '../../../../store/index'
-import { UserRequest } from '../../../../services/FriendsService';
+import { AcceptRequest, UserRequest } from '../../../../services/FriendsService';
 const userInfo = UseUserInformationStore()
 const service = UseServiceStore();
 const fristore = UseFriendsStore()
@@ -132,7 +132,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
     targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
   })
 }
-const acceptFriendsReq = (TargetModel: UserRequest) => {
+const acceptFriendsReq = (TargetModel: AcceptRequest) => {
   TargetModel.xusername = TargetModel.TargetName
   let flag = service.Friend?.AcceptFriendRequest(TargetModel)
   if(flag == undefined) return ;
@@ -208,7 +208,6 @@ getFriendsList()
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -219,7 +218,7 @@ getFriendsList()
     </template>
   </el-dialog>
 </template>
-<style>
+<style scoped>
 .FriendsRequestContent {
   display: flex;
   height: 100%;

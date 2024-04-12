@@ -116,8 +116,7 @@ namespace ChatHubApi.Controllers.AdminServices.User.Model
         /// <summary>
         /// 密码
         /// </summary>
-        [Required(ErrorMessage = "密码不能为空")]
-        public override string Password { get; set; }
+        public override string? Password { get; set; }
 
         /// <summary>
         /// 性别

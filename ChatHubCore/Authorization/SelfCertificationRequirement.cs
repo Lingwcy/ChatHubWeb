@@ -10,7 +10,10 @@ namespace ChatHubApi.Authorization
         {
         }
     }
-
+    /**
+     * 
+     * 检查策略: 当JWT中的username与请求体/url中的xusername一致时 授权通过
+     * **/
     public class SelfCertificationRequirementHandler : AuthorizationHandler<SelfCertificationRequirement>
     {
         private readonly IHttpContextAccessor _httpContextAccessor;

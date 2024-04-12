@@ -1,4 +1,5 @@
-﻿using ChatHubApi.System;
+﻿using ChatHubApi.Controllers.Font.Friends.Model;
+using ChatHubApi.System;
 using ChatHubApi.System.Entity.Font;
 using construct.Application.System.FontServices.Friends.Model;
 using Mapster;
@@ -29,6 +30,8 @@ namespace construct.Application.System.FontServices.Friends
         /// <summary>
         /// 查找好友（好友）
         /// 描述:目标表 SysFriends
+        /// 作用：检验是否与此用户为好友 
+        /// 注：单个查找
         /// version 2.0
         /// </summary>
         /// <param name="targetName"></param>
@@ -58,7 +61,31 @@ namespace construct.Application.System.FontServices.Friends
 
             return Ok(new Response(1, null, "查找成功！")); ;//成功
         }
-
+        /// <summary>
+        /// 查找好友（好友）
+        /// 描述:目标表 SysFriends
+        /// 注：群体模糊查找
+        /// version 2.0
+        /// </summary>
+        /// <param name="targetName"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        /// 
+        [HttpGet]
+        [Authorize(policy: "SelfOnly")]
+        public ActionResult Querys(string targetName, string username)
+        {
+            if (targetName == username)
+            {
+                return Ok(new Response(2, null, "不能添加自己为好友"));
+            }
+            //目标用户
+            var query = _db.Queryable<sysFontUser>()
+            .WhereIF(!string.IsNullOrEmpty(targetName), it => it.Username.Contains(targetName))
+            .ToList();
+            if(query.Count ==0) return Ok(new Response(3, null, "找不到符合此条件的用户！"));
+            return Ok(new Response(1, query, "查找成功！")); ;//成功
+        }
 
         /// <summary>
         /// 获取一个用户的所有好友
@@ -79,7 +106,34 @@ namespace construct.Application.System.FontServices.Friends
             var res = _db.Queryable<sysFriends>().Where(a => a.TheUserId == userId).ToList();
             return Ok(new Response(1, res, "获取成功"));
         }
-
+        /// <summary>
+        /// 获取一个用户的所有好友（好友树版）
+        /// version: 2.0
+        /// </summary>
+        /// <param name="userId">用户id</param>
+        /// <returns></returns>
+        /// 
+        [HttpGet]
+        [Authorize(policy: "SelfOnly")]
+        public async Task<ActionResult> QueryTree(long userId)
+        {
+            FriendTree tree = new FriendTree();
+            var resUnits = _db.Queryable<sysRelationTree>().Where(x=>x.ownerId==userId).ToList();
+            if(resUnits.Count == 0) return Ok(new Response(2, null, "没有任何分组"));
+            tree.OnwerId = userId;
+            foreach (var t in resUnits)
+            {
+                FriendTreeUnit unit= new FriendTreeUnit() { id = t.id, UnitName = t.name };
+                var userIdList = _db.Queryable<systRelationTreeMember>().Where(x => x.groupId == unit.id).Select(x=>x.nameId).ToList();
+                foreach(var id in userIdList)
+                {
+                    sysFontUser u = await _db.Queryable<sysFontUser>().SingleAsync(x=>x.id==id);
+                    if(u!=null) unit.Children?.Add(u);
+                }
+                tree.Units.Add(unit);
+            }
+            return Ok(new Response(1, tree, "获取成功"));
+        }
 
         /// <summary>
         /// 发送一个好友请求(向请求表插入数据)
@@ -101,13 +155,20 @@ namespace construct.Application.System.FontServices.Friends
             {
                 return Ok(new Response(3,null,"不存在此用户！"));
             }
+            if (TUser.Username == SUser.Username)
+            {
+                return Ok(new Response(2, null, "你不能添加自己为好友！"));
+            }
+            var exist = _db.Queryable<sysFriends>().Any(a=>a.FriendName == md.targetName && a.TheUserId == SUser.id);
+            if(exist) return Ok(new Response(2, null, "已经是好友了！"));
+
             var repeat = await _db.Queryable<sysFriendsRequest>().FirstAsync(a => a.UserId == SUser.id && a.TargetId == TUser.id);
             if (repeat != null)
             {
                 return Ok(new Response(2, null, "已经发送过请求了！"));
             }
 
-            sysFriendsRequest friendsReq = new sysFriendsRequest() { ReqMsg = md.ReqMsg, UserId = SUser.id, TargetId = TUser.id, TargetName = TUser.Username, UserName = SUser.Username, TargetImg = TUser.HeaderImg, UserImg = SUser.HeaderImg, remark = md.mark };
+            sysFriendsRequest friendsReq = new sysFriendsRequest() { ReqMsg = md.ReqMsg, UserId = SUser.id, TargetId = TUser.id, TargetName = TUser.Username, UserName = SUser.Username, TargetImg = TUser.HeaderImg, UserImg = SUser.HeaderImg, remark = md.mark,TargetGroupId = md.TargetGroupId };
             return Ok(new Response(1, _db.Insertable<sysFriendsRequest>(friendsReq).ExecuteCommand(), "发送请求成功！")); ;
 
         }
@@ -140,7 +201,7 @@ namespace construct.Application.System.FontServices.Friends
         /// 
         [HttpDelete]
         [Authorize(policy: "SelfOnly")]
-        public new IActionResult Request([FromQuery]sysFriendsRequest friendsReq)
+        public new IActionResult Request([FromQuery] DenyRequestModel friendsReq)
         {
             sysFriendsRequest res =friendsReq.Adapt<sysFriendsRequest>();
 
@@ -156,9 +217,9 @@ namespace construct.Application.System.FontServices.Friends
         /// 
         [HttpPost]
         [Authorize(policy: "SelfOnly")]
-        public async Task<IActionResult> AcceptRequest([FromBody]sysFriendsRequest friendsReq)
+        public async Task<IActionResult> AcceptRequest([FromBody]acceptRequestModel friendsReq)
         {
-            //创建一个双向好友 =>同时添加两条数据
+            //创建一个双向好友 =>同时添加两条数据(此时接收者是target方)
             sysFriends friends1 = new sysFriends()
             {
                 TheUserId = friendsReq.UserId,
@@ -175,7 +236,6 @@ namespace construct.Application.System.FontServices.Friends
                 FriendImg = friendsReq.UserImg,
                 remark = "",
             };
-
             bool repeat = await _db.Queryable<sysFriends>().AnyAsync(a => a.TheUserId == friendsReq.UserId && a.FriendId == friendsReq.TargetId);
             var res = friendsReq.Adapt<sysFriendsRequest>();
             if (repeat)
@@ -186,6 +246,16 @@ namespace construct.Application.System.FontServices.Friends
             _db.Insertable<sysFriends>(friends1).ExecuteCommand();
             _db.Insertable<sysFriends>(friends2).ExecuteCommand();
             _db.Deleteable<sysFriendsRequest>().Where(a => a.UserId == res.UserId && a.TargetId == res.TargetId).ExecuteCommand();
+
+            //添加各自分组
+            systRelationTreeMember accpter = new systRelationTreeMember();
+            accpter.groupId = friendsReq.AccepterGroupId;
+            accpter.nameId = friendsReq.UserId;
+            systRelationTreeMember sender = new systRelationTreeMember();
+            sender.groupId = friendsReq.TargetGroupId;
+            sender.nameId = friendsReq.TargetId;
+            _db.Insertable(sender).ExecuteCommand();
+            _db.Insertable(accpter).ExecuteCommand();
             return Ok(new Response(code: 1, message: "添加成功!", data: null));
         }
 
