@@ -30,3 +30,10 @@ export const getUserInfo = (params:{targetname:string}) => get('/User/QueryByUse
 
 //Group
 export const getGroupFromName = (params:{groupName:string}) => get('/Group/GetByName',{params})
+export const getGroupList = (params:{userId:number,xusername:string}) => get('/Group/Mygroups',{params})
+export const getGroupMembers = (params:{groupId:number,xusername:string}) => get('/Group/Members',{params})
+export const postGroupRequest = (params:any) => post('/Group/SendRequest',params);
+export const getGroupRequest = (params:{userId:number,xusername:string}) => get('/Group/Requests',{params});
+export const postAcceptGroupRequest = (params:any) => post('/Group/AcceptRequest',params);
+export const deleteRejectGroupRequest = (params:any) => delete_('/Group/RejectRequest',{params})
+export const postCreateGroup = (params:any) => post('/Group/Create',params);

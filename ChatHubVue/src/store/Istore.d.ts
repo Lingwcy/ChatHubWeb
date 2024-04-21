@@ -24,8 +24,21 @@ declare export interface IGroupStore{
     SelectedGroup:Group
     SearchUser:IUserProfile[]
     SelectedUser:IUserProfile
+    MyGroups:UserGroup[]
+    OnConnectedGroup:{
+        GroupInfo:Group,
+        GroupMemebers:UserGroup[]
+    },
+    GroupRequestList:GroupRequestList[] 
 }
-
+interface GroupRequestList {
+    xusername: any;
+    Id:number,
+    ReqMsg:string,
+    TargetGroupId:number,
+    UserId:number,
+    GroupName:string,
+}
 declare export interface Group{
     GroupId:number,
     GroupName:string,
@@ -36,12 +49,25 @@ declare export interface Group{
     MemberNumber:number,
     GroupHeader:string,
 }
+interface UserGroup {  
+    UserGroupId: number;  
+    UserId: number;  
+    GroupId: number;  
+    JoinDate: string;
+    Role:string,  
+    IsActive: boolean;  
+    User: null | User; // 假设User是一个已经定义的接口，否则可以用any代替  
+    Group: Group;  
+}  
 //存储与用户正在聊天的Tab信息
 interface TargetUserTab {
     tabTitle: string;
     tabName: string;
+    tabType: number;
     targetUserMessage: TargetUserMessage;
+    tabId: number;
 }
+
 //存储目标聊天用户的相关信息。名称，聊天内容...
 interface TargetUserMessage {
     targetUserName: string,

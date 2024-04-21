@@ -59,7 +59,16 @@ const sendFridendsRequst = async () => {
     })
 
 }
-
+const sendGroupRequst =()=>{
+    let payload = {
+        ReqMsg: textarea.value,
+        UserId: Number(userStore.userId),
+        GroupId:groupStore.SelectedGroup.GroupId,
+        xusername:userStore.userName
+    }
+    console.log(payload)
+    service.Group?.SendGroupRequest(payload)
+}
 </script>
 <template>
     <el-dialog v-if="appset.CompoentsEvent.isAddDetail.mode == 'group'"
@@ -96,7 +105,7 @@ const sendFridendsRequst = async () => {
         </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="primary" @click="appset.CompoentsEvent.isAddDetail.isOpen = false">提交</el-button>
+                <el-button type="primary" @click="appset.CompoentsEvent.isAddDetail.isOpen = false;sendGroupRequst()">提交</el-button>
                 <el-button @click="appset.CompoentsEvent.isAddDetail.isOpen = false">取消</el-button>
             </div>
         </template>

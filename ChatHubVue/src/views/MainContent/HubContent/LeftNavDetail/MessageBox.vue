@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
 import { createMessageService, createUserService } from '../../../../services/ServicesCollector';
-import { UseUserInformationStore, UseMsgbox, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
+import { UseUserInformationStore, UseMsgbox,UseGroupStore, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
 createMessageService();
 createUserService();
 const service = UseServiceStore();
@@ -11,6 +11,7 @@ const MsgBox = UseMsgbox()
 const chatStore = UseChatStore()
 const friendStore = UseFriendsStore()
 const DetailVisible = ref(false)
+const groupStore = UseGroupStore()
 onMounted(function () {
     //http载入msgbox
     getMsgBox()
@@ -22,6 +23,7 @@ const getMsgBox = () => {
 }
 //点击私聊弹出聊天框并取消最新红点
 const TurnFriendsToMessageBox = (friends: any) => {
+    console.log(friends)
     if (friends.isNew == 1) {
         let servicePayLoad = {
             username: userInfo.userName,
@@ -31,37 +33,78 @@ const TurnFriendsToMessageBox = (friends: any) => {
         service.Message?.PostRedbob(servicePayLoad)
         friends.isNew = 0
     }
-    let flag1 = false//判断消息存储库
-    Pmsg.messageItems.forEach(element => {
-        if (element.targetUserName == friends.targetfont) {
-            flag1 = true
-            for (let i = 0; i < chatStore.targetUserTab.length; i++) {
-                if (chatStore.targetUserTab[i].tabName == friends.targetfont) {
-                    return
+    if (friends.Type == 'person') {
+        let flag1 = false//判断消息存储库
+        Pmsg.messageItems.forEach(element => {
+            if (element.targetUserName == friends.targetfont) {
+                flag1 = true
+                for (let i = 0; i < chatStore.targetUserTab.length; i++) {
+                    if (chatStore.targetUserTab[i].tabName == friends.targetfont) {
+                        return
+                    }
                 }
+                chatStore.targetUserTab.push({
+                    tabTitle: friends.targetfont,
+                    tabName: friends.targetfont,
+                    targetUserMessage: reactive(element),
+                    tabType: 0,
+                })
             }
-            chatStore.targetUserTab.push({
-                tabTitle: friends.targetfont,
-                tabName: friends.targetfont,
-                targetUserMessage: reactive(element)
-            })
-        }
 
-    });
-    if (flag1) return
-    Pmsg.messageItems.push(
-        {
-            targetUserName: friends.targetfont,
-            messages: [],
-            messageNames: [],
-            messageHeaders: [],
-        }
-    )
-    chatStore.targetUserTab.push({
-        tabTitle: friends.targetfont,
-        tabName: friends.targetfont,
-        targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
-    })
+        });
+        if (flag1) return
+        Pmsg.messageItems.push(
+            {
+                targetUserName: friends.targetfont,
+                messages: [],
+                messageNames: [],
+                messageHeaders: [],
+            }
+        )
+        chatStore.targetUserTab.push({
+            tabTitle: friends.targetfont,
+            tabName: friends.targetfont,
+            tabType: 0,
+            targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
+        })
+    }
+    else if (friends.Type == 'group') {
+        let flag1 = false//判断消息存储库
+        Pmsg.messageItems.forEach(element => {
+            if (element.targetUserName == friends.targetfont) {
+                flag1 = true
+                for (let i = 0; i < chatStore.targetUserTab.length; i++) {
+                    if (chatStore.targetUserTab[i].tabName == friends.targetfont) {
+                        return
+                    }
+                }
+
+                chatStore.targetUserTab.push({
+                    tabTitle: friends.targetfont,
+                    tabName: friends.targetfont,
+                    targetUserMessage: reactive(element),
+                    tabType: 1
+                })
+            }
+
+        });
+        if (flag1) return
+        Pmsg.messageItems.push(
+            {
+                targetUserName: friends.targetfont,
+                messages: [],
+                messageNames: [],
+                messageHeaders: [],
+            }
+        )
+        chatStore.targetUserTab.push({
+            tabTitle: friends.targetfont,
+            tabName: friends.targetfont,
+            tabType: 1,
+            targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
+        })
+    }
+
 }
 
 
@@ -78,7 +121,7 @@ const handleCommand = (command: any) => {
         DetailVisible.value = true
     }
     else if (commands[0] == "delete") {
-        service.Message?.DeleteMessageBoxItem(commands[1],userInfo.userName);
+        service.Message?.DeleteMessageBoxItem(commands[1], userInfo.userName);
     }
 }
 </script>
@@ -87,7 +130,10 @@ const handleCommand = (command: any) => {
         <div class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)">
             <div id="friendReq-Header">
                 <el-badge is-dot :hidden="!req.isNew">
-                    <img v-bind:src="'../../../src/images/systemHeader/' + req.targetImage" id="friendReq-Header-img" />
+                    <img v-if="req.Type == 'person'" v-bind:src="'../../../src/images/systemHeader/' + req.targetImage"
+                        id="friendReq-Header-img" />
+                    <img v-if="req.Type == 'group'" src="../../../../images/assets/群默认头像.svg" alt=""
+                        id="friendReq-Header-img">
                 </el-badge>
             </div>
             <div class="friendMSG-Body">
@@ -120,12 +166,14 @@ const handleCommand = (command: any) => {
         <template #header>
             <div class="DetailInfo-header">
                 <div class="DetailInfo-header-img">
-                    <img :src="'../../../../src/images/systemHeader/' + friendStore.TargetUserProfile?.HeaderImg" alt="">
+                    <img :src="'../../../../src/images/systemHeader/' + friendStore.TargetUserProfile?.HeaderImg"
+                        alt="">
                 </div>
                 <div class="DetailInfo-header-content">
                     <span v-if="friendStore.TargetUserProfile?.NickName" class="DetailInfo-header-content-font1">{{
-                        friendStore.TargetUserProfile?.NickName }}</span>
-                    <span v-else class="DetailInfo-header-content-font1">{{ friendStore.TargetUserProfile?.Username }}</span>
+        friendStore.TargetUserProfile?.NickName }}</span>
+                    <span v-else class="DetailInfo-header-content-font1">{{ friendStore.TargetUserProfile?.Username
+                        }}</span>
                     <span class="DetailInfo-header-content-font2">{{ friendStore.TargetUserProfile?.Job }}</span>
                     <span class="DetailInfo-header-content-font3">暂无个性签名</span>
                 </div>

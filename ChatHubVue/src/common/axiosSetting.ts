@@ -34,7 +34,6 @@ http.interceptors.request.use(
             config.headers!!['token'] = token || ''
         }
         config.data = crypto.encrypt(JSON.stringify(config.data))
-        console.log(config.data)
         return config;
     },
     error => {
@@ -106,7 +105,7 @@ http.interceptors.response.use(
         }
         if (res.status == 401) {
             ElMessage({
-                message: '用户未登录',
+                message: '用户未登录或Token已过期',
                 type: 'error',
                 duration: 3 * 1000
             })

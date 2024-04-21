@@ -1,10 +1,58 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ChatHubApi.Untils
 {
     public static class Crypto
     {
+        private static string AseKey { get;set; }
+        private static string AseIv { get; set; }
+        public static (string Key, string Iv) Get(IConfiguration configuration)
+        {
+            //从配置文件中读取密钥
+            AseKey = configuration["ASEKey"];
+            AseIv = configuration["ASEIv"];
+            string Key=string.Empty;string Iv= string.Empty; 
+            if (string.IsNullOrEmpty(AseKey) || string.IsNullOrEmpty(AseIv))
+            {
+                //如果密钥为空，则生成一个随机密钥
+                (string key, string iv) = GenerateAESKeyAndIV();
+                //保存到配置文件
+                configuration["ASEKey"] = key;
+                configuration["ASEIv"] = iv;
+                AseKey = key;
+                AseIv = iv;
+                Key = key;
+                Iv = iv;
+                return (Key, Iv);
+            }
+            //同时返回密钥和IV
+            return (AseKey,AseIv);
+        }
+
+        private static void GenerateRandomKey(out string key, out string iv)
+        {
+            //生成一个随机密钥
+            AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
+            aes.GenerateIV();
+            aes.GenerateKey();
+            key = Convert.ToBase64String(aes.Key);
+            iv = Convert.ToBase64String(aes.IV);
+        }
+        private static (string key, string iv) GenerateAESKeyAndIV()
+        {
+            using (RijndaelManaged rijndaelManaged = new RijndaelManaged())
+            {
+                rijndaelManaged.GenerateKey();
+                rijndaelManaged.GenerateIV();
+                string key = Convert.ToBase64String(rijndaelManaged.Key);
+                string iv = Convert.ToBase64String(rijndaelManaged.IV);
+
+                return (key, iv);
+            }
+        }
+
         /// <summary>  
         /// AES加密算法  
         /// </summary>  
@@ -70,5 +118,28 @@ namespace ChatHubApi.Untils
                 }
             }
         }
+        public static string HashPassword(string password)
+        {
+            // 将密码转换为字节数组  
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+
+            // 创建SHA256哈希算法实例  
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                // 计算哈希值  
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+
+                // 将哈希值转换为十六进制字符串  
+                StringBuilder hex = new StringBuilder(hashBytes.Length * 2);
+                foreach (byte b in hashBytes)
+                {
+                    hex.AppendFormat("{0:x2}", b);
+                }
+
+                return hex.ToString();
+            }
+        }
+
+
     }
 }

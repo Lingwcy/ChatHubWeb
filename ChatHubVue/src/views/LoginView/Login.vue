@@ -4,6 +4,7 @@ import type { FormInstance } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { ElLoading } from 'element-plus'
+import slideVerify from '../Compoents/slideVerify.vue'
 import { UseUserInformationStore, UseServiceStore, appsetting } from '../../store/index'
 import { loginForm } from '../../models/data/Form'
 import { createAuthService, createChatHubService } from "../../services/ServicesCollector";
@@ -42,43 +43,64 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
+
+function doLoginCheck() {
+  const payload = {
+    userName: loginForm.loginFormModel.account,
+    passworld: loginForm.loginFormModel.password
+  };
+  if (appset.CompoentsEvent.isSlideVerify.isOpen == false) return;
+  if (appset.CompoentsEvent.isSlideVerify.isSuccess) {
+      //配置loading
+      const loadingOptions = {
+        text: "登陆中...请稍后"
+      }
+      const loadingInstance = ElLoading.service(loadingOptions)
+      let flag: Promise<boolean> | undefined = service.Auth?.Login(payload, userInfo);
+      if (flag == undefined) return;
+      flag.then(res => {
+        if (res) {
+          ElMessageBox.alert(`欢迎 ${loginForm.loginFormModel.account} 加入\n Chat Hub`, '登录成功',
+            {
+              confirmButtonText: '确认',
+              type: 'success',
+            })
+          //未连接状态。重新创建服务
+          console.log(service.ChatHub?.HubConnection.state);
+          if (service.ChatHub?.HubConnection.state != 'Connected') {
+            console.log('重新创建服务');
+            createChatHubService();
+            service.ChatHub?.startHub();
+          }
+          router.push({
+            path: '/Hub'
+          })
+          service.ChatHub?.GetUserOfflineMessage(userInfo.userName)
+          appset.CompoentsEvent.isSlideVerify.isOpen = false;
+          resetForm(loginFormRef.value)
+          return
+        } else {
+          appset.CompoentsEvent.isSlideVerify.isOpen = false;
+          resetForm(loginFormRef.value)
+          return
+        }
+      })
+      appset.CompoentsEvent.isSlideVerify.isOpen = false;
+      resetForm(loginFormRef.value)
+      loadingInstance.close()
+      return;
+    }
+  setTimeout(doLoginCheck, 1000);
+}
 //登陆请求方法
 const login = async function () {
   if (loginForm.loginFormModel.account != userInfo.userName) {
     localStorage.clear()
     userInfo.$reset()
   }
-  const payload = {
-    userName: loginForm.loginFormModel.account,
-    passworld: loginForm.loginFormModel.password
-  };
-  //配置loading
-  const loadingOptions = {
-    text: "登陆中...请稍后"
-  }
-  const loadingInstance = ElLoading.service(loadingOptions)
-  let flag: Promise<boolean> | undefined = service.Auth?.Login(payload, userInfo);
-  if (flag == undefined) return;
-  flag.then(res => {
-    if (res) {
-      ElMessageBox.alert(`欢迎 ${loginForm.loginFormModel.account} 加入\n Chat Hub`, '登录成功',
-        {
-          confirmButtonText: '确认',
-          type: 'success',
-        })
-      //未连接状态。重新创建服务
-      if (service.ChatHub?.HubConnection.state != 'Connected') {
-        createChatHubService();
-        service.ChatHub?.startHub();
-      }
-      router.push({
-        path: '/Hub'
-      })
-    } else {
-      resetForm(loginFormRef.value)
-    }
-  })
-  loadingInstance.close()
+  appset.CompoentsEvent.isSlideVerify.isSuccess = false;
+  appset.CompoentsEvent.isSlideVerify.isOpen = true;
+  doLoginCheck()
 }
 
 
@@ -122,6 +144,7 @@ const login = async function () {
       <p style=" color: #989899; font-size: 13px;">需要新的账号？<router-link to="/Login/Register">注册</router-link></p>
     </el-form>
   </el-col>
+  <slideVerify />
 </template>
 <style>
 .demo-ruleForm {
@@ -187,7 +210,6 @@ const login = async function () {
 }
 
 .el-input__inner {
-  color: rgb(226, 226, 226);
   font-size: 16px;
 }
 

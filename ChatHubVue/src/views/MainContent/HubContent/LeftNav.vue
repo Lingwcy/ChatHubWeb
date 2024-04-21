@@ -1,10 +1,13 @@
 <script setup>
-import {reactive,ref} from 'vue'
+import {reactive,ref,h} from 'vue'
+import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { UseServiceStore } from '../../../store/index'
 import {UseUserInformationStore} from '../../../store/index'
-
+import { createUserService } from '../../../services/ServicesCollector'
 import { CaretBottom } from '@element-plus/icons-vue'
-
+createUserService()
+const service=UseServiceStore()
 const userInfo=UseUserInformationStore()
 const router =useRouter()
 const state = reactive({
@@ -16,6 +19,17 @@ const state = reactive({
     PrivateMsg:""
 });
 
+function exitLogin(){
+    userInfo.logout()
+    service.ChatHub.IsLogin=false
+    ElNotification({
+    title: '消息',
+    message: h('i', { style: 'color: teal' }, '退出登录成功'),
+  })
+  router.push({
+        path:'/Login/Account'
+    })
+}
 
 const DetailSelector=(index)=>{
     if(index==1){
@@ -51,16 +65,16 @@ const confirm =()=>{
 </script>
 <template>
     <div id="LeftNav-Container">
-        <div class="LeftNav-Container-items">
+        <div class="LeftNav-Container-items" >
             <div id="UserMsg">
                 <el-popconfirm 
-                   confirm-button-text="."
-                   cancel-button-text="修改资料"
+                   confirm-button-text="修改资料"
+                   cancel-button-text="退出登录"
                    cancel-button-type="success"
                    title="配置您的个人信息来获得更高的辨识度"
                    icon-color="#626AEF"
                    @confirm="confirm()"
-                   @cancel="confirm()"
+                   @cancel="exitLogin()"
                    >
                     <template #reference>
                         <el-button style="border-radius: 50px; width: 100%; height: 100%; overflow: hidden; box-sizing: border-box;">
@@ -71,7 +85,7 @@ const confirm =()=>{
             </div>
         </div>
 
-        <div class="LeftNav-Container-items" v-on:click="DetailSelector(3)" >
+        <div class="LeftNav-Container-items" v-on:click="DetailSelector(3)" style="margin-top: 10px;" >
             <el-badge value="new" class="redpop" :max="99" :hidden="userInfo.unReadMsg">
             <img src="../../../images/icon/dark/消息-黑.svg" class="LeftNavItem"/>
         </el-badge>
@@ -79,12 +93,6 @@ const confirm =()=>{
 
         <div class="LeftNav-Container-items" v-on:click="DetailSelector(0) "   >
             <img src="../../../images/icon/dark/好友-黑.svg" class="LeftNavItem"/>
-        </div>
-        <div class="LeftNav-Container-items" v-on:click="DetailSelector(1) "   >
-            <img src="../../../images/icon/dark/好友-黑.svg" class="LeftNavItem"/>
-        </div>
-        <div class="LeftNav-Container-items" v-on:click="DetailSelector(2)">
-            <img src="../../../images/icon/dark/群组-黑.svg" class="LeftNavItem"/>
         </div>
 
         <div class="LeftNav-Container-items" style="margin-top: 15px;" v-on:click="DetailSelector(4)" >

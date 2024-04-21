@@ -288,10 +288,10 @@ namespace construct.Application.System.FontServices.Friends
         [HttpPost]
         public async Task<IActionResult> Redbob(sendRedBobModel md)
         {
-            var exist = await _db.Queryable<sysMsgBox>().FirstAsync(a => a.username == md.targetname && a.targetfont == md.username);
+            var exist = await _db.Queryable<sysMsgBox>().FirstAsync(a => a.username == md.username && a.targetfont == md.targetname);
             if (exist == null)
             {
-                return NotFound();
+                return Ok(new Response(3, null, "不存在此消息盒子！"));
             }
 
                 var result = _db.Updateable<sysMsgBox>()

@@ -21,8 +21,6 @@ interface registerParams {
     passworld: string
 }
 export class Auth {
-    constructor() {
-    }
     public async Login(params: loginParams, userStore: any): Promise<boolean> {
         return await postLogin(params).then(
             result => {
@@ -31,8 +29,8 @@ export class Auth {
                     localStorage.setItem('token', data.jwtToken,)
                     loginForm.loginFormModel.jwtToken = data.jwtToken
                     userStore.connection = new signalR.HubConnectionBuilder();
-                    userStore.userName = loginForm.loginFormModel.account
-                    userStore.userPsw = loginForm.loginFormModel.password
+                    userStore.userName = data.userName
+                    userStore.userPsw = data.userPsw
                     userStore.jwtToken = data.jwtToken
                     userStore.userImg = data.userImg
                     userStore.userId = data.userId

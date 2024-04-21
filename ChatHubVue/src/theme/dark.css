@@ -11,6 +11,10 @@
 .leftScan-font1{
     color: rgb(206, 206, 206)
 }
+.el-input__inner {
+    color: rgb(206, 206, 206)
+    font-size: 16px;
+  }
 .Logincontainer-Phone{
     background-color: #303133;
 }

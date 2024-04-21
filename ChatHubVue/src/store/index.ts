@@ -1,5 +1,5 @@
 import { defineStore, createPinia } from 'pinia'
-import { IChatStore, IGroupStore, IService, IUseFriendsStore } from './Istore';
+import { IChatStore, IGroupStore, IService, IUseFriendsStore} from './Istore';
 import piniaPluginPersist from 'pinia-plugin-persist';
 import { IMsgStore } from '../models/interface/IMessageStore';
 
@@ -42,6 +42,31 @@ export const UseUserInformationStore = defineStore("userInfo", {
         ]
     },
     actions: {
+        logout() {
+            this.isLogin = false
+            this.userId = ''
+            this.userName = "未登录"
+            this.userPsw = ""
+            this.jwtToken = ""
+            this.userImg = ""
+            this.connection = null
+            this.UserDetailInfo = {
+                id: '',
+                Password: '',
+                Username: '',
+                HeaderImg: '',
+                Email: '',
+                City: '',
+                Sex: '',
+                Age: '',
+                Job: '',
+                Phone: '',
+                NickName: '',
+                Birth: '',
+                Desc: '',
+                status: ''
+            }
+        },
     },
 
 
@@ -102,6 +127,10 @@ export const appsetting = defineStore('appset', {
             ServerAddress: "https://localhost:5001",
             ServerHubAddress: "https://localhost:5001/MyHub",
             NavBarShow: true,
+            MessageContract:{
+                OnConnectedName:"0",
+                IsNewMessageCome:0,
+            },
             CompoentsEvent: {
                 isAddOpen: false,
                 isAddDetail:{
@@ -127,6 +156,15 @@ export const appsetting = defineStore('appset', {
                 isFriendRequestMessageOpen:false,
                 isGroupRequestMessageOpen:false,
                 isFriendManagerSystemOpen:false,
+                isGroupCreateOpen:false,
+                isSlideVerify:{
+                    isOpen:false,
+                    isSuccess:false,
+                },
+                isContractSwitch:{
+                    isFriendOpen:true,
+                    isGroupOpen:false,
+                },
             }
         }
     },
@@ -168,7 +206,9 @@ export const UseChatStore = defineStore('Chat', {
                     messages: [],
                     messageNames: [],
                     messageHeaders: []
-                }
+                },
+                tabType:0,
+                tabId:0,
             }],
             selectedTab: 0
         }
@@ -205,7 +245,23 @@ export const UseGroupStore = defineStore('Group', {
                 Birth: '',
                 Desc: '',
                 status: 0
-            }
+            },
+            MyGroups:[],
+            //正在对话中的群组信息
+            OnConnectedGroup:{
+                GroupInfo:{
+                    GroupId: 0,
+                    GroupName: '',
+                    GroupDescription: '',
+                    CreationDate: '',
+                    CreatorUserId: 0,
+                    IsDeleted: false,
+                    MemberNumber: 0,
+                    GroupHeader: ''
+                },
+                GroupMemebers:[]
+            },
+            GroupRequestList:[]
         }
     },
 })

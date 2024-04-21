@@ -12,9 +12,11 @@ namespace ChatHubApi.System.Entity.Font
     public class sysUserGroup
     {
 
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        [SugarColumn(IsPrimaryKey = true)]
         public int UserGroupId { get; set; }
 
+        public string Role { get; set; }
+        [SugarColumn(IsPrimaryKey = false)]
         public int UserId { get; set; }
 
         public int GroupId { get; set; }

@@ -12,7 +12,7 @@
   import { reactive, ref } from 'vue'
   import { appsetting } from '../../store';
   const appset = appsetting();
-  
+
 
   
   const gridData = [

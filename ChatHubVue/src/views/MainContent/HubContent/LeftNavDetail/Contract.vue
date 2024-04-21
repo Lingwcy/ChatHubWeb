@@ -1,28 +1,33 @@
 <script lang="ts" setup>
 import { Search, Plus, Tools, ArrowRight } from '@element-plus/icons-vue'
 import { reactive, ref } from 'vue'
-import { appsetting, UseChatStore, UseFriendsStore, UseMsgStore, UseServiceStore, UseUserInformationStore } from '../../../../store';
+import { appsetting, UseChatStore, UseGroupStore, UseFriendsStore, UseMsgStore, UseServiceStore, UseUserInformationStore } from '../../../../store';
 import Add from '../../../Compoents/Add.vue';
 import FriendManager from '../../../Compoents/FriendManager.vue';
+import GroupRequestMessage from '../../../Compoents/GroupRequestMessage.vue';
 import FriendRequestMessage from '../../../Compoents/FriendRequestMessage.vue';
-import { createMessageService, createUserService, createFriendsService } from '../../../../services/ServicesCollector';
+import CreateGroup from '../../../Compoents/CreateGroup.vue';
+import { createMessageService, createUserService, createFriendsService, createGroupService } from '../../../../services/ServicesCollector';
+import { UserGroup } from '../../../../store/Istore';
 let appset = appsetting();
 createMessageService();
 createUserService();
+createGroupService();
 createFriendsService();
 const Pmsg = UseMsgStore()
 const service = UseServiceStore();
 const userInfo = UseUserInformationStore()
 const friendStore = UseFriendsStore()
 const chatStore = UseChatStore()
+const groupStore = UseGroupStore()
 const DetailVisible = ref(false)
 const mainSearch = ref("")
-const paload = {
+const friendPayload = {
     userId: userInfo.userId,
     xusername: userInfo.userName
 }
-service.Friend?.FindFriendTree(paload, friendStore)
-
+service.Friend?.FindFriendTree(friendPayload, friendStore)
+service.Group?.GetGroupList(Number(userInfo.userId), userInfo.userName, groupStore)
 const treeProps = {
     children: 'Children',
     label: 'UnitName'
@@ -36,10 +41,15 @@ const groupBtStyle = reactive({
 function friendSelected() {
     friendBtStyle.backgroundColor = "rgb(248, 250, 250)"
     groupBtStyle.backgroundColor = ""
+    appset.CompoentsEvent.isContractSwitch.isFriendOpen = true
+    appset.CompoentsEvent.isContractSwitch.isGroupOpen = false
 }
+
 function groupSelected() {
     friendBtStyle.backgroundColor = ""
     groupBtStyle.backgroundColor = "rgb(248, 250, 250)"
+    appset.CompoentsEvent.isContractSwitch.isFriendOpen = false
+    appset.CompoentsEvent.isContractSwitch.isGroupOpen = true
 }
 
 
@@ -119,11 +129,9 @@ const handleCommand = (command: any) => {
 const GetDetailInformation = (name: any) => {
     service.User?.GetUserInfo(name);
 }
-const D=()=>{
-    console.log("aa")
-}
+
 const TurnFriendsToMessageBox = (data: any) => {
-    service.Friend?.GetUserFriends(userInfo.userId,userInfo.userName,friendStore)
+    service.Friend?.GetUserFriends(userInfo.userId, userInfo.userName, friendStore)
     let flag1 = false//判断消息存储库
     Pmsg.messageItems.forEach(element => {
         if (element.targetUserName == data.Username) {
@@ -137,7 +145,9 @@ const TurnFriendsToMessageBox = (data: any) => {
             chatStore.targetUserTab.push({
                 tabTitle: data.Username,
                 tabName: data.Username,
-                targetUserMessage: reactive(element)
+                targetUserMessage: reactive(element),
+                tabType:0,
+                tabId:data.UserId
             })
         }
 
@@ -154,6 +164,47 @@ const TurnFriendsToMessageBox = (data: any) => {
     chatStore.targetUserTab.push({
         tabTitle: data.Username,
         tabName: data.Username,
+        tabType:0,
+        tabId:data.UserId,
+        targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
+    })
+}
+const TurnGroupToMessageBox = (data: UserGroup) => {
+    let flag1 = false//判断消息存储库
+    groupStore.OnConnectedGroup.GroupInfo = data.Group
+    Pmsg.messageItems.forEach(element => {
+        if (element.targetUserName == data.Group.GroupName) {
+            flag1 = true
+            for (let i = 0; i < chatStore.targetUserTab.length; i++) {
+                if (chatStore.targetUserTab[i].tabName == data.Group.GroupName) {
+                    return
+                }
+            }
+
+            chatStore.targetUserTab.push({
+                tabTitle: data.Group.GroupName,
+                tabName: data.Group.GroupName,
+                targetUserMessage: reactive(element),
+                tabType:1,
+                tabId:data.Group.GroupId
+            })
+        }
+
+    });
+    if (flag1) return
+    Pmsg.messageItems.push(
+        {
+            targetUserName: data.Group.GroupName,
+            messages: [],
+            messageNames: [],
+            messageHeaders: [],
+        }
+    )
+    chatStore.targetUserTab.push({
+        tabTitle: data.Group.GroupName,
+        tabName: data.Group.GroupName,
+        tabType:1,
+        tabId:data.Group.GroupId,
         targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
     })
 }
@@ -162,15 +213,17 @@ const visible = ref(false)
 <template>
     <div id="main">
         <Add />
-        <FriendManager/>
-        <FriendRequestMessage />
+        <FriendManager />
+        <FriendRequestMessage/>
+        <GroupRequestMessage />
+        <CreateGroup/>
         <div id="main-content">
             <div class="main-search">
                 <el-input v-model="mainSearch" style="width: 210px; height: 30px;" placeholder="搜索"
                     :prefix-icon="Search" />
                 <el-popover :visible="visible" placement="top" :width="160">
                     <div id="addContent">
-                        <el-button size="small" text @click="visible = false">发起群聊</el-button>
+                        <el-button size="small" text @click="visible = false; appset.CompoentsEvent.isGroupCreateOpen = true" >发起群聊</el-button>
                         <el-button size="small" text @click="visible = false; appset.CompoentsEvent.isAddOpen = true"
                             style="margin: 0;">添加好友/群</el-button>
                     </div>
@@ -180,7 +233,8 @@ const visible = ref(false)
                 </el-popover>
             </div>
             <div class="main-modify">
-                <el-button size="large" :icon="Tools" style="width: 100%; height: 30px;" onclick="openFriendManager()">好友管理</el-button>
+                <el-button size="large" :icon="Tools" style="width: 100%; height: 30px;"
+                    onclick="openFriendManager()">好友管理</el-button>
             </div>
             <div class="main-request">
                 <div class="main-request-content" @click="appset.CompoentsEvent.isFriendRequestMessageOpen = true">
@@ -189,7 +243,7 @@ const visible = ref(false)
                             <ArrowRight />
                         </el-icon></div>
                 </div>
-                <div class="main-request-content">
+                <div class="main-request-content" @click="appset.CompoentsEvent.isGroupRequestMessageOpen = true">
                     <div class="left">群通知</div>
                     <div class="right"><el-icon>
                             <ArrowRight />
@@ -206,12 +260,12 @@ const visible = ref(false)
                     </div>
                 </div>
                 <div style="height: 20px;"></div>
-                <el-scrollbar height="400px" id="treeContent">
+                <el-scrollbar v-if="appset.CompoentsEvent.isContractSwitch.isFriendOpen" height="400px"
+                    id="treeContent">
                     <el-tree style="width: 220px;background-color: #fafafa;" :data="friendStore.FriendTree?.Units"
                         :props="treeProps">
                         <template #default="{ node, data }">
                             <span class="mytree">
-                                {{ console.log(data) }}
                                 <span>{{ data.UnitName }}</span> <!-- 假设 unitName 是节点标签 -->
                                 <span v-if="node.isLeaf && node.level != 1"> <!-- 这里判断是否是叶子节点，不显示任何内容 -->
                                     <div class="friends-list-item">
@@ -249,7 +303,8 @@ const visible = ref(false)
                                                     <el-dropdown-menu>
                                                         <el-dropdown-item
                                                             :command="'show,' + data.Username">查看资料</el-dropdown-item>
-                                                        <el-dropdown-item :command="'communicate,' + data.Username"  @click ="TurnFriendsToMessageBox(data)">发起会话</el-dropdown-item>
+                                                        <el-dropdown-item :command="'communicate,' + data.Username"
+                                                            @click="TurnFriendsToMessageBox(data)">发起会话</el-dropdown-item>
                                                     </el-dropdown-menu>
                                                 </template>
                                             </el-dropdown>
@@ -259,6 +314,18 @@ const visible = ref(false)
                             </span>
                         </template>
                     </el-tree>
+                </el-scrollbar>
+                <el-scrollbar v-if="appset.CompoentsEvent.isContractSwitch.isGroupOpen" height="400px">
+                    <div  class="group-item" v-for="(item, index) in groupStore.MyGroups" :key="index" @click="TurnGroupToMessageBox(item)">
+                        <div class="group-item-content">
+                            <div class="group-item-content-img">
+                                <img src="../../../../images/assets/群默认头像.svg" alt="">
+                            </div>
+                            <div class="group-item-content-font">
+                                <span>{{ item.Group.GroupName}}</span>
+                            </div>
+                        </div>
+                    </div>
                 </el-scrollbar>
             </div>
         </div>
@@ -304,6 +371,59 @@ const visible = ref(false)
     </el-dialog>
 </template>
 <style scoped>
+.group-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:40px;
+    width: 200px;
+    border-bottom: 1px solid #e3e3e7;
+    padding-bottom: 5px;
+    cursor: pointer;
+}
+.group-item:hover{
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+}
+.group-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.group-item-content-img {
+    border-radius: 50%;
+    height: 100%;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-direction: column;
+}
+
+.group-item-content-img img {
+    width: 35px;
+    height: 35px;
+}
+
+.group-item-content-font {
+    width: 55%;
+    height: 100%;
+    text-overflow: ellipsis;
+    display: flex;
+    flex-direction: column;
+    line-height: 21px;
+    overflow: hidden;
+    color: #606266;
+    font-size: 14px;
+    font-family: 幼圆;
+    margin-top: 1px;
+    margin-right: 38px;
+    font-size: 12px;
+}
 :deep(.el-tree-node__content:last-child) {
     height: auto;
     padding-left: 0;

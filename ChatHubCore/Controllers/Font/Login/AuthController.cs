@@ -1,6 +1,7 @@
 ﻿using ChatHubApi.Services;
 using ChatHubApi.System;
 using ChatHubApi.System.Entity.Font;
+using ChatHubApi.Untils;
 using construct.Application.System.Services.Login.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,7 @@ namespace construct.Application.System.Services.Login
         [HttpPost]
         public async Task<IActionResult> login([FromBody]FontLoginInput loginInput)
         {
-            sysFontUser user = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == loginInput.userName && a.Password==loginInput.passworld);
+            sysFontUser user = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == loginInput.userName && a.Password== Crypto.HashPassword(loginInput.passworld));
             if (user == null) return Ok(new Response(code:2,message: "用户名或密码错误！", data:new object()));
             
 
@@ -56,7 +57,7 @@ namespace construct.Application.System.Services.Login
                     new Claim("UserName", user.Username),
                     new Claim("Role","User"),
                 };
-                var expiresAt = DateTime.UtcNow.AddMinutes(300);
+                var expiresAt = DateTime.UtcNow.AddMinutes(30000);
                 accessToken = jwtService.CreateJwtToken(claims, expiresAt, _jwtHandler, _config);
                
             }
@@ -91,7 +92,7 @@ namespace construct.Application.System.Services.Login
             sysFontUser user = new sysFontUser()
             {
                 Username = loginInput.userName,
-                Password = loginInput.passworld,
+                Password = Crypto.HashPassword(loginInput.passworld),
                 HeaderImg = "head1.svg",
                 Desc = "这个人还没有填写介绍",
                 status= ChatHubApi.System.Enum.Status.DISABLE,

@@ -74,17 +74,6 @@ const routes = [
                 component: Phone
             }
         ],
-        beforeEnter: async (to: any, from: any, next: any) => {
-            if (window.location.href.indexOf("#reloaded") == -1) {
-
-                window.location.href = window.location.href + "#reloaded";
-
-                window.location.reload();
-
-            }
-
-            next()
-        },
     },
     {
         path: '/About',

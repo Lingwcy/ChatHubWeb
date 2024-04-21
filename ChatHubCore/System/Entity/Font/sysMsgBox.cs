@@ -52,6 +52,12 @@ namespace ChatHubApi.System.Entity.Font
         [SugarColumn(ColumnDescription = "是否未读")]
         public int isNew { get; set; }
 
+        /// <summary>
+        ///消息盒子类型
+        /// </summary>
+        [Required]
+        [SugarColumn(ColumnDescription = "消息盒子类型")]
+        public string Type { get; set; }
 
 
 

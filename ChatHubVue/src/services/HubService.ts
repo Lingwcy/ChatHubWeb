@@ -1,7 +1,8 @@
 import * as SignalR from '@microsoft/signalr';
 import { crypto } from '../Crypto/crypto';
 import { ElMessage, ElNotification } from 'element-plus'
-import { getMessageBox, getOfflineMessage } from '../common/api';
+import { getMessageBox, getOfflineMessage, getGroupList } from '../common/api';
+import { IGroupStore } from '../store/Istore';
 export class ChatHub {
     private UserJwt!: string;
     public Options = {};
@@ -11,12 +12,16 @@ export class ChatHub {
     public PmsgStore: any;
     public UserInfoStore: any;
     public MsgboxStore: any;
+    public AppsetStore: any;
+    public GroupStore: IGroupStore;
 
-    constructor(jwt: string, ChatStore: any, PmsgStore: any, UserInfoStore: any, MsgBoxStore: any) {
+    constructor(jwt: string, ChatStore: any, PmsgStore: any, UserInfoStore: any, MsgBoxStore: any, GroupStore: IGroupStore, AppsetStore: any) {
         this.ChatStore = ChatStore;
         this.PmsgStore = PmsgStore;
         this.UserInfoStore = UserInfoStore;
+        this.GroupStore = GroupStore;
         this.MsgboxStore = MsgBoxStore;
+        this.AppsetStore = AppsetStore;
         this.UserJwt = jwt;
         this.Options = {
             skipNegotiation: true,
@@ -65,7 +70,40 @@ export class ChatHub {
             this.PmsgStore.messageItems[0].messages.push(msg)
             this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
             this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)
+            this.AppsetStore.MessageContract.OnConnectedName = 'public'
+            this.AppsetStore.MessageContract.IsNewMessageCome++;
             //scrollDown()
+        });
+        //群组消息接收器
+        this.HubConnection.on('GroupMsgReceived', (HeaderImg: string, fromUserName: string, msg: string, groupId: string) => {
+            //从GroupStore.MyGroups[]中找到groupId对应的群组信息
+            let groupInfo = this.GroupStore.MyGroups.find(g => g.GroupId.toString() == groupId)
+            ElNotification({
+                title: `${groupInfo?.Group.GroupName}`,
+                message: `${fromUserName} : ${msg}`,
+            })
+            //渲染到聊天区域
+            let existMsgStore = false
+            //如果本地有存储库 直接放
+            for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
+                if (this.PmsgStore.messageItems[i].targetUserName == groupInfo?.Group.GroupName) {
+                    existMsgStore = true
+                    this.PmsgStore.messageItems[i].messages.push(msg)
+                    this.PmsgStore.messageItems[i].messageNames.push(fromUserName)
+                    this.PmsgStore.messageItems[i].messageHeaders.push(HeaderImg)
+                }
+            }
+            if (!existMsgStore) {//如果没有这个库则创建
+                this.PmsgStore.messageItems.push({
+                    targetUserName: groupInfo?.Group.GroupName,
+                    messages: [msg],
+                    messageNames: [fromUserName],
+                    messageHeaders: [HeaderImg],
+                })
+            }
+            //scrollDown()
+            this.AppsetStore.MessageContract.OnConnectedName = fromUserName
+            this.AppsetStore.MessageContract.IsNewMessageCome++;
         });
         //好友添加请求
         this.HubConnection.on('FriendsRequestReceived', (fromUserName) => {
@@ -74,7 +112,7 @@ export class ChatHub {
                 message: ` 来自 :${fromUserName} `,
             })
         });
-        //离线消息接收器(漏洞-请求权限问题)
+        //离线消息接收器
         /*请求离线消息 并添加到Pinia[UseMsgbox] */
         this.HubConnection.on('MsgBoxFlasherReceived', (_fromUserName: string) => {
             let payload = { username: _fromUserName }
@@ -86,6 +124,36 @@ export class ChatHub {
                         this.MsgboxStore.MsgItems.push(JSON.parse(res.data.data[i]) as never)
                     }
                 }
+            })
+        });
+
+        //即时刷新群组消息盒子
+        /*请求离线消息 并添加到Pinia[UseMsgbox] */
+        this.HubConnection.on('GroupMsgBoxFlasherReceived', () => {
+            let payload = {
+                username: this.UserInfoStore.userName,
+                xusername: this.UserInfoStore.userName
+            }
+            getMessageBox(payload).then(result => {
+                if (result.data.code == 1) {
+                    this.MsgboxStore.$reset()
+                    let data = JSON.parse(result.data.data)
+                    for (let i = 0; i < data.length; i++) {
+                        this.MsgboxStore.MsgItems.push(data[i])
+                    }
+                    return true
+                } else if (result.data.code == 2) {
+                    ElMessage({
+                        message: result.data.message,
+                        type: 'warning',
+                    })
+                    return false
+
+                }
+                return false;
+            }, error => {
+                ElMessage.error(error);
+                return false;
             })
         });
         //私人消息接收器
@@ -107,7 +175,7 @@ export class ChatHub {
                     
                 
             */
-            //现在考虑的前提是 接收方 也就是此客户端在线下的操作（if message-receiver is online）
+            //现在考虑的前提是 接收方 也就是此客户端在线的操作（if message-receiver is online）
 
             let existMsgStore = false
             //如果本地有存储库 直接放
@@ -128,6 +196,43 @@ export class ChatHub {
                 })
             }
             //消息发入接受端之后 在 messageBox 上渲染 且冒红点 =》 此实现位于MessageBox.vue
+            this.AppsetStore.MessageContract.OnConnectedName = fromUserName
+            this.AppsetStore.MessageContract.IsNewMessageCome++;
+        });
+
+        //刷新群组列表
+        this.HubConnection.on('RefreshGroupList', async () => {
+            const playload = {
+                userId: this.UserInfoStore.userId,
+                xusername: this.UserInfoStore.userName,
+            }
+            return await getGroupList(playload).then(res => {
+                if (res.data.code == 1) {
+                    this.GroupStore.MyGroups = JSON.parse(res.data.data);
+                    ElNotification({
+                        title: '系统通知',
+                        message: `您被添加到新的群组！`,
+                    })
+                    return true;
+                } else return false
+            })
+        });
+        //断线重连连接
+        this.HubConnection.onclose(async () => {
+            ElNotification({
+                title: '连接断开',
+            })
+            await this.startHub();
+        });
+        this.HubConnection.onreconnected(() => {
+            ElNotification({
+                title: '连接重连',
+            })
+        });
+        this.HubConnection.onreconnecting(() => {
+            ElNotification({
+                title: '连接中',
+            })
         });
     }
     //将聊天信息挂载到此时选中的Tab
@@ -146,6 +251,11 @@ export class ChatHub {
             }
         });
     }
+    //执行创建群组后的一系列即时通知任务
+    public async CreateGroupTask(group: any, userIds: number[]): Promise<void> {
+        await this.HubConnection.invoke("CreateGroupTask", group, userIds , this.UserInfoStore.userId);
+    }
+
     //发送消息
     public async SendMessageToServer(msg: string): Promise<void> {
         let selectedIndex: number = this.ChatStore.selectedTab;
@@ -153,7 +263,20 @@ export class ChatHub {
             await this.HubConnection.invoke("SendPublicMsg", this.UserInfoStore.userName, msg);
         } else {
             let pmsg = crypto.encrypt(msg)
-            await this.HubConnection.invoke("SendPrivateMsg",this.UserInfoStore.userName ,this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName, pmsg);
+            if (this.ChatStore.targetUserTab[selectedIndex].tabType == 1) {
+                await this.HubConnection.invoke("SendGroupMsg", this.UserInfoStore.userName, pmsg, this.GroupStore.OnConnectedGroup.GroupInfo.GroupId.toString());
+                for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
+                    if (this.PmsgStore.messageItems[i].targetUserName == this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName) {
+                        this.PmsgStore.messageItems[i].messages.push(msg)
+                        this.PmsgStore.messageItems[i].messageNames.push(this.UserInfoStore.userName)
+                        this.PmsgStore.messageItems[i].messageHeaders.push(this.UserInfoStore.userImg)
+                    }
+                }
+                //发送消息盒子提醒。刷新群组消息盒子
+                await this.HubConnection.invoke("GroupMsgBoxFlasher", this.GroupStore.OnConnectedGroup.GroupInfo.GroupId.toString(), this.UserInfoStore.userName);
+                return
+            }
+            await this.HubConnection.invoke("SendPrivateMsg", this.UserInfoStore.userName, this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName, pmsg);
             for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                 if (this.PmsgStore.messageItems[i].targetUserName == this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName) {
                     this.PmsgStore.messageItems[i].messages.push(msg)

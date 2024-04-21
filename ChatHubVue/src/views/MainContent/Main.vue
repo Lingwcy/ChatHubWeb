@@ -1,28 +1,31 @@
 <script setup lang="ts">
-import { ElLoading } from 'element-plus'
-import { onBeforeMount } from 'vue'
-import {UseServiceStore, UseUserInformationStore, UseMsgStore,appsetting, UseChatStore, UseMsgbox } from '../../store';
+import { ElLoading, ElNotification } from 'element-plus'
+import { onBeforeMount, watch } from 'vue'
+import { UseServiceStore, UseUserInformationStore, UseMsgStore, appsetting, UseChatStore, UseMsgbox, UseGroupStore } from '../../store';
 import { ChatHub } from '../../services/HubService';
 import { Auth } from '../../services/AuthService';
 import { Message } from '../../services/MessageService';
 import navVue from '../Topbar/nav.vue';
+import { createChatHubService } from '../../services/ServicesCollector';
 const userInfoStore = UseUserInformationStore();
 const msgStore = UseMsgStore();
 const chatStore = UseChatStore();
 const msgboxStore = UseMsgbox();
 const service = UseServiceStore();
+const groupStore = UseGroupStore();
 const appset = appsetting();
 
 
 onBeforeMount(function () {
   loadingInstance.close()
   //判断出data则为老用户，在登录之前加载服务
-  const data = localStorage.getItem('服务数据');
+  //const data = localStorage.getItem('服务数据');
   service.Auth = new Auth();
   service.Auth?.SendAESKey();
-  if (data != null) {
+  console.log(service.ChatHub?.IsLogin);
+  if (service.ChatHub?.IsLogin) {
     service.ChatHub = new ChatHub(localStorage.getItem('token') as string
-      , chatStore, msgStore, userInfoStore, msgboxStore)
+      , chatStore, msgStore, userInfoStore, msgboxStore, groupStore, appset)
     service.Message = new Message(msgboxStore);
     if (service.ChatHub.HubConnection.state != 'Connected') {
       service.ChatHub.startHub();
@@ -35,6 +38,24 @@ const mainLoading = {
 }
 const loadingInstance = ElLoading.service(mainLoading)
 
+
+watch(
+  () => service.ChatHub?.HubConnection.state,
+  (newVal, oldVal) => {
+    console.log('连接状态改变', newVal, oldVal);
+    if (newVal == 'Disconnected') {
+      //重定向到登录页面并刷新整个页面
+      ElNotification({
+        title: '连接断开',
+        message: '服务器连接断开，即将跳转到登录界面',
+        type: 'error'
+      });
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    }
+  }
+); 
 </script>
 <template>
   <div id="mainApp">

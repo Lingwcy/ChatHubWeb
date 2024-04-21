@@ -13,7 +13,8 @@
     "@types/vue": "^2.0.0",
     "crypto-js": "^4.2.0",
     "gsap": "^3.12.5",
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "vue3-slide-verify": "^1.1.5"
   },
   "devDependencies": {
     "@microsoft/signalr": "^6.0.10",
