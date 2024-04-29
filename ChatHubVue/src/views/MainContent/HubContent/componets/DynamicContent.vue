@@ -6,7 +6,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { decodeText } from "../../../../untils/chat/decodeText";
 const props = defineProps({
   text: {
