@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus";
-import { getGroupFromName, postCreateGroup,getGroupList,getGroupMembers,postGroupRequest,getGroupRequest,postAcceptGroupRequest,rejectRequest,acceptRequest, deleteRejectGroupRequest} from "../common/api";
+import { getGroupFromName,postExitGroup,postDismissGroup,postChangeGroupName,postChangeGroupNotice, postCreateGroup,getGroupList,getGroupMembers,postGroupRequest,getGroupRequest,postAcceptGroupRequest,rejectRequest,acceptRequest, deleteRejectGroupRequest} from "../common/api";
 import { IGroupStore } from "../store/Istore";
 interface SendGroupRequestParams {
     ReqMsg: string,
@@ -24,6 +24,29 @@ interface GroupRequestParams {
     Id: number,
     xusername: string,
 }
+interface ChangeGroupNameParams {
+    ChangedName: string,
+    GroupId: number,
+    UserId: number,
+    xusername: string,
+}
+interface ChangeGroupNoticeParams {
+    Notice: string,
+    GroupId: number,
+    UserId: number,
+    xusername: string,
+}
+interface ExitGroupParams {
+    GroupId: number,
+    UserId: number,
+    xusername: string,
+}
+interface DismissGroupParams {
+    GroupId: number,
+    UserId: number,
+    xusername: string,
+}
+
 export class GroupService{
     public async SearchtGroup(groupName:string,GroupStore:any): Promise<boolean> {
         return await getGroupFromName({groupName}).then(res => {
@@ -188,6 +211,105 @@ export class GroupService{
         })
     }
 
+    
+    public async ChangeGroupName(params: ChangeGroupNameParams): Promise<boolean> {
+        return await postChangeGroupName(params).then(result => {
+            if (result.data.code == 1) {
+                return true;
+            } else if (result.data.code == 2) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return false;
 
+            } else if (result.data.code == 3) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return  false;
+            }
+            return  false;
+        }, error => {
+            ElMessage.error(error);
+            return  false;
+        })
+    }
+
+    
+    public async ChangeGroupNotice(params: ChangeGroupNoticeParams): Promise<boolean> {
+        return await postChangeGroupNotice(params).then(result => {
+            if (result.data.code == 1) {
+                return true;
+            } else if (result.data.code == 2) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return false;
+
+            } else if (result.data.code == 3) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return  false;
+            }
+            return  false;
+        }, error => {
+            ElMessage.error(error);
+            return  false;
+        })
+    }
+    public async ExitGroup(params: ExitGroupParams): Promise<boolean> {
+        return await postExitGroup(params).then(result => {
+            if (result.data.code == 1) {
+                return true;
+            } else if (result.data.code == 2) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return false;
+
+            } else if (result.data.code == 3) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return  false;
+            }
+            return  false;
+        }, error => {
+            ElMessage.error(error);
+            return  false;
+        })
+    }
+
+    public async DismissGroup(params: DismissGroupParams): Promise<boolean> {
+        return await postDismissGroup(params).then(result => {
+            if (result.data.code == 1) {
+                return true;
+            } else if (result.data.code == 2) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return false;
+
+            } else if (result.data.code == 3) {
+                ElMessage({
+                    type: 'error',
+                    message: result.data.message,
+                  })
+                  return  false;
+            }
+            return  false;
+        }, error => {
+            ElMessage.error(error);
+            return  false;
+        })
+    }
 
 }

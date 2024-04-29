@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts"setup>
 import {reactive,ref,h} from 'vue'
 import { ElNotification } from 'element-plus'
 import { useRouter } from 'vue-router'

@@ -4,7 +4,7 @@ import { GroupService } from '../services/GroupService';
 import { ChatHub } from '../services/HubService';
 import { Message } from '../services/MessageService';
 import { UserApi } from '../services/UserService';
-
+import { FileService } from '../services/FileService';
 
 export interface IUseFriendsStore{
     $reset(): unknown;
@@ -27,9 +27,16 @@ declare export interface IGroupStore{
     MyGroups:UserGroup[]
     OnConnectedGroup:{
         GroupInfo:Group,
-        GroupMemebers:UserGroup[]
+        GroupMemebers:UserGroupInfo[]
     },
     GroupRequestList:GroupRequestList[] 
+}
+
+interface UserGroupInfo{
+    Role:string,
+    id:number,
+    name:string,
+    HeaderImg:string,
 }
 interface GroupRequestList {
     xusername: any;
@@ -71,7 +78,11 @@ interface TargetUserTab {
 //存储目标聊天用户的相关信息。名称，聊天内容...
 interface TargetUserMessage {
     targetUserName: string,
-    messages: string[],
+    messageContent: [{
+        message: string,
+        messageType: string,
+        messageDate: string,
+    }],
     messageNames: string[],
     messageHeaders: string[],
 }
@@ -83,4 +94,17 @@ interface IService {
     Message:Message| undefined,
     User:UserApi | undefined
     Group:GroupService | undefined
+    File:FileService | undefined
+}
+
+declare export interface IMessageStore{
+    MsgCount:number,
+    messageItems:MessageItem[]
+}
+interface MessageItem{
+    messageHeaders:string[],
+    messageNames:string[],
+    messages:string[],
+    targetUserName:string,
+    unreadCount:number,
 }

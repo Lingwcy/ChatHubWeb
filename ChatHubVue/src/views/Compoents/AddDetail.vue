@@ -66,7 +66,6 @@ const sendGroupRequst =()=>{
         GroupId:groupStore.SelectedGroup.GroupId,
         xusername:userStore.userName
     }
-    console.log(payload)
     service.Group?.SendGroupRequest(payload)
 }
 </script>

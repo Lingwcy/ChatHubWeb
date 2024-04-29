@@ -1,10 +1,12 @@
 ﻿using ChatHubApi.Controllers.Font.Friends.Model;
+using ChatHubApi.Hub;
 using ChatHubApi.System;
 using ChatHubApi.System.Entity.Font;
 using construct.Application.System.FontServices.Friends.Model;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SqlSugar;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -21,10 +23,12 @@ namespace construct.Application.System.FontServices.Friends
     public class FriendsController : ControllerBase
     {
         private readonly ISqlSugarClient _db;
+        private readonly IHubContext<MyHub,IHub> _hubContext;
 
-        public FriendsController(ISqlSugarClient db)
+        public FriendsController(ISqlSugarClient db, IHubContext<MyHub, IHub> hubContext)
         {
             _db = db;
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -169,7 +173,24 @@ namespace construct.Application.System.FontServices.Friends
             }
 
             sysFriendsRequest friendsReq = new sysFriendsRequest() { ReqMsg = md.ReqMsg, UserId = SUser.id, TargetId = TUser.id, TargetName = TUser.Username, UserName = SUser.Username, TargetImg = TUser.HeaderImg, UserImg = SUser.HeaderImg, remark = md.mark,TargetGroupId = md.TargetGroupId };
-            return Ok(new Response(1, _db.Insertable<sysFriendsRequest>(friendsReq).ExecuteCommand(), "发送请求成功！")); ;
+
+
+
+            try
+            {
+                //发送即时通知    
+                var existOnlineUser = _db.Queryable<sysOnlineUser>().Where(x => x.name == md.targetName).First();
+                if (existOnlineUser != null)
+                {
+                    await _hubContext.Clients.Client(existOnlineUser.conId).FriendsRequestReceived(md.userName);
+                }
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            return Ok(new Response(1, _db.Insertable<sysFriendsRequest>(friendsReq).ExecuteCommand(), "发送请求成功！"));
 
         }
 
@@ -201,11 +222,25 @@ namespace construct.Application.System.FontServices.Friends
         /// 
         [HttpDelete]
         [Authorize(policy: "SelfOnly")]
-        public new IActionResult Request([FromQuery] DenyRequestModel friendsReq)
+        public new async Task<IActionResult> RequestAsync([FromQuery] DenyRequestModel friendsReq)
         {
             sysFriendsRequest res =friendsReq.Adapt<sysFriendsRequest>();
 
-            return Ok(new Response(code: (_db.Deleteable<sysFriendsRequest>().Where(a => a.UserId == res.UserId && a.TargetId == res.TargetId).ExecuteCommand()) > 0 ? 1 : 2 , message: "操作成功!", data: null));
+            try
+            {
+                //发送即时通知    
+                var existOnlineUser = _db.Queryable<sysOnlineUser>().Where(x => x.name == friendsReq.UserName).First();
+                if (existOnlineUser != null)
+                {
+                    await _hubContext.Clients.Client(existOnlineUser.conId).FriendRequestRefused(friendsReq.TargetName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return Ok(new Response(code: (_db.Deleteable<sysFriendsRequest>().Where(a => a.UserId == res.UserId && a.TargetId == res.TargetId).ExecuteCommand()) > 0 ? 1 : 2, message: "操作成功!", data: null));
+
         }
 
         /// <summary>
@@ -256,6 +291,21 @@ namespace construct.Application.System.FontServices.Friends
             sender.nameId = friendsReq.TargetId;
             _db.Insertable(sender).ExecuteCommand();
             _db.Insertable(accpter).ExecuteCommand();
+
+
+            try
+            {
+                //发送即时通知    
+                var existOnlineUser = _db.Queryable<sysOnlineUser>().Where(x => x.name == friendsReq.UserName).First();
+                if (existOnlineUser != null)
+                {
+                    await _hubContext.Clients.Client(existOnlineUser.conId).FriendRequestAccepted(friendsReq.TargetName);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
             return Ok(new Response(code: 1, message: "添加成功!", data: null));
         }
 

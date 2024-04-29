@@ -5,6 +5,7 @@ using ChatHubApi.Middleware;
 using ChatHubApi.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -101,12 +102,19 @@ builder.Logging.AddSerilog(logger);
 //提供对当前 HttpContext的访问
 builder.Services.AddHttpContextAccessor();
 
-
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.ValueLengthLimit = 100 * 1024 * 1024; // 100 MB
+    options.KeyLengthLimit = 100 * 1024 * 1024; // 100 MB
+    options.MultipartHeadersCountLimit = 100 * 1024 * 1024; // 100 MB
+    options.MultipartBodyLengthLimit = 100 * 1024 * 1024; // 100 MB
+});
 
 //signalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
+    options.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
 }
 );
 

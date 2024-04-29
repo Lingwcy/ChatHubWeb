@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue';
-import { createMessageService, createUserService } from '../../../../services/ServicesCollector';
-import { UseUserInformationStore, UseMsgbox,UseGroupStore, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
+import { createMessageService, createUserService, createGroupService } from '../../../../services/ServicesCollector';
+import { UseUserInformationStore, UseMsgbox, UseGroupStore, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
+import { UserGroup } from '../../../../store/Istore';
+import { DropdownInstance } from 'element-plus';
 createMessageService();
 createUserService();
+createGroupService();
 const service = UseServiceStore();
 const Pmsg = UseMsgStore()
 const userInfo = UseUserInformationStore()
@@ -12,9 +15,11 @@ const chatStore = UseChatStore()
 const friendStore = UseFriendsStore()
 const DetailVisible = ref(false)
 const groupStore = UseGroupStore()
+
 onMounted(function () {
     //http载入msgbox
     getMsgBox()
+    service.Group?.GetGroupList(Number(userInfo.userId), userInfo.userName, groupStore);
 })
 
 const getMsgBox = () => {
@@ -23,7 +28,6 @@ const getMsgBox = () => {
 }
 //点击私聊弹出聊天框并取消最新红点
 const TurnFriendsToMessageBox = (friends: any) => {
-    console.log(friends)
     if (friends.isNew == 1) {
         let servicePayLoad = {
             username: userInfo.userName,
@@ -32,6 +36,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
         }
         service.Message?.PostRedbob(servicePayLoad)
         friends.isNew = 0
+        Pmsg.messageItems.find(item => item.targetUserName == friends.targetfont)!.unReadCount = 0
     }
     if (friends.Type == 'person') {
         let flag1 = false//判断消息存储库
@@ -48,42 +53,48 @@ const TurnFriendsToMessageBox = (friends: any) => {
                     tabName: friends.targetfont,
                     targetUserMessage: reactive(element),
                     tabType: 0,
+                    tabId: 0
                 })
             }
-
         });
         if (flag1) return
         Pmsg.messageItems.push(
             {
                 targetUserName: friends.targetfont,
-                messages: [],
+                messageContent: [],
                 messageNames: [],
                 messageHeaders: [],
+                unReadCount: 1,
             }
         )
         chatStore.targetUserTab.push({
             tabTitle: friends.targetfont,
             tabName: friends.targetfont,
             tabType: 0,
+            tabId: friends.userId,
             targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
         })
     }
     else if (friends.Type == 'group') {
         let flag1 = false//判断消息存储库
+        const data: UserGroup = groupStore.MyGroups.find(item => item.GroupId == friends.targetId) as UserGroup
+        console.log(friends)
+        groupStore.OnConnectedGroup.GroupInfo = data.Group
         Pmsg.messageItems.forEach(element => {
-            if (element.targetUserName == friends.targetfont) {
+            if (element.targetUserName == data.Group.GroupName) {
                 flag1 = true
                 for (let i = 0; i < chatStore.targetUserTab.length; i++) {
-                    if (chatStore.targetUserTab[i].tabName == friends.targetfont) {
+                    if (chatStore.targetUserTab[i].tabName == data.Group.GroupName) {
                         return
                     }
                 }
 
                 chatStore.targetUserTab.push({
-                    tabTitle: friends.targetfont,
-                    tabName: friends.targetfont,
+                    tabTitle: data.Group.GroupName,
+                    tabName: data.Group.GroupName,
                     targetUserMessage: reactive(element),
-                    tabType: 1
+                    tabType: 1,
+                    tabId: data.Group.GroupId
                 })
             }
 
@@ -91,16 +102,18 @@ const TurnFriendsToMessageBox = (friends: any) => {
         if (flag1) return
         Pmsg.messageItems.push(
             {
-                targetUserName: friends.targetfont,
-                messages: [],
+                targetUserName: data.Group.GroupName,
+                messageContent: [],
                 messageNames: [],
                 messageHeaders: [],
+                unReadCount: 1,
             }
         )
         chatStore.targetUserTab.push({
-            tabTitle: friends.targetfont,
-            tabName: friends.targetfont,
+            tabTitle: data.Group.GroupName,
+            tabName: data.Group.GroupName,
             tabType: 1,
+            tabId: data.Group.GroupId,
             targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
         })
     }
@@ -127,7 +140,8 @@ const handleCommand = (command: any) => {
 </script>
 <template>
     <div v-for="(req, _index) in MsgBox.MsgItems">
-        <div class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)">
+        <div v-if="req.Type == 'person'" class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)"
+            v-on:click.right="showClick">
             <div id="friendReq-Header">
                 <el-badge is-dot :hidden="!req.isNew">
                     <img v-if="req.Type == 'person'" v-bind:src="'../../../src/images/systemHeader/' + req.targetImage"
@@ -138,30 +152,52 @@ const handleCommand = (command: any) => {
             </div>
             <div class="friendMSG-Body">
                 <div class="friendMSG-Body-coentent">
-                    <span class="friendMSG-name">{{ req.targetfont }}</span>
-                    <el-dropdown @command="handleCommand">
-                        <span class="el-dropdown-link">
-                            <svg t="1671181070434" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                                xmlns="http://www.w3.org/2000/svg" p-id="2957" width="20" height="20">
-                                <path
-                                    d="M512 704c35.2 0 64 28.8 64 64s-28.8 64-64 64-64-28.8-64-64 28.8-64 64-64z m-64-192c0 35.2 28.8 64 64 64s64-28.8 64-64-28.8-64-64-64-64 28.8-64 64z m0-256c0 35.2 28.8 64 64 64s64-28.8 64-64-28.8-64-64-64-64 28.8-64 64z"
-                                    p-id="2958"></path>
-                            </svg>
-                        </span>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item :command="'show,' + req.targetfont">查看资料</el-dropdown-item>
-                                <el-dropdown-item :command="'delete,' + req.id">删除会话</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <div class="friendMSG-Body-coentent-inner">
+                        <span class="friendMSG-name">{{ req.targetfont }}</span>
+                        <span class="friendMSG-time">{{ req.lastTime }}</span>
+                    </div>
+                    <div class="friendMSG-Body-coentent-inner" v-if="req.isNew">
+                        <span class="friendMSG-msg">{{
+        Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageContent.at(-1)?.message
+    }}</span>
+                        <el-badge
+                            :value="Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.unReadCount"
+                            class="item" type="primary">
+                        </el-badge>
+                    </div>
                 </div>
             </div>
-
         </div>
 
-    </div>
+        <div v-if="req.Type == 'group'" class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)">
+            <div id="friendReq-Header">
+                <el-badge is-dot :hidden="!req.isNew">
+                    <img src="../../../../images/assets/群默认头像.svg" alt="" id="friendReq-Header-img">
+                </el-badge>
+            </div>
+            <div class="friendMSG-Body">
+                <div class="friendMSG-Body-coentent">
+                    <div class="friendMSG-Body-coentent-inner">
+                        <span class="friendMSG-name">{{ req.targetfont }}</span>
+                        <span class="friendMSG-time">{{ req.lastTime }}</span>
+                    </div>
+                    <div class="friendMSG-Body-coentent-inner" v-if="req.isNew">
+                        <span class="friendMSG-msg">{{
+        Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageNames.at(-1)
+    }}:
+                            {{ 
+    (Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageContent.at(-1))?.message
+}}</span>
+                        <el-badge
+                            :value="Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.unReadCount"
+                            class="item" type="primary">
+                        </el-badge>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
     <el-dialog v-model="DetailVisible" width="380px" id="addUser" center draggable>
         <template #header>
             <div class="DetailInfo-header">
@@ -201,6 +237,39 @@ const handleCommand = (command: any) => {
     </el-dialog>
 </template>
 <style>
+.friendMSG-Body-coentent-inner {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.friendMSG-msg {
+    width: 120px;
+    height: 20px;
+    overflow: hidden;
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #606266;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.friendMSG-time {
+    color: #606266;
+    font-size: 11px;
+}
+
+.friendMSG-name {
+    height: 20px;
+    overflow: hidden;
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #000000;
+}
+
 .DetailInfo-header {
     width: 90%;
     height: 90px;
@@ -277,8 +346,8 @@ const handleCommand = (command: any) => {
 }
 
 #friendReq-Header-img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     overflow: hidden;
     border-radius: 15px;
 }
@@ -319,40 +388,32 @@ const handleCommand = (command: any) => {
 
 .FriendMSGContent {
     height: 60px;
-    border-bottom: 1px solid #e9e9eb;
+    border-bottom: 1px solid #eeecec;
     display: flex;
 }
 
 .FriendMSGContent:hover {
-    background-color: #b4b5b8;
+    background-color: #f5f5f5;
     transition: 0.3s ease-in-out all;
     cursor: pointer;
 }
 
 .friendMSG-Body {
-    width: 70%;
+    width: 80%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: -8px;
 }
 
 .friendMSG-Body-coentent {
-    width: 90%;
+    width: 85%;
     height: 80%;
     font-size: 15px;
+    margin-left: -10px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
 
-}
-
-.friendMSG-name {
-    width: 120px;
-    height: 20px;
-    overflow: hidden;
-    font-size: 12px;
-    margin-bottom: 5px;
-    color: #606266;
 }
 </style>

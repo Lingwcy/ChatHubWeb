@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts"setup>
 </script>
 <template>
     <h2>#本地存储</h2>

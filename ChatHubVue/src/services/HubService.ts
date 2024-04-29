@@ -1,15 +1,16 @@
 import * as SignalR from '@microsoft/signalr';
 import { crypto } from '../Crypto/crypto';
 import { ElMessage, ElNotification } from 'element-plus'
-import { getMessageBox, getOfflineMessage, getGroupList } from '../common/api';
+import { getMessageBox, getOfflineMessage, getGroupList, findFriendTree } from '../common/api';
 import { IGroupStore } from '../store/Istore';
+import { IMsgStore } from '../models/interface/IMessageStore';
 export class ChatHub {
     private UserJwt!: string;
     public Options = {};
     public HubConnection!: signalR.HubConnection;
     public IsLogin: boolean = false;
     public ChatStore: any;
-    public PmsgStore: any;
+    public PmsgStore: IMsgStore;
     public UserInfoStore: any;
     public MsgboxStore: any;
     public AppsetStore: any;
@@ -67,7 +68,26 @@ export class ChatHub {
     private ChatMethodInitial() {
         //公共消息接收器
         this.HubConnection.on('PublicMsgReceived', (HeaderImg: string, fromUserName: string, msg: string) => {
-            this.PmsgStore.messageItems[0].messages.push(msg)
+            const payload = {
+                message: msg,
+                messageType: "TIMTextElem",
+                messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+            }
+            this.PmsgStore.messageItems[0].messageContent.push(payload)
+            this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
+            this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)
+            this.AppsetStore.MessageContract.OnConnectedName = 'public'
+            this.AppsetStore.MessageContract.IsNewMessageCome++;
+            //scrollDown()
+        });
+        //公共图片接收器
+        this.HubConnection.on('PublicImageReceived', (HeaderImg: string, fromUserName: string, url: string) => {
+            const payload = {
+                message: url,
+                messageType: "TIMImageElem",
+                messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+            }
+            this.PmsgStore.messageItems[0].messageContent.push(payload)
             this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
             this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)
             this.AppsetStore.MessageContract.OnConnectedName = 'public'
@@ -88,17 +108,28 @@ export class ChatHub {
             for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                 if (this.PmsgStore.messageItems[i].targetUserName == groupInfo?.Group.GroupName) {
                     existMsgStore = true
-                    this.PmsgStore.messageItems[i].messages.push(msg)
+                    const payload = {
+                        message: msg,
+                        messageType: "TIMTextElem",
+                        messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                    }
+                    this.PmsgStore.messageItems[i].messageContent.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(fromUserName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(HeaderImg)
+                    this.PmsgStore.messageItems[i].unReadCount++;
                 }
             }
             if (!existMsgStore) {//如果没有这个库则创建
                 this.PmsgStore.messageItems.push({
                     targetUserName: groupInfo?.Group.GroupName,
-                    messages: [msg],
+                    messageContent: [{
+                        message: msg,
+                        messageType: "TIMTextElem",
+                        messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                    }],
                     messageNames: [fromUserName],
                     messageHeaders: [HeaderImg],
+                    unReadCount: 1,
                 })
             }
             //scrollDown()
@@ -108,20 +139,38 @@ export class ChatHub {
         //好友添加请求
         this.HubConnection.on('FriendsRequestReceived', (fromUserName) => {
             ElNotification({
-                title: '新的好友请求!',
-                message: ` 来自 :${fromUserName} `,
+                title: '系统通知',
+                message: ` 来自 ${fromUserName} 的好友请求! `,
             })
+        });
+        //好友请求被拒绝
+        this.HubConnection.on('FriendRequestRefused', (fromUserName) => {
+            ElNotification({
+                title: '系统通知',
+                message: ` 发送给 ${fromUserName} 的好友请求被拒绝!`,
+            })
+        });
+        //好友请求被接受
+        this.HubConnection.on('FriendRequestAccepted', (fromUserName) => {
+            ElNotification({
+                title: '系统通知',
+                message: ` 发送给 ${fromUserName} 的好友请求被接受!`,
+            })
+            //刷新好友列表
+            this.AppsetStore.CompoentsEvent.isFriendReqestAccepted++
+            
         });
         //离线消息接收器
         /*请求离线消息 并添加到Pinia[UseMsgbox] */
-        this.HubConnection.on('MsgBoxFlasherReceived', (_fromUserName: string) => {
-            let payload = { username: _fromUserName }
+        this.HubConnection.on('MsgBoxFlasherReceived', () => {
+            let payload = { username: this.UserInfoStore.userName, xusername: this.UserInfoStore.userName }
             let res = getMessageBox(payload)
             res.then(res => {
                 if (res.data.code == 1) {
                     this.MsgboxStore.$reset()
-                    for (let i = 0; i < res.data.data.length - 1; i++) {
-                        this.MsgboxStore.MsgItems.push(JSON.parse(res.data.data[i]) as never)
+                    const result = JSON.parse(res.data.data)
+                    for (let i = 0; i < result.length; i++) {
+                        this.MsgboxStore.MsgItems.push(result[i])
                     }
                 }
             })
@@ -182,17 +231,29 @@ export class ChatHub {
             for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                 if (this.PmsgStore.messageItems[i].targetUserName == fromUserName) {
                     existMsgStore = true
-                    this.PmsgStore.messageItems[i].messages.push(msg)
+                    const payload = {
+                        message: msg,
+                        messageType: "TIMTextElem",
+                        messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                    }
+                    this.PmsgStore.messageItems[i].messageContent.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(fromUserName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(HeaderImg)
+                    this.PmsgStore.messageItems[i].unReadCount++;
                 }
             }
             if (!existMsgStore) {//如果没有这个库则创建
+                const payload = {
+                    message: msg,
+                    messageType: "TIMTextElem",
+                    messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                }
                 this.PmsgStore.messageItems.push({
                     targetUserName: fromUserName,
-                    messages: [msg],
+                    messageContent: [payload],
                     messageNames: [fromUserName],
                     messageHeaders: [HeaderImg],
+                    unReadCount: 1,
                 })
             }
             //消息发入接受端之后 在 messageBox 上渲染 且冒红点 =》 此实现位于MessageBox.vue
@@ -235,14 +296,14 @@ export class ChatHub {
             })
         });
     }
-    //将聊天信息挂载到此时选中的Tab
-    public PrintMessageToTab(targetUserName: string): void {
+    //将聊天信息挂载到此时选中的Tab ID
+    public PrintMessageToTab(targetUserName: string, id: number): void {
         //从状态库中获取用户所点击的这个Tab
-        this.ChatStore.targetUserTab.forEach((element, index) => {
-            if (element.tabName == targetUserName) {
+        this.ChatStore.targetUserTab.forEach((element: any, index: any) => {
+            if (element.tabId == id) {
                 this.ChatStore.selectedTab = index;
                 //一但获取到这个tab。就将pmsg中的数据传递给tab进行渲染
-                this.PmsgStore.messageItems.forEach(pelement => {
+                this.PmsgStore.messageItems.forEach((pelement: { targetUserName: string; }) => {
                     if (pelement.targetUserName == targetUserName) {
                         element.targetUserMessage = pelement
                         //引用挂起。在修改pmsg的时候同时修改chatstore(引用传递)
@@ -253,7 +314,12 @@ export class ChatHub {
     }
     //执行创建群组后的一系列即时通知任务
     public async CreateGroupTask(group: any, userIds: number[]): Promise<void> {
-        await this.HubConnection.invoke("CreateGroupTask", group, userIds , this.UserInfoStore.userId);
+        await this.HubConnection.invoke("CreateGroupTask", group, userIds, this.UserInfoStore.userId);
+    }
+    //发送图片测试
+    public async SendImgTest(imageData: any, fileType: string): Promise<void> {
+        //console.log(imageData)
+        await this.HubConnection.invoke("SendImage", imageData, fileType);
     }
 
     //发送消息
@@ -267,7 +333,12 @@ export class ChatHub {
                 await this.HubConnection.invoke("SendGroupMsg", this.UserInfoStore.userName, pmsg, this.GroupStore.OnConnectedGroup.GroupInfo.GroupId.toString());
                 for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                     if (this.PmsgStore.messageItems[i].targetUserName == this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName) {
-                        this.PmsgStore.messageItems[i].messages.push(msg)
+                        const payload = {
+                            message: msg,
+                            messageType: "TIMTextElem",
+                            messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                        }
+                        this.PmsgStore.messageItems[i].messageContent.push(payload)
                         this.PmsgStore.messageItems[i].messageNames.push(this.UserInfoStore.userName)
                         this.PmsgStore.messageItems[i].messageHeaders.push(this.UserInfoStore.userImg)
                     }
@@ -279,13 +350,25 @@ export class ChatHub {
             await this.HubConnection.invoke("SendPrivateMsg", this.UserInfoStore.userName, this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName, pmsg);
             for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                 if (this.PmsgStore.messageItems[i].targetUserName == this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName) {
-                    this.PmsgStore.messageItems[i].messages.push(msg)
+                    const payload = {
+                        message: msg,
+                        messageType: "TIMTextElem",
+                        messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                    }
+                    this.PmsgStore.messageItems[i].messageContent.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(this.UserInfoStore.userName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(this.UserInfoStore.userImg)
                 }
             }
             //发送消息盒子提醒。刷新对方消息盒子
             await this.HubConnection.invoke("MsgBoxFlasher", this.ChatStore.targetUserTab[this.ChatStore.selectedTab].tabName);
+        }
+    }
+
+    public async SendImageToServer(imageUrl: string): Promise<void> {
+        let selectedIndex: number = this.ChatStore.selectedTab;
+        if (this.ChatStore.targetUserTab[selectedIndex].tabName == "world") {
+            await this.HubConnection.invoke("SendPublicImage", this.UserInfoStore.userName, imageUrl);
         }
     }
 
@@ -303,17 +386,28 @@ export class ChatHub {
                     for (let i = 0; i < this.PmsgStore.messageItems.length; i++) {
                         if (this.PmsgStore.messageItems[i].targetUserName == result[x].Sender) {
                             existMsgStore = true
-                            this.PmsgStore.messageItems[i].messages.push(result[x].SendMessage)
+                            const payload = {
+                                message: result[x].SendMessage,
+                                messageType: "TIMTextElem",
+                                messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                            }
+                            this.PmsgStore.messageItems[i].messageContent.push(payload)
                             this.PmsgStore.messageItems[i].messageNames.push(result[x].Sender)
                             this.PmsgStore.messageItems[i].messageHeaders.push(result[x].SenderImg)
                         }
                     }
                     if (!existMsgStore) {//如果没有这个库则创建
+                        const payload = {
+                            message: result[x].SendMessage,
+                            messageType: "TIMTextElem",
+                            messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+                        }
                         this.PmsgStore.messageItems.push({
                             targetUserName: result[x].sender,
-                            messages: [result[x].sendMessage],
+                            messageContent: [payload],
                             messageNames: [result[x].sender],
                             messageHeaders: [result[x].senderImg],
+                            unReadCount: 1,
                         })
                     }
                 }

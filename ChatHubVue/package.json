@@ -11,8 +11,11 @@
   "dependencies": {
     "@types/jquery": "^3.5.29",
     "@types/vue": "^2.0.0",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "crypto-js": "^4.2.0",
     "gsap": "^3.12.5",
+    "sass": "^1.75.0",
     "vue": "^3.3.11",
     "vue3-slide-verify": "^1.1.5"
   },

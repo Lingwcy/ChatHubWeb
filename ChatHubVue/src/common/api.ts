@@ -16,6 +16,7 @@ export const findFriend = (params:{targetName:string, userName:string,xusername:
 export const findFriends = (params:{targetName:string, userName:string,xusername:string}) => get('/Friends/querys',{params}) //放回数据
 export const acceptRequest = (parmas:any) => post('/Friends/acceptRequest',parmas);
 export const rejectRequest = (params:any) => delete_('/Friends/request',{params})
+export const deleteFriend = (params:any) => delete_('/Friends/delete',{params})
 
 
 //Message
@@ -37,3 +38,11 @@ export const getGroupRequest = (params:{userId:number,xusername:string}) => get(
 export const postAcceptGroupRequest = (params:any) => post('/Group/AcceptRequest',params);
 export const deleteRejectGroupRequest = (params:any) => delete_('/Group/RejectRequest',{params})
 export const postCreateGroup = (params:any) => post('/Group/Create',params);
+export const postChangeGroupName = (params:any) => post('/Group/ChangeGroupName',params);
+export const postChangeGroupNotice = (params:any) => post('/Group/ChangeGroupNotice',params);
+export const postExitGroup = (params:any) => post('/Group/ExitGroup',params);
+export const postDismissGroup = (params:any) => post('/Group/DismissGroup',params);
+
+
+//File
+export const postUploadFile = (params:any) => post('/File/Upload',params);

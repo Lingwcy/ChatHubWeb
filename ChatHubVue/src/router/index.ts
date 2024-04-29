@@ -14,7 +14,6 @@ const Register = () => import('../views/LoginView/Register.vue')
 const Phone = () => import('../views/LoginView/Phone.vue')
 
 
-const Friends = () => import('../views/MainContent/HubContent/LeftNavDetail/Friends.vue')
 const Groups = () => import('../views/MainContent/HubContent/LeftNavDetail/Groups.vue')
 const Msgbox = () => import('../views/MainContent/HubContent/LeftNavDetail/MessageBox.vue')
 const UserSetting = () => import('../views/MainContent/Setting/UserSetting.vue')
@@ -39,14 +38,6 @@ const routes = [
         name: 'Hub',
         component: Hub,
         children: [
-            {
-                path: 'Friends',
-                component: Friends
-            },
-            {
-                path: 'Groups',
-                component: Groups
-            },
             {
                 path: 'Message',
                 component: Msgbox

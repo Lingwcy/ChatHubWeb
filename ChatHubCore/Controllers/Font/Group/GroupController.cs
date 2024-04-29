@@ -102,7 +102,7 @@ namespace ChatHubApi.Controllers.Font.Group
             {
                 var res = await _db.Queryable<sysFontUser>()
                      .FirstAsync(x => x.id == user.UserId);
-                memberList.Add(new { id = res.id, name = res.Username, Role = user.Role });
+                memberList.Add(new { id = res.id, name = res.Username, Role = user.Role,HeaderImg = res.HeaderImg });
             }
             return Ok(new Response(1, memberList, "操作成功!"));
         }
@@ -314,7 +314,7 @@ namespace ChatHubApi.Controllers.Font.Group
         /// <returns></returns>
         /// 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateGroupModel md)
+        public async Task<IActionResult> Create([FromBody] CreateGroupModel md)
         {
             //先判断所有用户是否存在
             foreach (var userId in md.UserId)
@@ -329,21 +329,15 @@ namespace ChatHubApi.Controllers.Font.Group
             group.GroupName = md.Name;
             group.CreatorUserId = md.CreateUserId;
             group.CreationDate = DateTime.Now;
-            _db.Insertable(group).ExecuteCommand();
+            var Resgroup = await _db.Insertable(group).ExecuteReturnEntityAsync(); ;
 
             //将所有成员添加进该组
-            //BUG 同一个用户不能创建一个重复名称的群组
-            var groupRes = _db.Queryable<sysGroups>().First(x => x.GroupName == md.Name && x.CreatorUserId == md.CreateUserId );
-            if (groupRes.GroupId == 0)
-            {
-                return Ok(new Response(2, null, "创建群组失败!"));
-            }
             foreach(var userId in md.UserId)
             {
                 sysFontUser user = _db.Queryable<sysFontUser>().First(x => x.id == userId);
                 sysUserGroup userGroup = new sysUserGroup()
                 {
-                    GroupId = groupRes.GroupId,
+                    GroupId = Resgroup.GroupId,
                     UserId = userId,
                     JoinDate = DateTime.Now,
                     Role = "成员",
@@ -351,23 +345,134 @@ namespace ChatHubApi.Controllers.Font.Group
                 }; 
                 _db.Insertable(userGroup).ExecuteCommand();
                 //添加成员之后，群人数+1
-                groupRes.MemberNumber += 1;
-                _db.Updateable(groupRes).ExecuteCommand();
+                Resgroup.MemberNumber += 1;
+                _db.Updateable(Resgroup).ExecuteCommand();
             }
             
             //添加创始人为群主
             sysUserGroup creatorUserGroup = new sysUserGroup()
             {
-                GroupId = groupRes.GroupId,
+                GroupId = Resgroup.GroupId,
                 UserId = md.CreateUserId,
                 JoinDate = DateTime.Now,
                 Role = "群主",
                 IsActive = true,
             };
             _db.Insertable(creatorUserGroup).ExecuteCommand();
-            groupRes.MemberNumber += 1;
-            _db.Updateable(groupRes).ExecuteCommand();
-            return Ok(new Response(1, groupRes, "创建群组成功!"));
+            Resgroup.MemberNumber += 1;
+            _db.Updateable(Resgroup).ExecuteCommand();
+            return Ok(new Response(1, Resgroup, "创建群组成功!"));
         }
+        //更改群名称
+        [HttpPost]
+        public IActionResult ChangeGroupName([FromBody] ChangeGroupNameModel md)
+        {
+            var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
+            if (group == null)
+            {
+                return Ok(new Response(3, null, "找不到此群组!"));
+            }
+            //查看此接口调用者是否是群主或者管理员
+            var userGroup = _db.Queryable<sysUserGroup>().First(x => x.GroupId == md.GroupId && x.UserId == md.UserId);
+            if (userGroup == null || (userGroup.Role != "群主" && userGroup.Role != "管理员"))
+            {
+                return Ok(new Response(3, null, "你没有权限修改群名称!"));
+            }
+            group.GroupName = md.ChangedName;
+            var i = _db.Updateable(group).ExecuteCommand();
+            if (i > 0)
+            {
+                return Ok(new Response(1, i, "操作成功!"));
+            }
+            else
+            {
+                return Ok(new Response(2, i, "操作失败!"));
+            }
+            //后续需要向该群在线的所有成员发送更新通知
+        }
+
+        //更改群公告
+        [HttpPost]
+        public IActionResult ChangeGroupNotice([FromBody] ChangeGroupNoticeModel md)
+        {
+            var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
+            if (group == null)
+            {
+                return Ok(new Response(3, null, "找不到此群组!"));
+            }
+            //查看此接口调用者是否是群主或者管理员
+            var userGroup = _db.Queryable<sysUserGroup>().First(x => x.GroupId == md.GroupId && x.UserId == md.UserId);
+            if (userGroup == null || (userGroup.Role != "群主" && userGroup.Role != "管理员"))
+            {
+                return Ok(new Response(3, null, "你没有权限修改群名称!"));
+            }
+            group.GroupDescription = md.Notice;
+            var i = _db.Updateable(group).ExecuteCommand();
+            if (i > 0)
+            {
+                return Ok(new Response(1, i, "操作成功!"));
+            }
+            else
+            {
+                return Ok(new Response(2, i, "操作失败!"));
+            }
+            //后续需要向该群在线的所有成员发送更新通知
+        }
+        
+        //退出群聊
+        [HttpPost]
+        public IActionResult ExitGroup([FromBody] ExitGroupModel md)
+        {
+            var userGroup = _db.Queryable<sysUserGroup>().First(x => x.GroupId == md.GroupId && x.UserId == md.UserId);
+            if (userGroup == null)
+            {
+                return Ok(new Response(3, null, "你不是此群的成员!"));
+            }
+            var i = _db.Deleteable<sysUserGroup>(userGroup).ExecuteCommand();
+            if (i > 0)
+            {
+                //后续需要向该群群主或管理发送通知
+                return Ok(new Response(1, i, "操作成功!"));
+            }
+            else
+            {
+                return Ok(new Response(2, i, "操作失败!"));
+            }
+        }
+
+        //解散群聊
+        [HttpPost]
+        public IActionResult DismissGroup([FromBody] DismissGroupModel md)
+        {
+            var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
+            if (group == null)
+            {
+                return Ok(new Response(3, null, "找不到此群组!"));
+            }
+            //查看此接口调用者是否是群主
+            var userGroup = _db.Queryable<sysUserGroup>().First(x => x.GroupId == md.GroupId && x.UserId == md.UserId);
+            if (userGroup == null || userGroup.Role != "群主")
+            {
+                return Ok(new Response(3, null, "你没有权限解散群组!"));
+            }
+            //删除前先向群内所有成员发送通知
+            //先删除sysUserGroup中含有此groupId的所有元组
+            var i = _db.Deleteable<sysUserGroup>().Where(x => x.GroupId == md.GroupId).ExecuteCommand();
+            if (i > 0)
+            {
+                //删除sysGroups中含有此groupId的元组
+                var j = _db.Deleteable<sysGroups>().Where(x => x.GroupId == md.GroupId).ExecuteCommand();
+                if (j > 0)
+                {
+                    return Ok(new Response(1, i, "操作成功!"));
+                }
+                else
+                {
+                    return Ok(new Response(2, i, "操作失败!"));
+                }
+            }
+            return Ok(new Response(2, i, "操作失败!"));
+        }
+
     }
 }

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Search, Plus, Tools, ArrowRight } from '@element-plus/icons-vue'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { appsetting, UseChatStore, UseGroupStore, UseFriendsStore, UseMsgStore, UseServiceStore, UseUserInformationStore } from '../../../../store';
 import Add from '../../../Compoents/Add.vue';
 import FriendManager from '../../../Compoents/FriendManager.vue';
@@ -147,7 +147,7 @@ const TurnFriendsToMessageBox = (data: any) => {
                 tabName: data.Username,
                 targetUserMessage: reactive(element),
                 tabType:0,
-                tabId:data.UserId
+                tabId:data.id
             })
         }
 
@@ -156,7 +156,7 @@ const TurnFriendsToMessageBox = (data: any) => {
     Pmsg.messageItems.push(
         {
             targetUserName: data.Username,
-            messages: [],
+            messageContent: [],
             messageNames: [],
             messageHeaders: [],
         }
@@ -195,7 +195,7 @@ const TurnGroupToMessageBox = (data: UserGroup) => {
     Pmsg.messageItems.push(
         {
             targetUserName: data.Group.GroupName,
-            messages: [],
+            messageContent: [],
             messageNames: [],
             messageHeaders: [],
         }
@@ -208,6 +208,15 @@ const TurnGroupToMessageBox = (data: UserGroup) => {
         targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
     })
 }
+
+watch(
+    () => appset.CompoentsEvent.isFriendReqestAccepted,
+    (newVal, oldVal) => {
+        if (newVal > oldVal) {
+            service.Friend?.FindFriendTree(friendPayload, friendStore)
+        }
+    }
+);
 const visible = ref(false)
 </script>
 <template>
@@ -344,8 +353,6 @@ const visible = ref(false)
                     friendStore.TargetUserProfile?.NickName }}</span>
                     <span v-else class="DetailInfo-header-content-font1">{{ friendStore.TargetUserProfile?.Username
                         }}</span>
-                    <span class="DetailInfo-header-content-font2">{{ friendStore.TargetUserProfile?.Job }}</span>
-                    <span class="DetailInfo-header-content-font3">暂无个性签名</span>
                 </div>
             </div>
         </template>
@@ -371,6 +378,12 @@ const visible = ref(false)
     </el-dialog>
 </template>
 <style scoped>
+.DetailInfo-header-img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-left: 110px;
+}
 .group-item{
     display: flex;
     justify-content: center;

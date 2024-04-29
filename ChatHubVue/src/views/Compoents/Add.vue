@@ -130,7 +130,7 @@ function handleTabClick(tab: { name: string }) {
 
 </script>
 
-<style>
+<style scoped>
 .group-name,
 .group-desc,
 .group-member-count {

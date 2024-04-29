@@ -7,6 +7,8 @@ import { Auth } from '../../services/AuthService';
 import { Message } from '../../services/MessageService';
 import navVue from '../Topbar/nav.vue';
 import { createChatHubService } from '../../services/ServicesCollector';
+
+import "../../styles/index.scss"
 const userInfoStore = UseUserInformationStore();
 const msgStore = UseMsgStore();
 const chatStore = UseChatStore();
@@ -22,7 +24,6 @@ onBeforeMount(function () {
   //const data = localStorage.getItem('服务数据');
   service.Auth = new Auth();
   service.Auth?.SendAESKey();
-  console.log(service.ChatHub?.IsLogin);
   if (service.ChatHub?.IsLogin) {
     service.ChatHub = new ChatHub(localStorage.getItem('token') as string
       , chatStore, msgStore, userInfoStore, msgboxStore, groupStore, appset)

@@ -116,7 +116,7 @@ const login = async function () {
       </div>
       <div class="rightLogin-content-main-center-items-phone">
         <el-form-item prop="password" style="width:380px; height: 50px;">
-          <el-input v-model="loginForm.loginFormModel.password" type="password" placeholder="密码" />
+          <el-input v-model="loginForm.loginFormModel.password" type="password" placeholder="密码" show-password />
         </el-form-item>
       </div>
       <div class="rightLogin-content-main-center-items-phone">

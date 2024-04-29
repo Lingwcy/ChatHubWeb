@@ -23,6 +23,9 @@ namespace ChatHubApi.System.Entity.Font
         [SugarColumn(ColumnDescription = "主键消息id", IsPrimaryKey = true)]
         public int id { get; set; }
 
+        public int userId { get; set; }
+        public int targetId { get; set; }
+        public string lastTime { get; set; }
         /// <summary>
         /// 记录用户
         /// </summary>

@@ -1,5 +1,5 @@
 import { defineStore, createPinia } from 'pinia'
-import { IChatStore, IGroupStore, IService, IUseFriendsStore} from './Istore';
+import { IChatStore, IGroupStore, IMessageStore, IService, IUseFriendsStore} from './Istore';
 import piniaPluginPersist from 'pinia-plugin-persist';
 import { IMsgStore } from '../models/interface/IMessageStore';
 
@@ -102,9 +102,10 @@ export const UseMsgStore = defineStore('msg', {
             messageItems: [
                 {
                     targetUserName: 'world',
-                    messages: [],
+                    messageContent: [],
                     messageNames: [],
-                    messageHeaders: []
+                    messageHeaders: [],
+                    unReadCount: 0,
                 }
             ]
         }
@@ -157,6 +158,8 @@ export const appsetting = defineStore('appset', {
                 isGroupRequestMessageOpen:false,
                 isFriendManagerSystemOpen:false,
                 isGroupCreateOpen:false,
+                isGroupInfoDetailOpen:false,
+                isFriendReqestAccepted:0,
                 isSlideVerify:{
                     isOpen:false,
                     isSuccess:false,
@@ -165,6 +168,7 @@ export const appsetting = defineStore('appset', {
                     isFriendOpen:true,
                     isGroupOpen:false,
                 },
+                OnSelectedImage: ''
             }
         }
     },
@@ -175,7 +179,7 @@ export const UseMsgbox = defineStore('MsgBox', {
     state: () => {
         return {
             MsgCount: 0,
-            MsgItems: []
+            MsgItems: [],
 
         }
     },
@@ -199,18 +203,18 @@ export const UseChatStore = defineStore('Chat', {
     state: (): IChatStore => {
         return {
             targetUserTab: [{
-                tabTitle: "世界频道",
+                tabTitle: "world",
                 tabName: "world",
                 targetUserMessage: {
                     targetUserName: '',
-                    messages: [],
+                    messageContent: [],
                     messageNames: [],
                     messageHeaders: []
                 },
                 tabType:0,
                 tabId:0,
             }],
-            selectedTab: 0
+            selectedTab: 0,
         }
     },
 })
@@ -275,6 +279,7 @@ export const UseServiceStore = defineStore('service', {
             Message: undefined,
             User: undefined,
             Group: undefined,
+            File: undefined,
         }
     },
     persist: {

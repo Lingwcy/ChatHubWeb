@@ -80,6 +80,11 @@ namespace ChatHubApi.Hub
             sysFontUser user = await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == FromName);
             await Clients.All.PublicMsgReceived(user.HeaderImg, user.Username, msg);
         }
+        public async Task SendPublicImage(string FromName, object image)
+        {
+            sysFontUser user = await _db.Queryable<sysFontUser>().FirstAsync(a => a.Username == FromName);
+            await Clients.All.PublicImageReceived(user.HeaderImg, user.Username, image);
+        }
         public async Task SendGroupMsg(string FromName, string msg,string GroupId)
         {
             /**
@@ -161,6 +166,8 @@ namespace ChatHubApi.Hub
             //如果在线就直接发送信息
             await Clients.Client(TargetUser.conId).FriendsRequestReceived(CurrentUser.name);
         }
+
+        //刷新对方的消息盒子
         public async Task MsgBoxFlasher(string toUserName)
         {
             //获取发送的客户端
@@ -181,13 +188,16 @@ namespace ChatHubApi.Hub
                     targetfont = CurrentUser.name,
                     targetImage = currentImg,
                     isNew = 1,
+                    userId = TargetUser.id,
+                    targetId = CurrentUser.id,
+                    lastTime = DateTime.Now.ToString("HH:mm"),
                     Type ="person"
                 };
                 _db.Insertable(res).ExecuteCommand();
             }
   
                 var result = _db.Updateable<sysMsgBox>()
-                .SetColumns(it => new sysMsgBox { isNew = 1 })//类只能在表达示里面不能提取
+                .SetColumns(it => new sysMsgBox { isNew = 1,lastTime = DateTime.Now.ToString("HH:mm") })//类只能在表达示里面不能提取
                 .Where(a => a.username == TargetUser.Username && a.targetfont == CurrentUser.name)
                 .ExecuteCommand();
 
@@ -197,7 +207,7 @@ namespace ChatHubApi.Hub
             {
                 return;
             }
-            await Clients.Client(online.conId).MsgBoxFlasherReceived(CurrentUser.name);
+            await Clients.Client(online.conId).MsgBoxFlasherReceived();
         }
 
         public async Task GroupMsgBoxFlasher(string GroupId,string FromName)
@@ -218,13 +228,16 @@ namespace ChatHubApi.Hub
                         targetfont = groupName,
                         targetImage = fontuser.HeaderImg,
                         isNew = 1,
+                        targetId = int.Parse(GroupId),
+                        userId = fontuser.id,
+                        lastTime = DateTime.Now.ToString("HH:mm"),
                         Type ="group"
                     };
                     _db.Insertable(res).ExecuteCommand();
                 }
    
                     var result = _db.Updateable<sysMsgBox>()
-                    .SetColumns(it => new sysMsgBox { isNew = 1 })//类只能在表达示里面不能提取
+                    .SetColumns(it => new sysMsgBox { isNew = 1, lastTime = DateTime.Now.ToString("HH:mm") })//类只能在表达示里面不能提取
                     .Where(a => a.username == fontuser.Username && a.targetfont == groupName)
                     .ExecuteCommand();
                 //立即刷新群在线成员的客户端msgbox
@@ -261,6 +274,32 @@ namespace ChatHubApi.Hub
             {
                 _logger.LogError(ex, "创建群组通知任务执行失败");
             }
+        }
+
+
+        public async Task SendImage(string base64String, string fileType)
+        {
+            byte[] imageBytes = Convert.FromBase64String(base64String);
+            //将imageBytes转化为IFormFile
+            var file = new FormFile(new MemoryStream(imageBytes), 0, imageBytes.Length, "image."+fileType, "image.png." + fileType);
+            string path = $"Files/{Guid.NewGuid().ToString("N")}/{file.FileName}";
+            string physicPath = Path.Combine(Directory.GetCurrentDirectory(), path);
+            string dir = Path.GetDirectoryName(physicPath);
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            using (FileStream fs = new FileStream(physicPath, FileMode.Create))
+            {
+                file.CopyTo(fs);
+            }
+            string url = $"{physicPath}";
+            var res = new
+            {
+                name = file.FileName,
+                status = "done",
+                thumbUrl = url,
+                url = url
+            };
+            _logger.LogWarning("执行成功!!!!");
         }
     }
 }

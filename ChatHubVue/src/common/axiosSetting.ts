@@ -33,6 +33,11 @@ http.interceptors.request.use(
         } else {
             config.headers!!['token'] = token || ''
         }
+        //如果url是https://localhost:5001/File/Upload则不加密
+        if (config.url!.indexOf('File') > -1) {
+            return config;
+        }
+
         config.data = crypto.encrypt(JSON.stringify(config.data))
         return config;
     },

@@ -3,7 +3,12 @@ declare export interface IMsgStore {
 }
 type ImessageItems = {
     targetUserName: string,
-    messages: string[],
+    messageContent: [{
+        message:string
+        messageType:string,
+        messageDate: string
+    }],
     messageNames: string[],
-    messageHeaders: string[]
+    messageHeaders: string[],
+    unReadCount: number,
 }

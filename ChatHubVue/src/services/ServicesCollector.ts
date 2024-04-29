@@ -4,6 +4,7 @@ import { Friends } from "./FriendsService";
 import { Message } from "./MessageService";
 import { UserApi } from "./UserService";
 import { GroupService } from "./GroupService";
+import { FileService } from "./FileService";
 import { UseChatStore, UseMsgStore, UseMsgbox, UseServiceStore, UseUserInformationStore,UseFriendsStore,UseGroupStore,appsetting} from "../store";
 const service = UseServiceStore();
 const userInfoStore = UseUserInformationStore();
@@ -33,4 +34,6 @@ export function createUserService(){
 export function createGroupService(){
     service.Group = new GroupService();
 }
-
+export function createFileService(){
+    service.File = new FileService();
+}
