@@ -1600,6 +1600,11 @@ url-parse@^1.5.3:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
 
+v-contextmenu@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npmmirror.com/v-contextmenu/-/v-contextmenu-3.2.0.tgz#629719c146210a97b97f1f7a06b3537bfe1e315a"
+  integrity sha512-6UemjAZkm6IXDH1XwIJrZj/uqSKnwnGDR+hfJnUvh66LRL5hk5bxgkgwto1lP3xFyjC8hzpQxnbzC6d1x1vXNg==
+
 vite@^5.0.8:
   version "5.0.10"
   resolved "https://registry.npmmirror.com/vite/-/vite-5.0.10.tgz"

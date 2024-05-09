@@ -13,6 +13,9 @@ import { ref } from 'vue';
 import SlideVerify, { SlideVerifyInstance } from 'vue3-slide-verify';
 import 'vue3-slide-verify/dist/style.css';
 import { ElMessage, ElMessageBox } from 'element-plus'
+
+
+
 const appset = appsetting();
 
 const handleClose = (done: () => void) => {

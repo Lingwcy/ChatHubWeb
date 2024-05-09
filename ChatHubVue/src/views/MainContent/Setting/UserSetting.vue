@@ -3,8 +3,10 @@ import { UseUserInformationStore } from '../../../store/index'
 import { reactive, ref, onMounted } from 'vue'
 import { ElButton, ElDialog } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import axios from '../../../common/axiosSetting'
-
+import { UseServiceStore } from '../../../store/index'
+import { createFileService } from '../../../services/ServicesCollector'
+createFileService()
+const service = UseServiceStore()
 const UserInfo = UseUserInformationStore()
 const Headvisible = ref(false)
 const GetHeaderImg = () => {
@@ -16,48 +18,32 @@ const GetHeaderImg = () => {
     return HeaderArr
 }
 let SelectedItem = ref('')
-axios.defaults.headers.common['Authorization'] = "Bearer " + UserInfo.jwtToken //向每一个请求携带JWT
 const DetailVisible = ref(false)
-const UpdateHeaderImg = (img:any) => {
+const UpdateHeaderImg = (img: any) => {
     SelectedItem.value = img
     DetailVisible.value = true
 }
 const SubmitUpdateHeaderRequest = () => {
     DetailVisible.value = false
     Headvisible.value = false
-    axios.put('api/user/user-header-image-update/' + SelectedItem.value + '/' + UserInfo.userName)
-        .then(res => {
-            if (res.data.errors != null) {
-                ElMessage({
-                    message: '头像更新失败!.' + res.data.errors,
-                    type: 'error',
-                })
-                return
-            }
-            if (res.data.data == '1') {
-                ElMessage({
-                    message: '头像更换成功!.',
-                    type: 'success',
-                })
-                UserInfo.userImg = SelectedItem.value
-            }
-        })
-        .catch(error => {
+    const payload = {
+        img: SelectedItem.value,
+        userId: UserInfo.userId
+    }
+    service.File?.UploadAvatar(payload).then(res => {
+        if (res) {
             ElMessage({
-                message: '头像更新失败!.' + error,
-                type: 'error',
+                message: '头像更换成功!.',
+                type: 'success',
             })
-            return
-        })
+            UserInfo.userImg = SelectedItem.value
+        }
+    })
 
 }
 const HeaderImgArr = GetHeaderImg()
 
-
-
-
 const form = reactive({
-    NickName: UserInfo.UserDetailInfo.NickName,
     Username: UserInfo.UserDetailInfo.Username,
     Email: UserInfo.UserDetailInfo.Email,
     City: UserInfo.UserDetailInfo.City,
@@ -65,38 +51,46 @@ const form = reactive({
     Job: UserInfo.UserDetailInfo.Job,
     Birth: UserInfo.UserDetailInfo.Birth,
     Desc: UserInfo.UserDetailInfo.Desc,
-    Phone:UserInfo.UserDetailInfo.Phone
+    Phone: UserInfo.UserDetailInfo.Phone,
+    id:UserInfo.userId,
+    UserName : UserInfo.userName
 })
-
+//清空表单
+const onClear = () => {
+    form.Username = ''
+    form.Email = ''
+    form.City = ''
+    form.Sex = ''
+    form.Job = ''
+    form.Birth = ''
+    form.Desc = ''
+    form.Phone = ''
+}
+//提交表单
 const onSubmit = () => {
-    UserInfo.UserDetailInfo.NickName = form.NickName
     UserInfo.UserDetailInfo.Email = form.Email
     UserInfo.UserDetailInfo.City = form.City
     UserInfo.UserDetailInfo.Sex = form.Sex
     UserInfo.UserDetailInfo.Job = form.Job
     UserInfo.UserDetailInfo.Birth = form.Birth
     UserInfo.UserDetailInfo.Desc = form.Desc
-    UserInfo.UserDetailInfo.Phone=form.Phone
-    console.log(form)
-    axios.put('api/user/user-detail-information-update', UserInfo.UserDetailInfo)
-        .then(res => {
-            if (res.data.errors != null) {
-                ElMessage({
-                    message: '信息更新失败!.' + res.data.errors,
-                    type: 'error',
-                })
-                return
-            }
-            if (res.data.data == '1') {
-                ElMessage({
-                    message: '信息更新成功!.',
-                    type: 'success',
-                })
-            }
-        })
-        .catch(res => {
-            console.log(res)
-        })
+    UserInfo.UserDetailInfo.Phone = form.Phone
+    UserInfo.UserDetailInfo.id = UserInfo.userId
+    UserInfo.userName = UserInfo.userName
+    //Birth格式调成yyyy-MM-dd
+    const Birth = new Date(form.Birth)
+    const year = Birth.getFullYear()
+    const month = (Birth.getMonth() + 1).toString().padStart(2, '0')
+    const day = Birth.getDate().toString().padStart(2, '0')
+    form.Birth = `${year}-${month}-${day}`
+    service.File?.UpdateUserInfo(form).then(res => {
+        if (res) {
+            ElMessage({
+                message: '个人信息更新成功!.',
+                type: 'success',
+            })
+        }   
+    })
 }
 
 onMounted(function () {
@@ -110,9 +104,6 @@ onMounted(function () {
         <div class="UserSetting-Content-col">
             <div class="setting-item">
                 <el-form :model="form" label-width="80px" style="margin-top: 20px;">
-                    <el-form-item label="社交名称">
-                        <el-input v-model="form.NickName" />
-                    </el-form-item>
                     <el-form-item label="邮箱">
                         <el-input v-model="form.Email" />
                     </el-form-item>
@@ -144,12 +135,12 @@ onMounted(function () {
                             <el-radio label="女" />
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="签名">
+                    <el-form-item label="简述">
                         <el-input v-model="form.Desc" type="textarea" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onSubmit">保存</el-button>
-                        <el-button>清空</el-button>
+                        <el-button @click="onClear">清空</el-button>
                     </el-form-item>
                 </el-form>
 

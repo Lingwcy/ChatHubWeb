@@ -1,5 +1,5 @@
 <template>
-  <div v-for="item in decodeText(text)" :key="item">
+  <div v-for="item in decodeText(text)">
     <span v-if="item.name === 'text'">
       {{ item.text }}
     </span>

@@ -1,9 +1,10 @@
 import * as SignalR from '@microsoft/signalr';
 import { crypto } from '../Crypto/crypto';
 import { ElMessage, ElNotification } from 'element-plus'
-import { getMessageBox, getOfflineMessage, getGroupList, findFriendTree } from '../common/api';
+import { getMessageBox, getOfflineMessage, getGroupList, findFriendTree, getFriends } from '../common/api';
 import { IGroupStore } from '../store/Istore';
 import { IMsgStore } from '../models/interface/IMessageStore';
+import { Friend } from './FriendsService';
 export class ChatHub {
     private UserJwt!: string;
     public Options = {};
@@ -15,13 +16,15 @@ export class ChatHub {
     public MsgboxStore: any;
     public AppsetStore: any;
     public GroupStore: IGroupStore;
+    public FriendStore: any;
 
-    constructor(jwt: string, ChatStore: any, PmsgStore: any, UserInfoStore: any, MsgBoxStore: any, GroupStore: IGroupStore, AppsetStore: any) {
+    constructor(jwt: string, ChatStore: any, PmsgStore: any, UserInfoStore: any, MsgBoxStore: any, GroupStore: IGroupStore, AppsetStore: any, FriendStore: any) {
         this.ChatStore = ChatStore;
         this.PmsgStore = PmsgStore;
         this.UserInfoStore = UserInfoStore;
         this.GroupStore = GroupStore;
         this.MsgboxStore = MsgBoxStore;
+        this.FriendStore = FriendStore;
         this.AppsetStore = AppsetStore;
         this.UserJwt = jwt;
         this.Options = {
@@ -158,7 +161,7 @@ export class ChatHub {
             })
             //刷新好友列表
             this.AppsetStore.CompoentsEvent.isFriendReqestAccepted++
-            
+
         });
         //离线消息接收器
         /*请求离线消息 并添加到Pinia[UseMsgbox] */
@@ -276,6 +279,27 @@ export class ChatHub {
                     })
                     return true;
                 } else return false
+            })
+        });
+        //刷新好友列表
+        this.HubConnection.on('RefreshFriendList', async () => {
+            const userId = this.UserInfoStore.userId
+            const xusername = this.UserInfoStore.userName
+            await getFriends({ userId, xusername }).then(res => {
+                if (res.data.code == 1) {
+                    this.FriendStore.Friends = [];
+                    let data: Friend[] = JSON.parse(res.data.data);
+                    let i = 0;
+                    data.forEach(element => {
+                        i++;
+                        this.FriendStore.Friends.push(element)
+                    });
+                }
+            })
+            await findFriendTree({ userId, xusername }).then(result => {
+                if (result.data.code == 1) {
+                    this.FriendStore.FriendTree = JSON.parse(result.data.data)
+                }
             })
         });
         //断线重连连接

@@ -1,5 +1,5 @@
 import { defineStore, createPinia } from 'pinia'
-import { IChatStore, IGroupStore, IMessageStore, IService, IUseFriendsStore} from './Istore';
+import { IChatStore, IGroupStore,IMsgBox,IService, IUseFriendsStore} from './Istore';
 import piniaPluginPersist from 'pinia-plugin-persist';
 import { IMsgStore } from '../models/interface/IMessageStore';
 
@@ -94,7 +94,7 @@ export const UseFriendsStore = defineStore("friendstore", {
     }
 })
 
-//貌似将公共消息与私人消息都存储到了这里...
+//公共消息与私人消息都存储到了这里
 export const UseMsgStore = defineStore('msg', {
     state: (): IMsgStore => {
         return {
@@ -109,6 +109,9 @@ export const UseMsgStore = defineStore('msg', {
                 }
             ]
         }
+    },
+    actions: {
+
     },
     persist: {
         enabled: true,
@@ -160,6 +163,7 @@ export const appsetting = defineStore('appset', {
                 isGroupCreateOpen:false,
                 isGroupInfoDetailOpen:false,
                 isFriendReqestAccepted:0,
+                isSendNewMessage:0,
                 isSlideVerify:{
                     isOpen:false,
                     isSuccess:false,
@@ -176,7 +180,7 @@ export const appsetting = defineStore('appset', {
 
 //消息栏仓库
 export const UseMsgbox = defineStore('MsgBox', {
-    state: () => {
+    state: ():IMsgBox=> {
         return {
             MsgCount: 0,
             MsgItems: [],

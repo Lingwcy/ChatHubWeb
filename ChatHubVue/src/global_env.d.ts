@@ -21,12 +21,16 @@ export default _default;
 
 
 //BUG
-declare interface HTMLElement{
-    href:any;
+declare interface HTMLElement {
+    href: any;
     getContext(o?: any);
 }
-export {HTMLElement}
+export { HTMLElement }
 
+declare module 'vue3-slide-verify' {
+    const SlideVerify: any;
+    export default SlideVerify;
+}
 
 //BUG
 declare module 'pinia-plugin-persist';

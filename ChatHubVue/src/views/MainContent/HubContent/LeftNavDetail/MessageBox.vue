@@ -3,7 +3,6 @@ import { onMounted, reactive, ref } from 'vue';
 import { createMessageService, createUserService, createGroupService } from '../../../../services/ServicesCollector';
 import { UseUserInformationStore, UseMsgbox, UseGroupStore, UseMsgStore, UseChatStore, UseServiceStore, UseFriendsStore } from '../../../../store/index'
 import { UserGroup } from '../../../../store/Istore';
-import { DropdownInstance } from 'element-plus';
 createMessageService();
 createUserService();
 createGroupService();
@@ -53,7 +52,7 @@ const TurnFriendsToMessageBox = (friends: any) => {
                     tabName: friends.targetfont,
                     targetUserMessage: reactive(element),
                     tabType: 0,
-                    tabId: 0
+                    tabId: friends.targetId
                 })
             }
         });
@@ -78,7 +77,6 @@ const TurnFriendsToMessageBox = (friends: any) => {
     else if (friends.Type == 'group') {
         let flag1 = false//判断消息存储库
         const data: UserGroup = groupStore.MyGroups.find(item => item.GroupId == friends.targetId) as UserGroup
-        console.log(friends)
         groupStore.OnConnectedGroup.GroupInfo = data.Group
         Pmsg.messageItems.forEach(element => {
             if (element.targetUserName == data.Group.GroupName) {
@@ -139,14 +137,18 @@ const handleCommand = (command: any) => {
 }
 </script>
 <template>
+    <v-contextmenu ref="contextmenu">
+        <v-contextmenu-item>删除对话</v-contextmenu-item>
+        <v-contextmenu-item>查看资料</v-contextmenu-item>
+    </v-contextmenu>
     <div v-for="(req, _index) in MsgBox.MsgItems">
         <div v-if="req.Type == 'person'" class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)"
-            v-on:click.right="showClick">
+            v-contextmenu:contextmenu>
             <div id="friendReq-Header">
                 <el-badge is-dot :hidden="!req.isNew">
                     <img v-if="req.Type == 'person'" v-bind:src="'../../../src/images/systemHeader/' + req.targetImage"
                         id="friendReq-Header-img" />
-                    <img v-if="req.Type == 'group'" src="../../../../images/assets/群默认头像.svg" alt=""
+                    <img v-else src="../../../../images/assets/群默认头像.svg" alt=""
                         id="friendReq-Header-img">
                 </el-badge>
             </div>
@@ -158,8 +160,9 @@ const handleCommand = (command: any) => {
                     </div>
                     <div class="friendMSG-Body-coentent-inner" v-if="req.isNew">
                         <span class="friendMSG-msg">{{
-        Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageContent.at(-1)?.message
-    }}</span>
+                            Pmsg.messageItems.find(item => item.targetUserName ==
+                                req.targetfont)?.messageContent.at(-1)?.message
+                        }}</span>
                         <el-badge
                             :value="Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.unReadCount"
                             class="item" type="primary">
@@ -169,7 +172,7 @@ const handleCommand = (command: any) => {
             </div>
         </div>
 
-        <div v-if="req.Type == 'group'" class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)">
+        <div v-if="req.Type == 'group'" class="FriendMSGContent" v-on:click="TurnFriendsToMessageBox(req)" v-contextmenu:contextmenu>
             <div id="friendReq-Header">
                 <el-badge is-dot :hidden="!req.isNew">
                     <img src="../../../../images/assets/群默认头像.svg" alt="" id="friendReq-Header-img">
@@ -183,11 +186,12 @@ const handleCommand = (command: any) => {
                     </div>
                     <div class="friendMSG-Body-coentent-inner" v-if="req.isNew">
                         <span class="friendMSG-msg">{{
-        Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageNames.at(-1)
-    }}:
-                            {{ 
-    (Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageContent.at(-1))?.message
-}}</span>
+                            Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.messageNames.at(-1)
+                            }}:
+                            {{
+                                (Pmsg.messageItems.find(item => item.targetUserName ==
+                                    req.targetfont)?.messageContent.at(-1))?.message
+                            }}</span>
                         <el-badge
                             :value="Pmsg.messageItems.find(item => item.targetUserName == req.targetfont)?.unReadCount"
                             class="item" type="primary">
@@ -207,7 +211,7 @@ const handleCommand = (command: any) => {
                 </div>
                 <div class="DetailInfo-header-content">
                     <span v-if="friendStore.TargetUserProfile?.NickName" class="DetailInfo-header-content-font1">{{
-        friendStore.TargetUserProfile?.NickName }}</span>
+                        friendStore.TargetUserProfile?.NickName }}</span>
                     <span v-else class="DetailInfo-header-content-font1">{{ friendStore.TargetUserProfile?.Username
                         }}</span>
                     <span class="DetailInfo-header-content-font2">{{ friendStore.TargetUserProfile?.Job }}</span>
@@ -228,8 +232,8 @@ const handleCommand = (command: any) => {
         </div>
         <template #footer>
             <div id="addUser-footer">
-                <el-button @click="Headvisible = false" style="width: 150px;">分享</el-button>
-                <el-button type="primary" @click="Headvisible = false" style="width: 150px;">
+                <el-button  style="width: 150px;">分享</el-button>
+                <el-button type="primary" style="width: 150px;">
                     发送消息
                 </el-button>
             </div>

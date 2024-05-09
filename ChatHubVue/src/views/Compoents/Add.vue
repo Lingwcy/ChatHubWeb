@@ -117,7 +117,7 @@ function searchFriends() {
     service.Friend?.FindFriends(payload,groupStore)
 }
 
-function addFriend(user:IUserProfile) {
+function addFriend(user:any) {
     // 处理添加好友的逻辑  
     appset.CompoentsEvent.isAddDetail.isOpen = true;
     groupStore.SelectedUser = user;

@@ -1,4 +1,4 @@
-import {post,get,delete_,put} from "./axios";
+import {post,get,delete_} from "./axios";
 
 
 //Auth
@@ -26,7 +26,7 @@ export const getMessageBox = (params: {username:string,xusername:string}) => get
 export const deleteMessageBox = (params:any) => delete_('/Message/messageBoxItem',{params})
 
 //User
-export const getUserInfo = (params:{targetname:string}) => get('/User/QueryByUserName',{params})
+export const getUserInfo = (params:{targetname:string}) => get('admin/User/QueryByUserName',{params})
 
 
 //Group
@@ -46,3 +46,5 @@ export const postDismissGroup = (params:any) => post('/Group/DismissGroup',param
 
 //File
 export const postUploadFile = (params:any) => post('/File/Upload',params);
+export const postUserAvatar = (params:any) => post('/File/UserAvatar',params);
+export const postUserInfo = (params:any) => post('/File/UserInfo',params);

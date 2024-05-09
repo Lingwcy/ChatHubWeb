@@ -12,7 +12,7 @@
 
                         <div class="friendReq-Body-info2">
                             <el-button class="friendReq-Body-info-bt" round
-                                v-on:click="acceptFriendsReq(req)">同意</el-button>
+                                v-on:click="acceptFriendsReq(req as any)">同意</el-button>
                             <el-button class="friendReq-Body-info-bt" round
                                 v-on:click="rejectFriendsReq(req)">拒绝</el-button>
                         </div>

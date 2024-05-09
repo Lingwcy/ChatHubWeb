@@ -64,11 +64,40 @@ export const refreshTokenApi = (data?: object) => {
 
 /** 获取所有用户 */
 export const getUser = (params?: object) => {
-  return http.request<AllUserResult>("get", baseUrlApi("/User/GetAll"), { params });
+  return http.request<AllUserResult>("get", baseUrlApi("/admin/User/GetAll"), { params });
 };
 
 /** 新增用户 */
-
 export const addUser = (data: object) => {
-  return http.request<any>("post", baseUrlApi("/User/Add"), { data })
+  return http.request<any>("post", baseUrlApi("/admin/User/Add"), { data })
+};
+
+/** 删除用户 */
+export const deleteUser = (params: object) => {
+  return http.request<any>("post", baseUrlApi("/admin/User/Delete"), { params })
+};
+
+/** 批量删除用户 */
+export const deletesUser = (params: object) => {
+  return http.request<any>("post", baseUrlApi("/admin/User/Deletes"), { params })
+};
+
+/** 获取所有在线用户 */
+export const getOlineUser = (params?: object) => {
+  return http.request<any>("get", baseUrlApi("/admin/OnlineUser/GetAll"), { params });
+};
+
+/** 获取所有好友关系 */
+export const getFriends = (params?: object) => {
+  return http.request<any>("get", baseUrlApi("/admin/FriendAdmin/GetAll"), { params });
+};
+
+/** 获取所有好友请求 */
+export const getFriendRequests = (params?: object) => {
+  return http.request<any>("get", baseUrlApi("/admin/FriendAdmin/GetAllRequests"), { params });
+};
+
+/** 获取所有群组 */
+export const getGroups = (params?: object) => {
+  return http.request<any>("get", baseUrlApi("/admin/GroupAdmin/GetAll"), { params });
 };

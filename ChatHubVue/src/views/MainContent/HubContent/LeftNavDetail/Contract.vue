@@ -369,8 +369,8 @@ const visible = ref(false)
         </div>
         <template #footer>
             <div id="addUser-footer">
-                <el-button @click="Headvisible = false" style="width: 150px;">分享</el-button>
-                <el-button type="primary" @click="Headvisible = false" style="width: 150px;">
+                <el-button  style="width: 150px;">分享</el-button>
+                <el-button type="primary" style="width: 150px;">
                     发送消息
                 </el-button>
             </div>

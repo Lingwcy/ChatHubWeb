@@ -33,8 +33,7 @@ import { AllUserResultData } from "@/api/user";
 
 export function useUser(tableRef: Ref, treeRef: Ref) {
   const form = reactive({
-    username: "",
-    phone: ""
+    username: ""
   });
   const formRef = ref();
   const ruleFormRef = ref();
@@ -55,66 +54,24 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   });
   const columns: TableColumnList = [
     {
-      label: "勾选列", // 如果需要表格多选，此处label必须设置
-      type: "selection",
-      fixed: "left",
-      reserveSelection: true // 数据刷新后保留选项
-    },
-    {
       label: "ID",
       prop: "id"
     },
     {
       label: "用户名",
-      prop: "Username"
+      prop: "name"
     },
     {
-      label: "头像",
-      prop: "HeaderImg"
+      label: "加入时间",
+      prop: "createtime"
     },
     {
-      label: "邮箱",
-      prop: "Email"
+      label: "连接号",
+      prop: "conId"
     },
     {
-      label: "城市",
-      prop: "City"
-    },
-    {
-      label: "年龄",
-      prop: "Age"
-    },
-    {
-      label: "工作",
-      prop: "Job"
-    },
-    {
-      label: "电话",
-      prop: "Phone"
-    },
-    {
-      label: "状态",
-      prop: "status",
-      minWidth: 90,
-      cellRenderer: scope => (
-        <el-switch
-          size={scope.props.size === "small" ? "small" : "default"}
-          loading={switchLoadMap.value[scope.index]?.loading}
-          v-model={scope.row.status}
-          active-value={1}
-          inactive-value={0}
-          active-text="已启用"
-          inactive-text="已停用"
-          inline-prompt
-          onChange={() => onChange(scope as any)}
-        />
-      )
-    },
-    {
-      label: "操作",
-      fixed: "right",
-      width: 180,
-      slot: "operation"
+      label: "通讯密钥",
+      prop: "key"
     }
   ];
   const buttonClass = computed(() => {
@@ -229,9 +186,9 @@ export function useUser(tableRef: Ref, treeRef: Ref) {
   //搜索指定数据
   async function onSearch() {
     loading.value = true;
-    const { data } = await useUserStoreHook().getAllUsers(toRaw(form));
+    const { data } = await useUserStoreHook().getAllOnlineUsers(toRaw(form));
 
-    let tableData = JSON.parse(data) as AllUserResultData;
+    let tableData = JSON.parse(data);
 
     dataList.value = tableData;
     //pagination.total = data.total;

@@ -1,7 +1,7 @@
 // https://www.emojiall.com/images/60/douyin/1f437.png
 export const emojiUrl = "https://www.emojiall.com/images/60/douyin/";
 
-export const emojiMap = {
+export const emojiMap: { [key: string]: string } = {
   "[九转大肠]": "fc20.png",
   "[逞强落泪]": "10001.png",
   "[恭喜]": "6ff8.png",

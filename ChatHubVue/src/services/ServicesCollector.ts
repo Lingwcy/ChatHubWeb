@@ -17,7 +17,7 @@ const appSetting = appsetting();
 
 export function createChatHubService() {
     service.ChatHub = new ChatHub(localStorage.getItem('token') as string
-        , chatStore, msgStore, userInfoStore, msgboxStore,groupStore,appSetting)
+        , chatStore, msgStore, userInfoStore, msgboxStore,groupStore,appSetting,friendStore)
 }
 export function createAuthService() {
     service.Auth = new Auth();

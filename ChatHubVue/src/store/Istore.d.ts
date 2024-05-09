@@ -6,8 +6,23 @@ import { Message } from '../services/MessageService';
 import { UserApi } from '../services/UserService';
 import { FileService } from '../services/FileService';
 
+
+export interface IMsgBox{
+    MsgCount:number,
+    MsgItems:Array<{
+        Type:string,
+        id:number,
+        isNew:number,
+        lastTime:string,
+        targetId:number,
+        targetImage:string,
+        targetfont:string,
+        userId:number,
+        username:string,
+    }>
+}
+
 export interface IUseFriendsStore{
-    $reset(): unknown;
     FriendTree:FriendTree | undefined,
     Friends: Friend[],
     RequestList: UserRequest[]
@@ -78,11 +93,11 @@ interface TargetUserTab {
 //存储目标聊天用户的相关信息。名称，聊天内容...
 interface TargetUserMessage {
     targetUserName: string,
-    messageContent: [{
+    messageContent: Array<{
         message: string,
         messageType: string,
         messageDate: string,
-    }],
+    }>,
     messageNames: string[],
     messageHeaders: string[],
 }

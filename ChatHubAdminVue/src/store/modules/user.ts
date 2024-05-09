@@ -4,8 +4,8 @@ import type { userType } from "./types";
 import { routerArrays } from "@/layout/types";
 import { router, resetRouter } from "@/router";
 import { storageLocal } from "@pureadmin/utils";
-import { getLogin, refreshTokenApi, getUser, addUser } from "@/api/user";
-import type { UserResult, RefreshTokenResult, AllUserResult } from "@/api/user";
+import { getLogin, refreshTokenApi, getUser, addUser, deletesUser } from "@/api/user";
+import { UserResult, RefreshTokenResult, AllUserResult, getOlineUser, getFriends, getFriendRequests, getGroups, deleteUser } from "@/api/user";
 import { useMultiTagsStoreHook } from "@/store/modules/multiTags";
 import { type DataInfo, setToken, removeToken, userKey } from "@/utils/auth";
 
@@ -81,6 +81,90 @@ export const useUserStore = defineStore({
     async getAllUsers(params?) {
       return new Promise<AllUserResult>((resolve, reject) => {
         getUser(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 删除用户 */
+    async postDeleteUser(params?) {
+      return new Promise<AllUserResult>((resolve, reject) => {
+        deleteUser(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 批量删除用户 */
+    async postDeletesUser(params?) {
+      return new Promise<AllUserResult>((resolve, reject) => {
+        deletesUser(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 获取群组 */
+    async getGroup(params?) {
+      return new Promise<AllUserResult>((resolve, reject) => {
+        getGroups(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 获取所有好友关系 */
+    async getAllFriends(params?) {
+      return new Promise<AllUserResult>((resolve, reject) => {
+        getFriends(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 获取所有在线用户 */
+    async getAllOnlineUsers(params?) {
+      return new Promise<any>((resolve, reject) => {
+        getOlineUser(params)
+          .then(data => {
+            if (data) {
+              resolve(data);
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    },
+    /** 获取所有用户请求 */
+    async getAllFriendRequests(params?) {
+      return new Promise<any>((resolve, reject) => {
+        getFriendRequests(params)
           .then(data => {
             if (data) {
               resolve(data);

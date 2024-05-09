@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus";
-import { getGroupFromName,postExitGroup,postDismissGroup,postChangeGroupName,postChangeGroupNotice, postCreateGroup,getGroupList,getGroupMembers,postGroupRequest,getGroupRequest,postAcceptGroupRequest,rejectRequest,acceptRequest, deleteRejectGroupRequest} from "../common/api";
+import { getGroupFromName,postExitGroup,postDismissGroup,postChangeGroupName,postChangeGroupNotice, postCreateGroup,getGroupList,getGroupMembers,postGroupRequest,getGroupRequest,postAcceptGroupRequest,deleteRejectGroupRequest} from "../common/api";
 import { IGroupStore } from "../store/Istore";
 interface SendGroupRequestParams {
     ReqMsg: string,
@@ -97,7 +97,8 @@ export class GroupService{
                         }
                     })
                 })
-                GroupStore.GroupRequestList = data;
+                
+                GroupStore.GroupRequestList = data as any;
                 return true;
             }else return false
         }) 

@@ -5,7 +5,6 @@ import { useRouter } from 'vue-router'
 import { UseServiceStore } from '../../../store/index'
 import {UseUserInformationStore} from '../../../store/index'
 import { createUserService } from '../../../services/ServicesCollector'
-import { CaretBottom } from '@element-plus/icons-vue'
 createUserService()
 const service=UseServiceStore()
 const userInfo=UseUserInformationStore()
@@ -21,7 +20,7 @@ const state = reactive({
 
 function exitLogin(){
     userInfo.logout()
-    service.ChatHub.IsLogin=false
+    service.ChatHub!.IsLogin=false
     ElNotification({
     title: '消息',
     message: h('i', { style: 'color: teal' }, '退出登录成功'),
@@ -31,7 +30,7 @@ function exitLogin(){
     })
 }
 
-const DetailSelector=(index)=>{
+const DetailSelector=(index: number)=>{
     if(index==1){
             router.push({
             path:'/Hub/Friends'

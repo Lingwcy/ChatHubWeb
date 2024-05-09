@@ -16,11 +16,12 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { IToolbarConfig, IEditorConfig, DomEditor, } from '@wangeditor/editor'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { InsertFnType } from '../../models/data/Entity';
-import { UseServiceStore } from '../../store';
+import { appsetting, UseServiceStore } from '../../store';
 import { createFileService } from '../../services/ServicesCollector';
 import { extractImageInfo } from '../MainContent/HubContent/utils';
 const service = UseServiceStore()
 const editorRef = shallowRef()
+const appset = appsetting()
 createFileService()
 const mode = 'simple'
 const valueHtml = ref('')
@@ -32,7 +33,7 @@ const sendMessage = (text: string, images: any) => {
             service.ChatHub?.SendImageToServer(element);
         });
     }
-    console.log(text)
+    appset.CompoentsEvent.isSendNewMessage++;
     clearInputInfo()
 }
 
@@ -59,7 +60,7 @@ const editorConfig: Partial<IEditorConfig> = {
     maxLength: 1000,
 }
 
-editorConfig.MENU_CONF['uploadImage'] = {
+editorConfig.MENU_CONF!['uploadImage'] = {
     // form-data fieldName ，默认值 'wangeditor-uploaded-image'
     fieldName: 'your-custom-name',
     server: '/api/upload',

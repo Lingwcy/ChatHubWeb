@@ -6,8 +6,6 @@ import groupMemeber from '../../Compoents/groupMemeber.vue'
 import { ElNotification, ElScrollbar } from 'element-plus'
 //import {ChatHubService} from '../../../services/ServicesCollector'
 import { appsetting, UseServiceStore, UseUserInformationStore, UseGroupStore } from '../../../store/index'
-import Emoji from '../HubContent/Tools/Emoji.vue'
-import PicUpLoad from '../HubContent/Tools/PicUpload.vue'
 import { Group } from '../../../store/Istore'
 import GroupInfoDetail from '../../Compoents/GroupInfoDetail.vue'
 import { submitUpload } from './Tools/PicUploadHook'
@@ -150,7 +148,24 @@ watch(
         }
     }
 );
+watch(
+    () => appset.CompoentsEvent.isSendNewMessage,
+    (newVal, oldVal) => {
+        // 在这里添加你希望在 IsNewMessageCome 变化时执行的代码  
+        if (newVal> oldVal) {
+            if (appset.MessageContract.OnConnectedName = 'public') {
+                scrollDown()
+                return;
+            }
 
+            const targetUser = chatStore.targetUserTab.find(item => item.tabName == appset.MessageContract.OnConnectedName)
+            if (targetUser) {
+                // 如果找到了目标用户，则下拉到聊天栏到底部
+                scrollDown()
+            }
+        }
+    }
+);
 const msgType = (elem_type: any) => {
     let resp = "";
     switch (elem_type) {

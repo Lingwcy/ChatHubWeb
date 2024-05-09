@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import router from '../../router';
 import { UseUserInformationStore } from '../../store/index'
 
 import {
@@ -6,84 +7,91 @@ import {
     Menu as IconMenu,
     Location,
     Setting,
-  } from '@element-plus/icons-vue'
-  
-document.body.style.overflow="scroll"
+} from '@element-plus/icons-vue'
+
+document.body.style.overflow = "scroll"
 const UserInfo = UseUserInformationStore()
 
-  const handleOpen = (key: string, keyPath: string[]) => {
+const handleOpen = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
-  }
-  const handleClose = (key: string, keyPath: string[]) => {
+}
+const handleClose = (key: string, keyPath: string[]) => {
     console.log(key, keyPath)
-  }
+}
+const directToHub = () => {
+    router.push('/Hub/Message');
+}
 
 </script>
 <template>
     <div id="setting-bg">
         <div id="Setting-Container">
-        <div id="Setting-Container-header">
-            <div id="Setting-Container-header-center">
-                <img :src="'../../../src/images/systemHeader/'+UserInfo.userImg" class="avater" alt="">
-                <div id="Setting-Container-header-center-font">
-                    <strong v-if="UserInfo.UserDetailInfo.NickName">{{ UserInfo.UserDetailInfo.NickName }}</strong>
-                    <strong v-else>{{UserInfo.userName}}</strong>
-                    <i>你的个人账户</i>
+            <div id="Setting-Container-header">
+                <div id="Setting-Container-header-center">
+                    <img :src="'../../../src/images/systemHeader/' + UserInfo.userImg" class="avater" alt="">
+                    <div id="Setting-Container-header-center-font">
+                        <strong v-if="UserInfo.UserDetailInfo.NickName">{{ UserInfo.UserDetailInfo.NickName }}</strong>
+                        <strong v-else>{{ UserInfo.userName }}</strong>
+                        <i>你的个人账户</i>
+                    </div>
+                </div>
+                <div id="Setting-Container-header-footer">
+                    <el-button size="small" color="#626aef" style="height: 40px; width: 100px; border-radius: 10px;" @click="directToHub">返回聊天室</el-button>
                 </div>
             </div>
-            <div id="Setting-Container-header-footer">
-                <button style="color: darkgrey;">返回聊天室</button>
-            </div>
-        </div>
-
-        <div id="Setting-Container-center">
-            <div id="setting-main">
-                <div id="setting-main-nav">
-
-                    <el-menu active-text-color="gold" class="el-menu-vertical-demo"
-                        default-active="2" text-color="black" router @open="handleOpen" @close="handleClose" style="height: 700px;">
-                        <el-menu-item index="/Setting/User">
-                            <template #title>
+            <div id="Setting-Container-center">
+                <div id="setting-main">
+                    <div id="setting-main-nav">
+                        <el-menu active-text-color="#626aef" class="el-menu-vertical-demo" default-active="2"
+                            text-color="black" router @open="handleOpen" @close="handleClose" style="height: 700px;">
+                            <el-menu-item index="/Setting/User">
+                                <template #title>
+                                    <el-icon>
+                                        <location />
+                                    </el-icon>
+                                    <span>个人信息</span>
+                                </template>
+                            </el-menu-item>
+                            <el-menu-item index="/Setting/Local">
+                                <el-icon><icon-menu /></el-icon>
+                                <span>本地存储</span>
+                            </el-menu-item>
+                            <el-menu-item index="3" disabled>
                                 <el-icon>
-                                    <location />
+                                    <document />
                                 </el-icon>
-                                <span>个人信息</span>
-                            </template>
-                        </el-menu-item>
-                        <el-menu-item index="/Setting/Local">
-                            <el-icon><icon-menu /></el-icon>
-                            <span>本地存储</span>
-                        </el-menu-item>
-                        <el-menu-item index="3" disabled>
-                            <el-icon>
-                                <document />
-                            </el-icon>
-                            <span>隐私</span>
-                        </el-menu-item>
-                        <el-menu-item index="4">
-                            <el-icon>
-                                <setting />
-                            </el-icon>
-                            <span>系统设置</span>
-                        </el-menu-item>
-                    </el-menu>
-                </div>
-                <div id="setting-main-main">
-                    <router-view></router-view>
+                                <span>隐私</span>
+                            </el-menu-item>
+                            <el-menu-item index="4">
+                                <el-icon>
+                                    <setting />
+                                </el-icon>
+                                <span>系统设置</span>
+                            </el-menu-item>
+                        </el-menu>
+                    </div>
+                    <div id="setting-main-main">
+                        <router-view></router-view>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
 </template>
 <style>
-#setting-bg{
+::-webkit-scrollbar {
+    display: none;
+}
+
+#setting-bg {
     width: 100%;
     justify-content: center;
     display: flex;
+    height: 100vh;
     background-color: white;
 }
+
 #Setting-Container {
     width: 80%;
     margin-top: 20px;
@@ -99,7 +107,6 @@ const UserInfo = UseUserInformationStore()
 
 #Setting-Container-header-center {
     width: 180px;
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -128,7 +135,6 @@ const UserInfo = UseUserInformationStore()
 
 #Setting-Container-header-footer {
     width: 200px;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -138,18 +144,17 @@ const UserInfo = UseUserInformationStore()
     width: 100%;
 }
 
-#setting-main{
+#setting-main {
     width: 100%;
     display: flex;
 }
-#setting-main-nav{
+
+#setting-main-nav {
     width: 200px;
-    height: 100vh;
     margin-right: 30px;
 }
-#setting-main-main{
+
+#setting-main-main {
     width: 100%;
 }
-
-
 </style>

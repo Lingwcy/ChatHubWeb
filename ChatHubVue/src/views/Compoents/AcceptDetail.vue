@@ -11,7 +11,7 @@ let userStore = UseUserInformationStore();
 const groupvalue = ref('')
 
 let options: any[] = []
-friendStore.FriendTree?.Units.forEach(element => {
+friendStore.FriendTree?.Units.forEach((element: { id: unknown; UnitName: string; })=> {
     let payload = {
         value: element.id as unknown as string,
         label: element.UnitName as string

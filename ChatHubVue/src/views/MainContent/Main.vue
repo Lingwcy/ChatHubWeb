@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ElLoading, ElNotification } from 'element-plus'
 import { onBeforeMount, watch } from 'vue'
-import { UseServiceStore, UseUserInformationStore, UseMsgStore, appsetting, UseChatStore, UseMsgbox, UseGroupStore } from '../../store';
+import { UseServiceStore, UseUserInformationStore, UseMsgStore, appsetting, UseChatStore, UseMsgbox, UseGroupStore,UseFriendsStore } from '../../store';
 import { ChatHub } from '../../services/HubService';
 import { Auth } from '../../services/AuthService';
 import { Message } from '../../services/MessageService';
 import navVue from '../Topbar/nav.vue';
-import { createChatHubService } from '../../services/ServicesCollector';
 
 import "../../styles/index.scss"
+import router from '../../router';
 const userInfoStore = UseUserInformationStore();
 const msgStore = UseMsgStore();
 const chatStore = UseChatStore();
@@ -16,6 +16,7 @@ const msgboxStore = UseMsgbox();
 const service = UseServiceStore();
 const groupStore = UseGroupStore();
 const appset = appsetting();
+const friendsStore = UseFriendsStore();
 
 
 onBeforeMount(function () {
@@ -26,11 +27,18 @@ onBeforeMount(function () {
   service.Auth?.SendAESKey();
   if (service.ChatHub?.IsLogin) {
     service.ChatHub = new ChatHub(localStorage.getItem('token') as string
-      , chatStore, msgStore, userInfoStore, msgboxStore, groupStore, appset)
+      , chatStore, msgStore, userInfoStore, msgboxStore, groupStore, appset,friendsStore )
     service.Message = new Message(msgboxStore);
     if (service.ChatHub.HubConnection.state != 'Connected') {
       service.ChatHub.startHub();
     }
+  }else{
+    router.push('/')
+    ElNotification({
+        title: '连接断开',
+        message: '服务器连接断开，即将跳转到登录界面',
+        type: 'error'
+      });
   }
 })
 //配置loading
@@ -46,6 +54,7 @@ watch(
     console.log('连接状态改变', newVal, oldVal);
     if (newVal == 'Disconnected') {
       //重定向到登录页面并刷新整个页面
+      service.ChatHub!.IsLogin = false;
       ElNotification({
         title: '连接断开',
         message: '服务器连接断开，即将跳转到登录界面',

@@ -74,6 +74,7 @@ import { CircleCloseFilled } from '@element-plus/icons-vue'
 import { CreateGroupModel } from '../../services/GroupService';
 import { createGroupService } from '../../services/ServicesCollector';
 import { ElMessage } from 'element-plus';
+import { IUserProfile } from '../../models/data/Entity';
 createGroupService();
 const selectedUsers = ref<IUserProfile[]>([]);
 const friendStore = UseFriendsStore();

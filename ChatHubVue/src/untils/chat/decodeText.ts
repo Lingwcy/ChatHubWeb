@@ -22,7 +22,7 @@ export function decodeText(text:any) {
         remainingText = "";
       } else {
         // 获取表情文本
-        const emojiText = remainingText.slice(0, rightBracketIndex + 1);
+        const emojiText = remainingText.slice(0, rightBracketIndex + 1) as string;
         const emoji = emojiMap[emojiText];
         // 如果是已知表情
         if (emoji) {

@@ -9,7 +9,7 @@ onBeforeMount(() => {
 })
 let ChangeLeftNavDetail = reactive({
     width: ref("300px"),
-    //minwidth: ref("188px"),
+    minwidth: ref("188px"),
     flag: ref(0)
 })
 const ChangeLowerLeftNavDetail = function () {
@@ -42,7 +42,7 @@ document.body.style.overflow = "hidden"
                 </div>
             </div>
             <div id="LeftNavDetail"
-                v-bind:style="{ width: ChangeLeftNavDetail.width, minWidth: ChangeLeftNavDetail.minwidth }">
+                v-bind:style="{ width: ChangeLeftNavDetail.width, minWidth: ChangeLeftNavDetail.minwidth}">
                 <router-view></router-view>
             </div>
             <div id="MainHub-ChatContent">

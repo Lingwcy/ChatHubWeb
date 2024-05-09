@@ -14,7 +14,6 @@ const Register = () => import('../views/LoginView/Register.vue')
 const Phone = () => import('../views/LoginView/Phone.vue')
 
 
-const Groups = () => import('../views/MainContent/HubContent/LeftNavDetail/Groups.vue')
 const Msgbox = () => import('../views/MainContent/HubContent/LeftNavDetail/MessageBox.vue')
 const UserSetting = () => import('../views/MainContent/Setting/UserSetting.vue')
 const LocalSetting = () => import('../views/MainContent/Setting/LocalSetting.vue')

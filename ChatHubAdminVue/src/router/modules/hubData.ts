@@ -6,7 +6,7 @@ export default {
   },
   children: [
     {
-      path: "/hubData/user",
+      path: "/hubData/User",
       name: "HubData",
       component: () => import("@/views/hubData/user/user.vue"),
       meta: {
@@ -24,7 +24,7 @@ export default {
     {
       path: "/hubData/friends",
       name: "Friends",
-      component: () => import("@/views/hubData/friends.vue"),
+      component: () => import("@/views/hubData/friends/friends.vue"),
       meta: {
         title: "好友关系管理"
       }
@@ -32,7 +32,7 @@ export default {
     {
       path: "/hubData/friendRequest",
       name: "FriendsRequest",
-      component: () => import("@/views/hubData/friendRequest.vue"),
+      component: () => import("@/views/hubData/friendRequest/friendRequest.vue"),
       meta: {
         title: "好友请求管理"
       }
@@ -40,7 +40,7 @@ export default {
     {
       path: "/hubData/group",
       name: "Group",
-      component: () => import("@/views/hubData/group.vue"),
+      component: () => import("@/views/hubData/group/group.vue"),
       meta: {
         title: "群组管理"
       }

@@ -3,7 +3,6 @@ import { postLogin, getVerify, postAESKey, postRegister } from "../common/api";
 import { ElMessage } from "element-plus";
 import { loginForm, registerForm } from "../models/data/Form";
 import { crypto } from "../Crypto/crypto";
-import http from "../common/axiosSetting";
 
 interface LoginData {
     userId: number;
@@ -88,7 +87,7 @@ export class Auth {
     //判断是否鉴权
     public async Verify(): Promise<boolean> {
         //http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token') || ''
-        return await getVerify().then(res => {
+        return await getVerify().then(() => {
             return true;
         })
     }
@@ -100,7 +99,7 @@ export class Auth {
                 'Key': crypto.gkey,
             }
         }
-        return await postAESKey("switchKey", config).then(res => {
+        return await postAESKey("switchKey", config).then(() => {
             return true;
         })
     }
