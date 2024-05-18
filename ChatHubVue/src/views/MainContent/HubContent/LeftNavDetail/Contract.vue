@@ -165,7 +165,7 @@ const TurnFriendsToMessageBox = (data: any) => {
         tabTitle: data.Username,
         tabName: data.Username,
         tabType:0,
-        tabId:data.UserId,
+        tabId:data.id,
         targetUserMessage: reactive(Pmsg.messageItems[Pmsg.messageItems.length - 1])
     })
 }

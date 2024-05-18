@@ -3,7 +3,6 @@ import { createApp } from 'vue'
 import './style.css'
 import ElementUI from 'element-plus'
 import 'element-plus/theme-chalk/index.css'
-import * as $ from 'jquery'
 import Main from './views/MainContent/Main.vue'
 import router from './router/index.ts'
 import store from './store/index.ts';

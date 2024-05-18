@@ -167,7 +167,7 @@ namespace ChatHubApi.Hub
             await Clients.Client(TargetUser.conId).FriendsRequestReceived(CurrentUser.name);
         }
 
-        //刷新对方的消息盒子
+        //刷新对方的消息盒子 wtf
         public async Task MsgBoxFlasher(string toUserName)
         {
             //获取发送的客户端
@@ -189,7 +189,7 @@ namespace ChatHubApi.Hub
                     targetImage = currentImg,
                     isNew = 1,
                     userId = TargetUser.id,
-                    targetId = CurrentUser.id,
+                    targetId = int.Parse(CurrentUser.userid),
                     lastTime = DateTime.Now.ToString("HH:mm"),
                     Type ="person"
                 };
@@ -198,7 +198,7 @@ namespace ChatHubApi.Hub
   
                 var result = _db.Updateable<sysMsgBox>()
                 .SetColumns(it => new sysMsgBox { isNew = 1,lastTime = DateTime.Now.ToString("HH:mm") })//类只能在表达示里面不能提取
-                .Where(a => a.username == TargetUser.Username && a.targetfont == CurrentUser.name)
+                .Where(a => a.username == CurrentUser.name && a.targetfont == TargetUser.Username)
                 .ExecuteCommand();
 
             //如果在线就直接发送信息 接到消息 立即刷新目标客户端的msgbox
@@ -216,6 +216,10 @@ namespace ChatHubApi.Hub
             var users = await _db.Queryable<sysUserGroup>().Where(a => a.GroupId == int.Parse(GroupId)).ToListAsync();
             //获取群名称
             var groupName = (await _db.Queryable<sysGroups>().FirstAsync(a => a.GroupId == int.Parse(GroupId))).GroupName;
+            if(groupName == null)
+            {
+                return;
+            }
             foreach(var user in users){
                 //获取用户名
                 var fontuser = await _db.Queryable<sysFontUser>().FirstAsync(a => a.id == user.UserId);

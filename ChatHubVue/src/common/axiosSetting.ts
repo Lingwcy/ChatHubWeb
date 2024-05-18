@@ -13,11 +13,11 @@ function generateUUIDv4() {
 const http = axios.create({
     baseURL: 'https://localhost:5001/',
     timeout: 2 * 60 * 1000,
-    headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token') || '',
-        'Identifier' : generateUUIDv4(),
-        'Key': "Empty"
-    }
+    headers : {  
+        'Authorization': (localStorage.getItem('token') ? `Bearer ${localStorage.getItem('token')}` : undefined )as string, // 或者 ''，取决于你希望发送的是 undefined 还是空字符串  
+        'Identifier' : generateUUIDv4(),  
+        'Key': "Empty"  
+    } 
 })
 
 //请求拦截器

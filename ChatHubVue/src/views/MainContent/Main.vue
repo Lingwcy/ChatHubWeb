@@ -32,12 +32,12 @@ onBeforeMount(function () {
     if (service.ChatHub.HubConnection.state != 'Connected') {
       service.ChatHub.startHub();
     }
+    router.push('/Hub/Contract')
   }else{
     router.push('/')
     ElNotification({
-        title: '连接断开',
-        message: '服务器连接断开，即将跳转到登录界面',
-        type: 'error'
+        title: '请登录',
+        message: '请登录后连接至中心',
       });
   }
 })

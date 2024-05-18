@@ -76,7 +76,7 @@ export class ChatHub {
                 messageType: "TIMTextElem",
                 messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
             }
-            this.PmsgStore.messageItems[0].messageContent.push(payload)
+            this.PmsgStore.messageItems[0].messageContent!.push(payload)
             this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
             this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)
             this.AppsetStore.MessageContract.OnConnectedName = 'public'
@@ -90,7 +90,7 @@ export class ChatHub {
                 messageType: "TIMImageElem",
                 messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
             }
-            this.PmsgStore.messageItems[0].messageContent.push(payload)
+            this.PmsgStore.messageItems[0].messageContent!.push(payload)
             this.PmsgStore.messageItems[0].messageNames.push(fromUserName)
             this.PmsgStore.messageItems[0].messageHeaders.push(HeaderImg)
             this.AppsetStore.MessageContract.OnConnectedName = 'public'
@@ -116,7 +116,7 @@ export class ChatHub {
                         messageType: "TIMTextElem",
                         messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                     }
-                    this.PmsgStore.messageItems[i].messageContent.push(payload)
+                    this.PmsgStore.messageItems[i].messageContent!.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(fromUserName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(HeaderImg)
                     this.PmsgStore.messageItems[i].unReadCount++;
@@ -124,7 +124,7 @@ export class ChatHub {
             }
             if (!existMsgStore) {//如果没有这个库则创建
                 this.PmsgStore.messageItems.push({
-                    targetUserName: groupInfo?.Group.GroupName,
+                    targetUserName: groupInfo?.Group.GroupName as string,
                     messageContent: [{
                         message: msg,
                         messageType: "TIMTextElem",
@@ -239,7 +239,7 @@ export class ChatHub {
                         messageType: "TIMTextElem",
                         messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                     }
-                    this.PmsgStore.messageItems[i].messageContent.push(payload)
+                    this.PmsgStore.messageItems[i].messageContent!.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(fromUserName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(HeaderImg)
                     this.PmsgStore.messageItems[i].unReadCount++;
@@ -280,6 +280,76 @@ export class ChatHub {
                     return true;
                 } else return false
             })
+        });
+        //刷新群组公告
+        this.HubConnection.on('RefreshGroupNotice', async (groupName: string, notice: string) => {
+            const playload = {
+                userId: this.UserInfoStore.userId,
+                xusername: this.UserInfoStore.userName,
+            }
+            return await getGroupList(playload).then(res => {
+                if (res.data.code == 1) {
+                    this.GroupStore.MyGroups = JSON.parse(res.data.data);
+                    ElNotification({
+                        title: '系统公告',
+                        message: `群组${groupName}发布了新的公告`,
+                    })
+                    this.AppsetStore.MessageEvent.GroupNotice++;
+                    return true;
+                } else return false
+            })
+        });
+        //刷新群组名称
+        this.HubConnection.on('RefreshGroupName', async (groupId: number, groupName: string) => {
+            //找到这个群组
+            let groupInfo = this.GroupStore.MyGroups.find(g => g.GroupId == groupId)
+            if (groupInfo) {
+                //更新pmsg的名称
+                let pmsg = this.PmsgStore.messageItems.find((m) => m.targetUserName == groupInfo!.Group.GroupName)
+                console.log(groupInfo!.Group.GroupName)
+                if (pmsg) {
+                    console.log(pmsg)
+                    pmsg.targetUserName = groupName
+                }
+                groupInfo.Group.GroupName = groupName
+            }
+            //更新msgbox上的名称
+            let msgBox = this.MsgboxStore.MsgItems.find((m: any) => m.targetId == groupId)
+            if (msgBox) {
+                msgBox.targetfont = groupName
+            }
+            //更新tab上的名称 如果有的话
+            let tab = this.ChatStore.targetUserTab.find((t: { tabId: number; }) => t.tabId == groupId)
+            if (tab) {
+                tab.tabName = groupName
+                tab.tabTitle = groupName
+            }
+        });
+        //退出群组 通知+行动
+        this.HubConnection.on('DissolveGroupNotice', async (groupId: number, type: number) => {
+            //type 0:被解散 1:主动退出 2:被踢出
+            const taskReason = type == 0 ? "被解散" : type == 1 ? "主动退出" : "被踢出"
+            //根据groupid找到这个群组
+            let groupInfo = this.GroupStore.MyGroups.find(g => g.GroupId == groupId)
+            if (groupInfo) {
+                ElNotification({
+                    title: '系统公告',
+                    message: `群组${groupInfo.Group.GroupName} - ${taskReason}！`,
+                })
+                //从本地删除群组
+                this.GroupStore.MyGroups.splice(this.GroupStore.MyGroups.indexOf(groupInfo), 1)
+                this.AppsetStore.MessageEvent.GroupDissolve++;
+                //如果此群组在聊天栏，则删除(this.ChatStore.targetUserTab[].tabId)
+                let tab = this.ChatStore.targetUserTab.find((t: { tabId: number; }) => t.tabId == groupInfo.Group.GroupId)
+                if (tab) {
+                    this.ChatStore.targetUserTab.splice(this.ChatStore.targetUserTab.indexOf(tab), 1)
+                }
+                //删除对应的MsgBox
+                let msgBox = this.MsgboxStore.MsgItems.find((m: any) => m.targetId == groupInfo.Group.GroupId)
+                if (msgBox) {
+                    this.MsgboxStore.MsgItems.splice(this.MsgboxStore.MsgItems.indexOf(msgBox), 1)
+                }
+            }
         });
         //刷新好友列表
         this.HubConnection.on('RefreshFriendList', async () => {
@@ -362,7 +432,7 @@ export class ChatHub {
                             messageType: "TIMTextElem",
                             messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                         }
-                        this.PmsgStore.messageItems[i].messageContent.push(payload)
+                        this.PmsgStore.messageItems[i].messageContent!.push(payload)
                         this.PmsgStore.messageItems[i].messageNames.push(this.UserInfoStore.userName)
                         this.PmsgStore.messageItems[i].messageHeaders.push(this.UserInfoStore.userImg)
                     }
@@ -379,7 +449,7 @@ export class ChatHub {
                         messageType: "TIMTextElem",
                         messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                     }
-                    this.PmsgStore.messageItems[i].messageContent.push(payload)
+                    this.PmsgStore.messageItems[i].messageContent!.push(payload)
                     this.PmsgStore.messageItems[i].messageNames.push(this.UserInfoStore.userName)
                     this.PmsgStore.messageItems[i].messageHeaders.push(this.UserInfoStore.userImg)
                 }
@@ -415,9 +485,10 @@ export class ChatHub {
                                 messageType: "TIMTextElem",
                                 messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                             }
-                            this.PmsgStore.messageItems[i].messageContent.push(payload)
+                            this.PmsgStore.messageItems[i].messageContent!.push(payload)
                             this.PmsgStore.messageItems[i].messageNames.push(result[x].Sender)
                             this.PmsgStore.messageItems[i].messageHeaders.push(result[x].SenderImg)
+                            this.PmsgStore.messageItems[i].unReadCount = x+1;
                         }
                     }
                     if (!existMsgStore) {//如果没有这个库则创建
@@ -426,12 +497,13 @@ export class ChatHub {
                             messageType: "TIMTextElem",
                             messageDate: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
                         }
+                        console.log(result[x].Sender)
                         this.PmsgStore.messageItems.push({
-                            targetUserName: result[x].sender,
+                            targetUserName: result[x].Sender,
                             messageContent: [payload],
-                            messageNames: [result[x].sender],
-                            messageHeaders: [result[x].senderImg],
-                            unReadCount: 1,
+                            messageNames: [result[x].Sender],
+                            messageHeaders: [result[x].SenderImg],
+                            unReadCount: x+1,
                         })
                     }
                 }

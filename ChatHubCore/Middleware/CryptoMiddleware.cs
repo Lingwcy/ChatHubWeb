@@ -22,7 +22,7 @@ namespace ChatHubApi.Middleware
         {
 
             var path = context.Request.Path;
-            if (path.StartsWithSegments("/MyHub") || path.StartsWithSegments("/File"))
+            if (path.StartsWithSegments("/MyHub") || path.StartsWithSegments("/File") || path.StartsWithSegments("/admin"))
             {
                 await _next(context); return;
             }

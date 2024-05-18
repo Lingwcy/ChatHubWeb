@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { ref} from 'vue'
+import { ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 import { ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
-import { UseUserInformationStore,UseServiceStore } from '../../store/index'
+import { UseUserInformationStore, UseServiceStore } from '../../store/index'
 import { ElLoading } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { registerForm } from '../../models/data/Form';
@@ -72,6 +72,10 @@ const register = async function () {
       router.push({
         path: '/Hub'
       })
+
+      setTimeout(() => {
+        location.reload()
+      }, 1000)
     } else {
       resetForm(registerFormRef.value)
     }
@@ -80,8 +84,8 @@ const register = async function () {
 }
 </script>
 <template>
-  <el-form id="Loinform" ref="registerFormRef" :model="registerForm.registerFormModel" :rules="registerForm.registerRules" status-icon label-width="0px"
-    class="demo-ruleForm">
+  <el-form id="Loinform" ref="registerFormRef" :model="registerForm.registerFormModel"
+    :rules="registerForm.registerRules" status-icon label-width="0px" class="demo-ruleForm">
     <div class="rightRegister-content-main-center-items">
       <el-form-item prop="account" style="width:300px;">
         <el-input v-model="registerForm.registerFormModel.account" placeholder="账号或者邮箱" />
@@ -98,10 +102,12 @@ const register = async function () {
       </el-form-item>
     </div>
     <div class="rightRegister-content-main-center-items" style="height: 35%;">
-      <el-button id="loginBt" type="primary" style="width: 350px; margin-top: -30px;" @click="submitForm(registerFormRef)">注册</el-button>
+      <el-button id="loginBt" type="primary" style="width: 350px; margin-top: -30px;"
+        @click="submitForm(registerFormRef)">注册</el-button>
     </div>
     <div id="rightLogin-content-footers">
-      <p style=" color: #989899; font-size: 13px; margin-top: -30px;">已经拥有账号？<router-link to="/Login/Account">登录</router-link></p>
+      <p style=" color: #989899; font-size: 13px; margin-top: -30px;">已经拥有账号？<router-link
+          to="/Login/Account">登录</router-link></p>
     </div>
   </el-form>
 </template>
@@ -114,6 +120,7 @@ const register = async function () {
   justify-content: center;
   flex-wrap: nowrap;
 }
+
 #rightLogin-content-footers {
   width: 50%;
   height: 10px;
@@ -122,6 +129,7 @@ const register = async function () {
   align-items: center;
   margin-bottom: 10px;
 }
+
 #Loinform {
   width: 100%;
   height: 100%;

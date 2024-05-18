@@ -9,7 +9,7 @@
                     </div>
                     <div class="group-info-detail-title-name">
                         <span class="group-info-detail-title-name-text1">{{
-        groupStore.OnConnectedGroup.GroupInfo.GroupName }}</span>
+                            groupStore.OnConnectedGroup.GroupInfo.GroupName }}</span>
                         <div class="group-info-detail-title-name-text2">
                             <span style="font-size: 11.4px;">{{ groupStore.OnConnectedGroup.GroupInfo.GroupId }}</span>
                         </div>
@@ -23,7 +23,7 @@
                 <div class="group-info-detail-memeber-title">
                     <span>群聊成员</span>
                     <span class="group-info-detail-memeber-title-num">查看{{
-        groupStore.OnConnectedGroup.GroupInfo.MemberNumber }}名群成员<el-icon>
+                        groupStore.OnConnectedGroup.GroupInfo.MemberNumber }}名群成员<el-icon>
                             <ArrowRight />
                         </el-icon></span>
                 </div>
@@ -98,7 +98,7 @@
                 退出群聊
             </button>
             <button v-else-if="group?.Role == '群主'" class="group-info-detail-option-btns"
-                style="justify-content: center; color: red;" @click = "dismissGroup">
+                style="justify-content: center; color: red;" @click="dismissGroup">
                 解散群聊
             </button>
         </el-scrollbar>
@@ -107,7 +107,7 @@
 
 <script lang="ts" setup>
 
-import { appsetting, UseGroupStore, UseServiceStore, UseUserInformationStore,UseChatStore } from '../../store';
+import { appsetting, UseGroupStore, UseServiceStore, UseUserInformationStore, UseChatStore } from '../../store';
 import { ref, watch } from 'vue';
 import { Grid, ArrowRight, Plus, Close } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus';
@@ -123,7 +123,6 @@ const groupRemark = ref('')
 //根据groupStore.OnConnectedGroup.GroupInfo.GroupId拿到MyGroups里面的对于的group
 let group = ref<any>(null);
 const handleClose = () => {
-
     ElMessageBox.confirm('确定要提交已更改的数据吗?')
         .then(async () => {
             if (groupName.value !== groupStore.OnConnectedGroup.GroupInfo.GroupName && groupName.value !== '') {
@@ -180,7 +179,7 @@ const exitGroup = () => {
                     //删除MyGroups里面的group
                     groupStore.MyGroups = groupStore.MyGroups.filter(item => item.GroupId !== groupStore.OnConnectedGroup.GroupInfo.GroupId);
                     chatStore.targetUserTab = chatStore.targetUserTab.filter(item => item.tabId !== groupStore.OnConnectedGroup.GroupInfo.GroupId);
-                    
+
                 }
             })
         })
@@ -215,7 +214,7 @@ const dismissGroup = () => {
                     //删除MyGroups里面的group
                     groupStore.MyGroups = groupStore.MyGroups.filter(item => item.GroupId !== groupStore.OnConnectedGroup.GroupInfo.GroupId);
                     chatStore.targetUserTab = chatStore.targetUserTab.filter(item => item.tabId !== groupStore.OnConnectedGroup.GroupInfo.GroupId);
-                    
+
                 }
             })
         })

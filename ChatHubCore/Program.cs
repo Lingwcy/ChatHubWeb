@@ -2,6 +2,8 @@ using ChatHubApi;
 using ChatHubApi.Authorization;
 using ChatHubApi.Hub;
 using ChatHubApi.Middleware;
+using ChatHubApi.Repository;
+using ChatHubApi.Services;
 using ChatHubApi.System;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -90,6 +92,8 @@ builder.Services.AddAuthorization(o =>
     });
 });
 builder.Services.AddSingleton<IAuthorizationHandler, SelfCertificationRequirementHandler>();
+//仓储
+builder.Services.AddRepository(builder.Configuration);
 
 //Serilog集成
 var logger = new LoggerConfiguration()
@@ -120,8 +124,9 @@ builder.Services.AddSignalR(options =>
 
 //jwt工具
 builder.Services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
+builder.Services.AddScoped<IGroupService, GroupService>();
 //跨域配置
-string[] urls = new[] { builder.Configuration["Cors"], "http://localhost:5173", "https://localhost:5001/", "http://localhost:8848", "*" };
+string[] urls = new[] { builder.Configuration["Cors"], "http://localhost:5173", "https://localhost:5001/", "http://localhost:8848", "http://100.83.131.91:8080", "*" };
 builder.Services.AddCors(opt =>
 {
     opt.AddDefaultPolicy(builder => builder.WithOrigins(urls).AllowAnyHeader().AllowAnyMethod());
@@ -147,7 +152,7 @@ app.Use(async (context, next) =>
 app.UseExceptionHandling();
 app.UseHttpsRedirection();
 app.UseCors();
-app.UseCrypto();
+//app.UseCrypto();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

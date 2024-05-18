@@ -1,4 +1,6 @@
-﻿using ChatHubApi.Controllers.Font.Group.Model;
+﻿using ChatHubApi.Controllers.Font.Friends.Model;
+using ChatHubApi.Controllers.Font.Group.Model;
+using ChatHubApi.Hub;
 using ChatHubApi.Services;
 using ChatHubApi.System;
 using ChatHubApi.System.Entity.Font;
@@ -7,7 +9,9 @@ using construct.Application.System.Services.Login.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using SqlSugar;
+using System.Diagnostics.Metrics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
@@ -26,13 +30,18 @@ namespace ChatHubApi.Controllers.Font.Group
         private readonly IConfiguration _config;
         private readonly JwtSecurityTokenHandler _jwtHandler;
         private readonly ILogger<GroupController> _logger;
+        private readonly IHubContext<MyHub, IHub> _hubContext;
+        private readonly IGroupService _groupService;
 
-        public GroupController(ISqlSugarClient db, IConfiguration config, JwtSecurityTokenHandler jwtHandler, ILogger<GroupController> logger)
+        public GroupController(ISqlSugarClient db, IConfiguration config, JwtSecurityTokenHandler jwtHandler, ILogger<GroupController> logger, IHubContext<MyHub, IHub> hubContext, IGroupService groupService)
         {
             _db = db;
             _config = config;
             _jwtHandler = jwtHandler;
             _logger = logger;
+            _hubContext = hubContext;
+            _groupService = groupService;
+
         }
 
         /// <summary>
@@ -329,8 +338,7 @@ namespace ChatHubApi.Controllers.Font.Group
             group.GroupName = md.Name;
             group.CreatorUserId = md.CreateUserId;
             group.CreationDate = DateTime.Now;
-            var Resgroup = await _db.Insertable(group).ExecuteReturnEntityAsync(); ;
-
+            var Resgroup = await _db.Insertable(group).ExecuteReturnEntityAsync();
             //将所有成员添加进该组
             foreach(var userId in md.UserId)
             {
@@ -365,7 +373,7 @@ namespace ChatHubApi.Controllers.Font.Group
         }
         //更改群名称
         [HttpPost]
-        public IActionResult ChangeGroupName([FromBody] ChangeGroupNameModel md)
+        public async Task<IActionResult> ChangeGroupName([FromBody] ChangeGroupNameModel md)
         {
             var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
             if (group == null)
@@ -382,6 +390,32 @@ namespace ChatHubApi.Controllers.Font.Group
             var i = _db.Updateable(group).ExecuteCommand();
             if (i > 0)
             {
+                try
+                {
+                    //发送即时通知    
+                    var onlineMembers = await _groupService.GetOnlineGroupMembers(md.GroupId);
+                    if (onlineMembers != null)
+                    {
+                        foreach (var member in onlineMembers)
+                        {
+                            await _hubContext.Clients.Client(member).RefreshGroupName(group.GroupId, md.ChangedName);
+                        }
+                    }
+                    //修改群组中每一个成员的msgbox
+                    var msgBoxs = _db.Queryable<sysMsgBox>().Where(x => x.targetId == md.GroupId).ToList();
+                    if (msgBoxs != null)
+                    {
+                        foreach (var msgBox in msgBoxs)
+                        {
+                            _db.Updateable<sysMsgBox>().SetColumns(it => it.targetfont == md.ChangedName ).Where(x => x.targetId == md.GroupId).ExecuteCommand();
+                            
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 return Ok(new Response(1, i, "操作成功!"));
             }
             else
@@ -393,7 +427,7 @@ namespace ChatHubApi.Controllers.Font.Group
 
         //更改群公告
         [HttpPost]
-        public IActionResult ChangeGroupNotice([FromBody] ChangeGroupNoticeModel md)
+        public async Task<IActionResult> ChangeGroupNotice([FromBody] ChangeGroupNoticeModel md)
         {
             var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
             if (group == null)
@@ -410,6 +444,22 @@ namespace ChatHubApi.Controllers.Font.Group
             var i = _db.Updateable(group).ExecuteCommand();
             if (i > 0)
             {
+                try
+                {
+                    //发送即时通知    
+                    var onlineMembers = await _groupService.GetOnlineGroupMembers(md.GroupId);
+                    if (onlineMembers != null)
+                    {
+                        foreach (var member in onlineMembers)
+                        {
+                            await _hubContext.Clients.Client(member).RefreshGroupNotice(group.GroupName, md.Notice);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 return Ok(new Response(1, i, "操作成功!"));
             }
             else
@@ -421,7 +471,7 @@ namespace ChatHubApi.Controllers.Font.Group
         
         //退出群聊
         [HttpPost]
-        public IActionResult ExitGroup([FromBody] ExitGroupModel md)
+        public async Task<IActionResult> ExitGroupAsync([FromBody] ExitGroupModel md)
         {
             var userGroup = _db.Queryable<sysUserGroup>().First(x => x.GroupId == md.GroupId && x.UserId == md.UserId);
             if (userGroup == null)
@@ -431,7 +481,15 @@ namespace ChatHubApi.Controllers.Font.Group
             var i = _db.Deleteable<sysUserGroup>(userGroup).ExecuteCommand();
             if (i > 0)
             {
-                //后续需要向该群群主或管理发送通知
+                //删除此用户对应的群组Msgbox
+                var msgBox = _db.Queryable<sysMsgBox>().First(x => x.targetId == md.GroupId && x.userId == md.UserId);
+                if (msgBox != null)
+                {
+                    _db.Deleteable<sysMsgBox>(msgBox).ExecuteCommand();
+                }
+                //获取此在线用户的conId
+                var conId = _db.Queryable<sysOnlineUser>().Where(x => Int32.Parse(x.userid) == md.UserId).Select(x => x.conId).First();
+                await _hubContext.Clients.Client(conId).DissolveGroupNotice(md.GroupId,ExiteGroupType.Exit);
                 return Ok(new Response(1, i, "操作成功!"));
             }
             else
@@ -442,7 +500,7 @@ namespace ChatHubApi.Controllers.Font.Group
 
         //解散群聊
         [HttpPost]
-        public IActionResult DismissGroup([FromBody] DismissGroupModel md)
+        public async Task<IActionResult> DismissGroupAsync([FromBody] DismissGroupModel md)
         {
             var group = _db.Queryable<sysGroups>().First(x => x.GroupId == md.GroupId);
             if (group == null)
@@ -456,7 +514,32 @@ namespace ChatHubApi.Controllers.Font.Group
                 return Ok(new Response(3, null, "你没有权限解散群组!"));
             }
             //删除前先向群内所有成员发送通知
-            //先删除sysUserGroup中含有此groupId的所有元组
+            try
+            {
+                //发送即时通知    
+                var onlineMembers = await _groupService.GetOnlineGroupMembers(md.GroupId);
+                if (onlineMembers != null)
+                {
+                    foreach (var member in onlineMembers)
+                    {
+                        await _hubContext.Clients.Client(member).DissolveGroupNotice(group.GroupId,ExiteGroupType.Dissolve);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //删除群组中每一个成员的msgbox
+            var msgBoxs = _db.Queryable<sysMsgBox>().Where(x => x.targetId== md.GroupId).ToList();
+            if(msgBoxs!= null)
+            {
+                foreach (var msgBox in msgBoxs)
+                {
+                    _db.Deleteable<sysMsgBox>(msgBox).ExecuteCommand();
+                }
+            }
+            //删除sysUserGroup中含有此groupId的所有元组
             var i = _db.Deleteable<sysUserGroup>().Where(x => x.GroupId == md.GroupId).ExecuteCommand();
             if (i > 0)
             {

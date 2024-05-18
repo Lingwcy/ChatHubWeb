@@ -97,13 +97,14 @@ namespace construct.Application.System.Services.Login
                 Desc = "这个人还没有填写介绍",
                 status= ChatHubApi.System.Enum.Status.DISABLE,
             };
+            var res =  _db.Insertable(user).ExecuteReturnIdentity();
             string accessToken = string.Empty;
             if (!string.IsNullOrEmpty(user.Username) && !string.IsNullOrEmpty(user.Password))
             {
                 // 生成 token
                 var claims = new List<Claim>
                 {
-                    new Claim("UserId", user.id.ToString()),
+                    new Claim("UserId", res.ToString()),
                     new Claim("UserName", user.Username),
                     new Claim("Role","User"),
                 };
@@ -113,7 +114,6 @@ namespace construct.Application.System.Services.Login
             }
             try
             {
-                _db.Insertable(user).ExecuteCommand();
                 //初始化分组系统
                 sysRelationTree tree = new sysRelationTree();
                 int id  = await _db.Queryable<sysFontUser>().Where(x=>x.Username == user.Username ).Select(x=>x.id).FirstAsync();
@@ -152,7 +152,6 @@ namespace construct.Application.System.Services.Login
         {
             return Ok(new Response(code: 1, new object(), string.Empty));
         }
-
         [HttpPost]
         public ActionResult AES()
         {

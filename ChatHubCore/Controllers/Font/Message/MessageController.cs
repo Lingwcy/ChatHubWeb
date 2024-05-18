@@ -40,7 +40,7 @@ namespace construct.Application.System.FontServices.Message
                         existrecord = true;
                         msgbox.isNew = 1;
                         _db.Updateable<sysMsgBox>()
-                       .SetColumns(it => new sysMsgBox { isNew = 1 })
+                       .SetColumns(it => it.isNew == 1)
                        .Where(a => a.username == username && a.targetfont == record.Sender)
                        .ExecuteCommand();
                     }

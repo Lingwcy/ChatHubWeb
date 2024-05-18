@@ -87,6 +87,7 @@ const openGroupNotice = () => {
 const GroupNoticeConfirm = () => {
     if (groupNoticeConfirmText.value == '确认') return;
     groupNoticeOpen.value = false;
+    if(groupStore.OnConnectedGroup.GroupInfo.GroupDescription == groupNoticeText.value) return;
     groupStore.OnConnectedGroup.GroupInfo.GroupDescription = groupNoticeText.value
     let payload = {
         Notice: groupNoticeText.value,
@@ -163,6 +164,16 @@ watch(
                 // 如果找到了目标用户，则下拉到聊天栏到底部
                 scrollDown()
             }
+        }
+    }
+);
+
+watch(
+    () => appset.MessageEvent.GroupNotice,
+    (newVal, oldVal) => {
+        if (newVal> oldVal) {
+            //刷新OnConnectedGroup的GroupInfo
+            groupStore.OnConnectedGroup.GroupInfo = groupStore.MyGroups.find(item => item.GroupId == groupStore.OnConnectedGroup.GroupInfo.GroupId)?.Group as unknown as Group
         }
     }
 );

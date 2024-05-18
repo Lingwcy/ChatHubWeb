@@ -11,12 +11,20 @@ let userStore = UseUserInformationStore();
 const groupvalue = ref('')
 
 let options: any[] = []
-friendStore.FriendTree?.Units.forEach((element: { id: unknown; UnitName: string; })=> {
-    let payload = {
-        value: element.id as unknown as string,
-        label: element.UnitName as string
+const payload = {
+    userId: userStore.userId,
+    xusername: userStore.userName
+}
+service.Friend?.FindFriendTree(payload, friendStore).then(res => {
+    if (res) {
+        friendStore.FriendTree?.Units.forEach((element: { id: unknown; UnitName: string; }) => {
+            let payload = {
+                value: element.id as unknown as string,
+                label: element.UnitName as string
+            }
+            options.push(payload)
+        });
     }
-    options.push(payload)
 });
 
 const acceptFriendsReq = () => {

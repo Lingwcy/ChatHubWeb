@@ -72,7 +72,7 @@ namespace ChatHubApi.System.Entity.Font
         /// </summary>
         [Required]
         [SugarColumn(ColumnDescription = "年龄")]
-        public string Age { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         ///工作
@@ -93,9 +93,9 @@ namespace ChatHubApi.System.Entity.Font
         /// <summary>
         /// 社交名称
         /// </summary>
-        [Required, MaxLength(30)]
+        [ MaxLength(30)]
         [SugarColumn(ColumnDescription = "社交名称")]
-        public string NickName { get; set; }
+        public string? NickName { get; set; }
 
 
         /// <summary>

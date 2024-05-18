@@ -1,4 +1,6 @@
-﻿using ChatHubApi.System.Entity.Font;
+﻿using ChatHubApi.Controllers.AdminServices.User.Model;
+using ChatHubApi.System;
+using ChatHubApi.System.Entity.Font;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
@@ -18,7 +20,7 @@ namespace ChatHubApi.Controllers.AdminServices.User
     /// 在线用户表 服务
     /// </summary>
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("admin/[controller]/[action]")]
     public class OnlineUserController:ControllerBase
     {
         private readonly ISqlSugarClient _db;
@@ -36,24 +38,19 @@ namespace ChatHubApi.Controllers.AdminServices.User
         /// <returns></returns>
         /// 
         [HttpGet]
-        public ActionResult<string> getAll()
+        public async Task<IActionResult> GetAll([FromQuery] OnlineUserSearchModel? md)
         {
-            var res = _db.Queryable<sysOnlineUser>().ToList();
-            StringBuilder json = new StringBuilder();
-            foreach (var item in res)
+            if (md != null)
             {
-                json.Append(JsonSerializer.Serialize(item, new JsonSerializerOptions()
-                {
-                    // 整齐打印
-                    WriteIndented = true,
-                    //重新编码，解决中文乱码问题
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
-                }) + "$");
+                var query = _db.Queryable<sysOnlineUser>()
+                .WhereIF(!string.IsNullOrEmpty(md.name), it => it.name.Contains(md.name));
+                var users = await query.ToListAsync();
+
+                return Ok(new Response(1, users, "搜索成功"));
             }
-
-            return json.ToString();
+            var res = _db.Queryable<sysOnlineUser>().ToList();
+            return Ok(new Response(1, res, "获取成功"));
         }
-
 
         /// <summary>
         /// 通过Username模糊查询       

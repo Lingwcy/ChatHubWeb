@@ -17,6 +17,7 @@
     "gsap": "^3.12.5",
     "sass": "^1.75.0",
     "v-contextmenu": "3.2.0",
+    "vite-plugin-externals": "^0.6.2",
     "vue": "^3.3.11",
     "vue3-slide-verify": "^1.1.5"
   },

@@ -3,12 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\controllers\\font\\friends\\friendscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:controllers\\font\\friends\\friendscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\repository\\repositorysetup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:repository\\repositorysetup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\hub\\ihub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:hub\\ihub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\controllers\\admin\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:controllers\\admin\\user\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\repository\\interface\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:repository\\interface\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\repository\\entity\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:repository\\entity\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\repository\\entity\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:repository\\entity\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\controllers\\font\\message\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|solutionrelative:controllers\\font\\message\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7818B2F3-1811-4CA1-819D-4771FEA49214}|ChatHubApi.csproj|c:\\users\\legion\\desktop\\rebuildchat\\chathub\\chathubcore\\hub\\hub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -26,40 +46,103 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IHub.cs",
-              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Hub\\IHub.cs",
-              "RelativeDocumentMoniker": "Hub\\IHub.cs",
-              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Hub\\IHub.cs",
-              "RelativeToolTip": "Hub\\IHub.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAANAAAA",
+              "DocumentIndex": 3,
+              "Title": "UserRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Entity\\UserRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Entity\\UserRepository.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Entity\\UserRepository.cs",
+              "RelativeToolTip": "Repository\\Entity\\UserRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-28T10:24:37.066Z"
+              "WhenOpened": "2024-05-18T14:02:35.006Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Entity\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Entity\\BaseRepository.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Entity\\BaseRepository.cs",
+              "RelativeToolTip": "Repository\\Entity\\BaseRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T14:01:15.497Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RepositorySetup.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\RepositorySetup.cs",
+              "RelativeDocumentMoniker": "Repository\\RepositorySetup.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\RepositorySetup.cs",
+              "RelativeToolTip": "Repository\\RepositorySetup.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T13:42:24.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Admin\\User\\UserController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Admin\\User\\UserController.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Admin\\User\\UserController.cs",
+              "RelativeToolTip": "Controllers\\Admin\\User\\UserController.cs",
+              "ViewState": "AQIAACMAAAAAAAAAAAAzwCYAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T13:41:35.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AQIAAHIAAAAAAAAAAAAAAH4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T13:26:56.555Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Interface\\IRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\Interface\\IRepository.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Repository\\Interface\\IRepository.cs",
+              "RelativeToolTip": "Repository\\Interface\\IRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-18T13:06:48.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MessageController.cs",
+              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Font\\Message\\MessageController.cs",
+              "RelativeDocumentMoniker": "Controllers\\Font\\Message\\MessageController.cs",
+              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Font\\Message\\MessageController.cs",
+              "RelativeToolTip": "Controllers\\Font\\Message\\MessageController.cs",
+              "ViewState": "AQIAAD0AAAAAAAAAAAA3wDkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T09:35:21.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "Hub.cs",
               "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Hub\\Hub.cs",
               "RelativeDocumentMoniker": "Hub\\Hub.cs",
               "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Hub\\Hub.cs",
               "RelativeToolTip": "Hub\\Hub.cs",
-              "ViewState": "AQIAAFwAAAAAAAAAAAA/wA8AAAAFAAAA",
+              "ViewState": "AQIAAIwAAAAAAAAAAAA/wAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-28T10:24:36.329Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "FriendsController.cs",
-              "DocumentMoniker": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Font\\Friends\\FriendsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\Font\\Friends\\FriendsController.cs",
-              "ToolTip": "C:\\Users\\LEGION\\Desktop\\RebuildChat\\chathub\\ChatHubCore\\Controllers\\Font\\Friends\\FriendsController.cs",
-              "RelativeToolTip": "Controllers\\Font\\Friends\\FriendsController.cs",
-              "ViewState": "AQIAAKcAAAAAAAAAAAA/wLUAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-28T06:54:21.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-15T09:25:55.279Z"
             }
           ]
         }

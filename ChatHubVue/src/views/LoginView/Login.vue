@@ -78,6 +78,11 @@ function doLoginCheck() {
           service.ChatHub?.GetUserOfflineMessage(userInfo.userName)
           appset.CompoentsEvent.isSlideVerify.isOpen = false;
           resetForm(loginFormRef.value)
+          //刷新页面
+
+          setTimeout(() => {
+            location.reload()
+          }, 1000)
           return
         } else {
           appset.CompoentsEvent.isSlideVerify.isOpen = false;

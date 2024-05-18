@@ -1,5 +1,5 @@
 declare export interface IMsgStore {
-    messageItems: ImessageItems[];
+    messageItems: IMessageItems[];
 }
 type IMessageItems = {
     targetUserName: string,

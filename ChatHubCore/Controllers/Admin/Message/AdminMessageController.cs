@@ -19,7 +19,7 @@ namespace ChatHubApi.Controllers.AdminServices.Message
     /// 消息暂存 服务
     /// </summary>
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("admin/[controller]/[action]")]
     public class AdminMessageController:ControllerBase
     {
         private readonly ISqlSugarClient _db;

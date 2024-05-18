@@ -70,6 +70,8 @@ namespace ChatHubApi.Controllers.AdminServices.User.Model
 
 
     public record SearchModel(string? username,string? phone);
+    public record OnlineUserSearchModel(string? name);
+    public record DeleteUserInput(int id);
 
     public class AddUserInput : UserInput
     {
@@ -93,7 +95,6 @@ namespace ChatHubApi.Controllers.AdminServices.User.Model
         /// <summary>
         /// 昵称
         /// </summary>
-        [Required(ErrorMessage = "昵称不能为空")]
         public override string? NickName { get; set; }
 
         public override string? Phone { get; set; }

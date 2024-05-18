@@ -173,6 +173,10 @@ export const appsetting = defineStore('appset', {
                     isGroupOpen:false,
                 },
                 OnSelectedImage: ''
+            },
+            MessageEvent: {
+                GroupNotice:0,
+                GroupDissolve:0,
             }
         }
     },

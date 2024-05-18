@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { appsetting } from '../../store';
-import { UseServiceStore, UseGroupStore, UseUserInformationStore,UseFriendsStore } from '../../store';
+import { UseServiceStore, UseGroupStore, UseUserInformationStore, UseFriendsStore } from '../../store';
 import { ElMessage, ElNotification } from 'element-plus';
 let service = UseServiceStore();
 let groupStore = UseGroupStore();
@@ -12,18 +12,24 @@ let mark = ref("")//备注
 let userStore = UseUserInformationStore();
 const groupvalue = ref('')
 
-let options: any[] = []
-friendStore.FriendTree?.Units.forEach((element: { id: unknown; UnitName: string; }) => {
-    let payload = {
-        value: element.id as unknown as string,
-        label:element.UnitName as string
+let options: any[] = [] //分组选项
+const payload = {
+    userId: userStore.userId,
+    xusername: userStore.userName
+}
+service.Friend?.FindFriendTree(payload, friendStore).then(res => {
+    if (res) {
+        friendStore.FriendTree?.Units.forEach((element: { id: unknown; UnitName: string; }) => {
+            let payload = {
+                value: element.id as unknown as string,
+                label: element.UnitName as string
+            }
+            options.push(payload)
+        });
     }
-    options.push(payload)
 });
 
-const test =()=>{
-    console.log(groupvalue.value)
-}
+
 const sendFridendsRequst = async () => {
     if (groupvalue.value == "") {
         ElMessage({
@@ -38,7 +44,7 @@ const sendFridendsRequst = async () => {
         userName: userStore.userName,
         targetName: groupStore.SelectedUser.Username,
         xusername: userStore.userName,
-        TargetGroupId:Number(groupvalue.value)
+        TargetGroupId: Number(groupvalue.value)
     }
     let flag = service.Friend?.SendFriendRequest(payload);
     if (flag == undefined) return;
@@ -59,12 +65,12 @@ const sendFridendsRequst = async () => {
     })
 
 }
-const sendGroupRequst =()=>{
+const sendGroupRequst = () => {
     let payload = {
         ReqMsg: textarea.value,
         UserId: Number(userStore.userId),
-        GroupId:groupStore.SelectedGroup.GroupId,
-        xusername:userStore.userName
+        GroupId: groupStore.SelectedGroup.GroupId,
+        xusername: userStore.userName
     }
     service.Group?.SendGroupRequest(payload)
 }
@@ -85,8 +91,8 @@ const sendGroupRequst =()=>{
                         </div>
                         <div class="group-details">
                             <h3 class="group-name">{{ groupStore.SelectedGroup.GroupName }}({{
-        groupStore.SelectedGroup.GroupId
-    }})</h3>
+                                groupStore.SelectedGroup.GroupId
+                                }})</h3>
                             <p class="group-desc">{{ groupStore.SelectedGroup.GroupDescription }}</p>
                             <p class="group-member-count">成员数: {{ groupStore.SelectedGroup.MemberNumber }}</p>
                         </div>
@@ -104,7 +110,8 @@ const sendGroupRequst =()=>{
         </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="primary" @click="appset.CompoentsEvent.isAddDetail.isOpen = false;sendGroupRequst()">提交</el-button>
+                <el-button type="primary"
+                    @click="appset.CompoentsEvent.isAddDetail.isOpen = false; sendGroupRequst()">提交</el-button>
                 <el-button @click="appset.CompoentsEvent.isAddDetail.isOpen = false">取消</el-button>
             </div>
         </template>
@@ -129,7 +136,7 @@ const sendGroupRequst =()=>{
                             <p class="friend-id">ID:{{ groupStore.SelectedUser.id }}</p>
                             <p class="friend-desc"><i>{{ groupStore.SelectedUser.Desc }}</i></p>
                             <p v-if="groupStore.SelectedUser.Age != null" class="friend-member-count">年龄: {{
-        groupStore.SelectedUser.Age }}</p>
+                                groupStore.SelectedUser.Age }}</p>
                         </div>
                     </div>
                 </div>
@@ -141,7 +148,7 @@ const sendGroupRequst =()=>{
                 <p style="color: gray;font-size: 11px;">备注</p>
                 <el-input v-model="mark" maxlength="20" style="width: 100%;margin-top: -5px;" type="textarea" />
                 <p style="color: gray;font-size: 11px;">分组</p>
-                <el-select v-model="groupvalue" placeholder="请选择"  style="width: 100%;">
+                <el-select v-model="groupvalue" placeholder="请选择" style="width: 100%;">
                     <el-option v-for="item in options" :key="item.value" :label="item.label"
                         :value="item.value" /></el-select>
             </div>
@@ -149,18 +156,17 @@ const sendGroupRequst =()=>{
         <template #footer>
             <div class="dialog-footer">
                 <el-button type="primary"
-                    @click="appset.CompoentsEvent.isAddDetail.isOpen = true;test()">测试</el-button>
-                <el-button type="primary"
-                    @click="appset.CompoentsEvent.isAddDetail.isOpen = false;sendFridendsRequst()">提交</el-button>
+                    @click="appset.CompoentsEvent.isAddDetail.isOpen = false; sendFridendsRequst()">提交</el-button>
                 <el-button @click="appset.CompoentsEvent.isAddDetail.isOpen = false">取消</el-button>
             </div>
         </template>
     </el-dialog>
 </template>
 <style scoped>
-:deep(.el-select){
-    --el-select-border-color-hover:none
+:deep(.el-select) {
+    --el-select-border-color-hover: none
 }
+
 .group-name,
 .group-desc,
 .group-member-count {

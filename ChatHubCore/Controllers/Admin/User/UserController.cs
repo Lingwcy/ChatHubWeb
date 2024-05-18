@@ -1,6 +1,9 @@
-﻿using ChatHubApi.Controllers.AdminServices.User.Model;
+﻿using ChatHubApi.Controllers.AdminServices.Login.Model;
+using ChatHubApi.Controllers.AdminServices.User.Model;
+using ChatHubApi.Repository.@interface;
 using ChatHubApi.System;
 using ChatHubApi.System.Entity.Font;
+using ChatHubApi.Untils;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,17 +25,19 @@ namespace ChatHubApi.Controllers.AdminServices.User;
 /// 用户服务
 /// </summary>
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("admin/[controller]/[action]")]
 public class UserController : ControllerBase
 {
 
     private readonly ISqlSugarClient _db;
     private readonly ILogger<UserController> _logger;
+   private readonly IRepository<sysFontUser> _user;
 
-    public UserController(ISqlSugarClient db, ILogger<UserController> logger)
+    public UserController(ISqlSugarClient db, ILogger<UserController> logger, IRepository<sysFontUser> user)
     {
         _db = db;
         _logger = logger;
+        _user = user;
     }
 
 
@@ -50,9 +55,36 @@ public class UserController : ControllerBase
         if (isExist != null)
             return Ok(new Response(3, null, "找不到此数据"));
 
-        var user = input.Adapt<sysFontUser>();
-
-        return Ok(new Response(_db.Insertable<sysFontUser>(user).ExecuteCommand() > 0 ? 1 : 2,null,"操作成功"));
+        var users = input.Adapt<sysFontUser>();
+        users.Password = Crypto.HashPassword(users.Password);
+        var user = await _db.Insertable<sysFontUser>(users).ExecuteReturnEntityAsync();
+        try
+        {
+            //初始化分组系统
+            sysRelationTree tree = new sysRelationTree();
+            int id = user.id;
+            tree.ownerId = id;
+            tree.name = "好友";
+            _db.Insertable(tree).ExecuteCommand();
+            var returnMsg = new
+            {
+                userId = id,
+                userName = user.Username,
+                userPsw = user.Password,
+                userImg = user.HeaderImg,
+            };
+            return Ok(new Response(
+            code: 1,
+            data: returnMsg,
+            message: "创建成功"));
+        }
+        catch (Exception ex)
+        {
+            return Ok(new Response(
+                code: 2,
+                data: null,
+                message: "系统异常" + ex.Message));
+        }
 
     }
 
@@ -76,17 +108,17 @@ public class UserController : ControllerBase
 
 
     /// <summary>
-    /// 批量删除（通过传入name数组来搜索）   
+    /// 批量删除（通过传入id数组来删除）   
     /// VERSION 2.0
     /// </summary>
-    /// <param name="dc">需要删除的姓名（用户名）数组</param>
+    /// <param name="dc">需要删除的id数组</param>
     /// <returns></returns>
     /// 
     [HttpPost]
-    public IActionResult Deletes([FromBody] int[] dc)
+    public IActionResult Deletes([FromQuery] int[] ids)
     {
 
-        foreach (var item in dc)
+        foreach (var item in ids)
         {
             _db.Deleteable<sysFontUser>().Where(a => a.id == item).ExecuteCommand();
         }
@@ -127,11 +159,11 @@ public class UserController : ControllerBase
     /// <returns></returns>
     /// 
     [HttpPost]
-    public async Task<IActionResult> Delete([FromBody]string name)
+    public async Task<IActionResult> Delete([FromQuery] DeleteUserInput md)
     {
-        var isExist = await _db.Queryable<sysFontUser>().SingleAsync(a => a.Username == name);
+        var isExist = await _db.Queryable<sysFontUser>().SingleAsync(a => a.id == md.id);
         if (isExist == null) return Ok(new Response(3, null, "找不到此用户"));
-        return Ok(new Response(_db.Deleteable<sysFontUser>().Where(a => a.Username == name).ExecuteCommand() > 0 ? 1 :2, null , "操作成功" ));
+        return Ok(new Response(_db.Deleteable<sysFontUser>().Where(a => a.id == md.id).ExecuteCommand() > 0 ? 1 :2, null , "操作成功" ));
 
     }
 
@@ -243,6 +275,12 @@ public class UserController : ControllerBase
         sysFontUser res = user.Adapt<sysFontUser>();
         return _db.Updateable(res).WhereColumns(it => new { it.Username, }).ExecuteCommand();
 
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> TEST(string name)
+    {
+       return Ok(new Response(1, await _user.GetSingle(a => a.Username == name), "测试成功"));
     }
 
 }
