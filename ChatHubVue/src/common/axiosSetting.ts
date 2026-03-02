@@ -59,14 +59,15 @@ http.interceptors.response.use(
         }
         if (res.status == 404) {
             ElMessage({
-                message: res.data.message,
+                message: res.data.message || '未找到资源',
                 type: 'warning',
             })
             router.push({
                 name: 'ErrorPage',
                 query: { type: 'NoPermisson' }
             }).then()
-            return res;
+            // 修复：返回 rejected promise 以确保错误被正确处理
+            return Promise.reject(res.data);
         }
         if (res.data.code == -3) {
             //登录过期
@@ -80,13 +81,25 @@ http.interceptors.response.use(
         return res;
     },
     error => {
+        // 处理超时和网络错误
         if (error.message.indexOf('timeout') > -1) {
-            error.message = '请求超时'
+            error.message = '请求超时，请稍后重试'
+        } else if (error.message.indexOf('Network') > -1) {
+            error.message = '网络错误，请检查网络连接'
         }
-        if (error.message.indexOf('Network') > -1) {
-            error.message = '网络错误'
-        }
+
+        // 修复：先检查 error.response 是否存在
         const res = error.response;
+        if (!res) {
+            // 网络错误时没有 response
+            ElMessage({
+                message: error.message || '网络错误，请稍后重试',
+                type: 'error',
+                duration: 3 * 1000
+            })
+            return Promise.reject(error);
+        }
+
         if (res.status == 500) {
             ElMessage({
                 message: '系统内部错误，请联系管理员',
