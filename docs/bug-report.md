@@ -178,3 +178,85 @@ var res = await _db.Queryable<sysAdmin>().FirstAsync(it => it.name == loginInput
 - **严重程度**: 低
 - **描述**: 使用 `.Contains()` 进行模糊查询，虽然 SqlSugar 有参数化处理，但应验证输入
 - **建议修复**: 对输入进行验证和清理，确保只有预期的字符
+
+---
+
+## Task 3: 后端 Core - JWT 认证审查
+
+### 发现的问题
+
+#### 问题 1: 管理员登录返回错误的 HTTP 状态码
+- **文件**: `ChatHubCore/Controllers/Admin/Login/AdminAuthController.cs`
+- **严重程度**: 高
+- **描述**:
+  - 无论登录成功与否都返回 `NotFound()`，登录成功时返回的 token 根本没有发送给客户端
+  - 管理员密码使用明文比较，没有进行哈希处理
+- **建议修复**:
+```csharp
+// 修复：使用密码哈希比较
+var res = await _db.Queryable<sysAdmin>().FirstAsync(it => it.name == loginInput.account && it.psw == Crypto.HashPassword(loginInput.psw));
+
+// 修复：返回 token
+return Ok(new { token = output });
+```
+
+#### 问题 2: 登录/注册响应泄露密码哈希
+- **文件**: `ChatHubCore/Controllers/Font/Login/AuthController.cs`
+- **严重程度**: 高
+- **描述**:
+  - 登录响应返回 `userPsw: user.Password`
+  - 注册响应也返回密码哈希
+- **建议修复**: 从响应对象中移除 `userPsw` 字段
+
+#### 问题 3: JWT Token 过期时间过长
+- **文件**: `ChatHubCore/Controllers/Font/Login/AuthController.cs`
+- **严重程度**: 高
+- **描述**:
+  - Token 过期时间设置为 30000 分钟（约 20.8 天）
+  - 注册时是 300 分钟（5小时）
+- **建议修复**: 前台用户 Token 过期时间建议设置为 60-120 分钟
+
+#### 问题 4: Admin 策略 Claim 不匹配
+- **文件**: `ChatHubCore/Program.cs` 和 `ChatHubCore/Controllers/Admin/Login/AdminAuthController.cs`
+- **严重程度**: 高
+- **描述**:
+  - Program.cs 策略要求 `RequireClaim("Admin")`
+  - 但 AdminAuthController 生成的是 `new Claim("Role","admin")` (小写)
+  - 这导致 AdminOnly 策略永远不会生效
+- **建议修复**: 统一使用 "Admin" 或 "admin"，确保策略和生成代码一致
+
+#### 问题 5: 缺少 Token 刷新机制
+- **文件**: `ChatHubCore/Services/jwtService.cs`
+- **严重程度**: 中
+- **描述**: 没有实现 refresh token 机制，用户需要重新登录才能获取新 Token
+- **建议修复**: 实现 refresh token 端点，支持用 refresh token 换取新的 access token
+
+#### 问题 6: 缺少 Token 黑名单/注销机制
+- **文件**: `ChatHubCore/`
+- **严重程度**: 中
+- **描述**: 用户 logout 后，之前签发的 Token 仍然有效，直到自然过期
+- **建议修复**: 实现 Token 黑名单机制（可以存储在内存缓存或数据库中）
+
+#### 问题 7: JWT 未验证 Issuer 和 Audience
+- **文件**: `ChatHubCore/Program.cs`
+- **严重程度**: 中
+- **描述**: `ValidateAudience = false, ValidateIssuer = false`，没有验证 JWT 的发行者和受众
+- **建议修复**: 设置具体的 Issuer 和 Audience 并进行验证
+
+#### 问题 8: JWT 密钥强度不足
+- **文件**: `ChatHubCore/appsettings.json`
+- **严重程度**: 高
+- **描述**: `SecretKey` 为 `kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk`，仅由重复字符 'k' 组成
+- **建议修复**: 使用至少 32 字节的随机密钥，使用 base64 或十六进制编码
+
+#### 问题 9: CustomAuthorizeAttribute 为空实现
+- **文件**: `ChatHubCore/System/Attribuite/CustomAuthorizeAttribute.cs`
+- **严重程度**: 低
+- **描述**: 该类仅继承 `AuthorizeAttribute` 并无任何自定义逻辑，目前没有任何作用
+- **建议修复**: 如果不需要可以删除此文件，或者实现自定义授权逻辑
+
+#### 问题 10: jwtService 中有多余的调试输出
+- **文件**: `ChatHubCore/Services/jwtService.cs`
+- **严重程度**: 低
+- **描述**: 生成 Token 后又读取并用 Console.WriteLine 打印所有 claims，这些调试代码应该移除
+- **建议修复**: 删除调试代码
