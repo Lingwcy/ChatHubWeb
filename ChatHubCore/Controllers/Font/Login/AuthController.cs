@@ -5,6 +5,7 @@ using ChatHubApi.Untils;
 using construct.Application.System.Services.Login.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SqlSugar;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,12 +25,14 @@ namespace construct.Application.System.Services.Login
         private readonly ISqlSugarClient _db;
         private readonly IConfiguration _config;
         private readonly JwtSecurityTokenHandler _jwtHandler;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(ISqlSugarClient db, IConfiguration config, JwtSecurityTokenHandler jwtHandler)
+        public AuthController(ISqlSugarClient db, IConfiguration config, JwtSecurityTokenHandler jwtHandler, ILogger<AuthController> logger)
         {
             _db = db;
             _config = config;
             _jwtHandler = jwtHandler;
+            _logger = logger;
         }
 
 
@@ -57,7 +60,7 @@ namespace construct.Application.System.Services.Login
                     new Claim("UserName", user.Username),
                     new Claim("Role","User"),
                 };
-                var expiresAt = DateTime.UtcNow.AddMinutes(30000);
+                var expiresAt = DateTime.UtcNow.AddMinutes(120);
                 accessToken = jwtService.CreateJwtToken(claims, expiresAt, _jwtHandler, _config);
                
             }
@@ -66,7 +69,7 @@ namespace construct.Application.System.Services.Login
             {
                 userId = user.id,
                 userName = user.Username,
-                userPsw = user.Password,
+                // 移除密码字段，避免泄露给客户端
                 jwtToken = accessToken,
                 userImg = user.HeaderImg,
             };
@@ -124,7 +127,7 @@ namespace construct.Application.System.Services.Login
                 {
                     userId = id,
                     userName = user.Username,
-                    userPsw = user.Password,
+                    // 移除密码字段，避免泄露给客户端
                     jwtToken = accessToken,
                     userImg = user.HeaderImg,
                 };
@@ -135,10 +138,12 @@ namespace construct.Application.System.Services.Login
             }
             catch(Exception ex)
             {
+                // 记录详细错误日志，但对外返回通用消息
+                _logger?.LogError(ex, "User registration failed");
                 return Ok(new Response(
                     code: 2,
                     data: null,
-                    message: "系统异常" + ex.Message));
+                    message: "系统异常，请稍后重试"));
             }
 
         }
