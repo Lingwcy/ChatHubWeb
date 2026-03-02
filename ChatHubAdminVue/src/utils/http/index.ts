@@ -93,6 +93,15 @@ class PureHttp {
                       PureHttp.requests.forEach(cb => cb(token));
                       PureHttp.requests = [];
                     })
+                    .catch(() => {
+                      // 刷新失败，清空请求队列并跳转到登录页
+                      PureHttp.requests.forEach(cb => cb(''));
+                      PureHttp.requests = [];
+                      // 使用 router 实例跳转到登录页（需要导入 router）
+                      import("@/router").then(({ default: router }) => {
+                        router.push("/login");
+                      });
+                    })
                     .finally(() => {
                       PureHttp.isRefreshing = false;
                     });
@@ -139,6 +148,15 @@ class PureHttp {
         $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画
         NProgress.done();
+
+        // 处理 401 未授权错误
+        if (error.response?.status === 401) {
+          // 跳转到登录页
+          import("@/router").then(({ default: router }) => {
+            router.push("/login");
+          });
+        }
+
         // 所有的响应异常 区分来源为取消请求/非取消请求
         return Promise.reject($error);
       }
