@@ -31,48 +31,94 @@ namespace ChatHubApi.Hub
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
-            var name = Context.User?.Claims.First(a => a.Type == "UserName").Value;
-            var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
-            var conId = Context.ConnectionId;
-            await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name).ExecuteCommandAsync();
-            await _db.Insertable(new sysOnlineUser
-            {
-                conId = conId,
-                name = name,
-                userid = id,
-                createtime = DateTime.Now,
-            }).ExecuteCommandAsync();
-            _logger.LogInformation($"[+] 用户：{name} => ID {id}");
+            // 添加空值检查，避免 NullReferenceException
+            var nameClaim = Context.User?.Claims.FirstOrDefault(a => a.Type == "UserName");
+            var idClaim = Context.User?.Claims.FirstOrDefault(a => a.Type == "UserId");
 
-            //查找该用户所在的群组，添加到群组
-            var groups = await _db.Queryable<sysUserGroup>().Where(a => a.UserId == int.Parse(id)).Select(a => a.GroupId).ToListAsync();
-            foreach (var group in groups)
+            if (nameClaim == null || idClaim == null || string.IsNullOrEmpty(nameClaim.Value) || string.IsNullOrEmpty(idClaim.Value))
             {
-                await Groups.AddToGroupAsync(conId, group.ToString());
-                _logger.LogInformation($"[+] 用户：{name} => 加入群组： {group}");
+                _logger.LogWarning("Connection rejected: Missing UserName or UserId in JWT claims");
+                Context.Abort();
+                return;
+            }
+
+            var name = nameClaim.Value;
+            var id = idClaim.Value;
+            var conId = Context.ConnectionId;
+
+            // 使用 try-catch 处理可能的数据库异常
+            try
+            {
+                await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name).ExecuteCommandAsync();
+                await _db.Insertable(new sysOnlineUser
+                {
+                    conId = conId,
+                    name = name,
+                    userid = id,
+                    createtime = DateTime.Now,
+                }).ExecuteCommandAsync();
+                _logger.LogInformation("[+] 用户：{Name} => ID {Id}", name, id);
+
+                //查找该用户所在的群组，添加到群组
+                if (int.TryParse(id, out int userId))
+                {
+                    var groups = await _db.Queryable<sysUserGroup>().Where(a => a.UserId == userId).Select(a => a.GroupId).ToListAsync();
+                    foreach (var group in groups)
+                    {
+                        await Groups.AddToGroupAsync(conId, group.ToString());
+                        _logger.LogInformation("[+] 用户：{Name} => 加入群组： {Group}", name, group);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in OnConnectedAsync for user {Name}", name);
+                Context.Abort();
             }
         }
 
         public override async Task OnDisconnectedAsync(Exception e)
         {
-            var name = Context.User?.Claims.First(a => a.Type == "UserName").Value;
-            var id = Context.User?.Claims.First(a => a.Type == "UserId").Value;
+            // 添加空值检查
+            var nameClaim = Context.User?.Claims.FirstOrDefault(a => a.Type == "UserName");
+            var idClaim = Context.User?.Claims.FirstOrDefault(a => a.Type == "UserId");
+
+            if (nameClaim == null || idClaim == null)
+            {
+                return; // 无法获取用户信息，直接返回
+            }
+
+            var name = nameClaim.Value;
+            var id = idClaim.Value;
             var conId = Context.ConnectionId;
-            await _db.Deleteable<sysOnlineUser>().Where(e => e.name == name && e.conId == conId).ExecuteCommandAsync();
-            if (e != null)
+
+            try
             {
-                _logger.LogWarning($"[-] 用户：{name} => ID {id} 异常断开 {e.Message}");
+                await _db.Deleteable<sysOnlineUser>().Where(x => x.name == name && x.conId == conId).ExecuteCommandAsync();
+
+                if (e != null)
+                {
+                    _logger.LogWarning("[-] 用户：{Name} => ID {Id} 异常断开 {Message}", name, id, e.Message);
+                }
+                else
+                {
+                    _logger.LogInformation("[-] 用户：{Name} => ID {Id} 断开连接", name, id);
+                }
+
+                //查找该用户所在的群组，移除用户
+                if (int.TryParse(id, out int userId))
+                {
+                    var groups = await _db.Queryable<sysUserGroup>().Where(a => a.UserId == userId).Select(a => a.GroupId).ToListAsync();
+                    foreach (var group in groups)
+                    {
+                        await Groups.RemoveFromGroupAsync(conId, group.ToString());
+                        _logger.LogInformation("[-] 用户：{Name} => 退出群组： {Group}", name, group);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogInformation($"[-] 用户：{name} => ID {id}");
-            }
-            //查找该用户所在的群组，移除用户
-            var groups = await _db.Queryable<sysUserGroup>().Where(a => a.UserId == int.Parse(id)).Select(a => a.GroupId).ToListAsync();
-            foreach (var group in groups)
-            {
-                await Groups.RemoveFromGroupAsync(conId, group.ToString());
-                _logger.LogInformation($"[-] 用户：{name} => 退出群组： {group}");
+                _logger.LogError(ex, "Error in OnDisconnectedAsync for user {Name}", name);
             }
         }
         public async Task SendPublicMsg(string FromName, string msg)
