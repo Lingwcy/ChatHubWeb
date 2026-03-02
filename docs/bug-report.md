@@ -356,3 +356,178 @@ return Ok(new { token = output });
 - **严重程度**: 中
 - **描述**: 删除用户记录时，如果记录不存在或查询失败可能导致异常。
 - **建议修复**: 处理可能的异常
+
+## Task 5: 前端 ChatHubVue - API 错误处理审查
+
+### 发现的问题
+
+#### 问题 1: 错误响应拦截器中访问可能不存在的属性
+- **文件**: `ChatHubVue/src/common/axiosSetting.ts`
+- **严重程度**: 高
+- **描述**: 第89行 `const res = error.response;` - 当网络错误（如超时）时，`error.response` 可能是 undefined，后续代码在访问 `res.status` 时会导致新的错误（Cannot read property 'status' of undefined）。
+- **建议修复**: 在访问 `error.response` 之前添加空值检查：
+```typescript
+error => {
+    if (error.message.indexOf('timeout') > -1) {
+        error.message = '请求超时'
+    }
+    if (error.message.indexOf('Network') > -1) {
+        error.message = '网络错误'
+    }
+    const res = error.response;
+    if (!res) {
+        // 网络错误时没有 response，直接抛出错误
+        ElMessage.error(error.message || '网络错误，请稍后重试')
+        return Promise.reject(error);
+    }
+    // ... 后续代码
+}
+```
+
+#### 问题 2: 404 处理不一致
+- **文件**: `ChatHubVue/src/common/axiosSetting.ts`
+- **严重程度**: 中
+- **描述**: 第60-70行处理404时返回 `res` 而不是拒绝 Promise，这可能导致后续代码继续执行而不是正确处理错误。
+- **建议修复**: 将 `return res;` 改为 `return Promise.reject(res);`
+
+#### 问题 3: 缺少请求重试机制
+- **文件**: `ChatHubVue/src/common/axiosSetting.ts`
+- **严重程度**: 中
+- **描述**: 没有实现自动重试机制，网络不稳定时容易请求失败。
+- **建议修复**: 使用 axios-retry 库或在请求拦截器中实现重试逻辑
+
+#### 问题 4: FileService 完全没有错误处理
+- **文件**: `ChatHubVue/src/services/FileService.ts`
+- **严重程度**: 高
+- **描述**: `Upload`, `UploadAvatar`, `UpdateUserInfo` 方法都只有 `.then()` 没有 `.catch()`，API 调用失败时会静默失败，用户不知道发生了什么。
+- **建议修复**: 为所有方法添加错误处理：
+```typescript
+public async Upload(params:UploadParmas): Promise<[boolean,any]> {
+    try {
+        const res = await postUploadFile(params);
+        if(res.data.code == 1){
+            return [true,JSON.parse(res.data.data)];
+        }
+        ElMessage.error(res.data.message || '上传失败');
+        return [false,null]
+    } catch (error) {
+        ElMessage.error('上传失败，请稍后重试');
+        return [false,null]
+    }
+}
+```
+
+#### 问题 5: GroupService 多个方法缺少错误处理
+- **文件**: `ChatHubVue/src/services/GroupService.ts`
+- **严重程度**: 高
+- **描述**: `SearchtGroup`, `GetGroupList`, `GetGroupMemberList`, `GetGroupRequestList` 等方法缺少 `.catch()` 处理，API 调用失败时会静默失败。
+- **建议修复**: 为这些方法添加错误处理，例如：
+```typescript
+public async GetGroupList(id:number,name:string,GroupStore:any): Promise<boolean> {
+    const playload = {
+        userId:id,
+        xusername:name
+    }
+    return await getGroupList(playload).then(res => {
+        if(res.data.code == 1){
+            GroupStore.MyGroups = JSON.parse(res.data.data);
+            return true;
+        }
+        ElMessage.error(res.data.message || '获取群组列表失败');
+        return false
+    }).catch(error => {
+        ElMessage.error('获取群组列表失败，请稍后重试');
+        return false
+    })
+}
+```
+
+#### 问题 6: HubService SignalR 回调中的 API 调用缺乏错误处理
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 高
+- **描述**: `ChatMethodInitial` 方法中多处 SignalR 回调里的 API 调用（如 `getMessageBox`, `getGroupList`, `getFriends`, `findFriendTree` 等）没有错误处理。当这些 API 调用失败时，会导致静默失败，用户体验不好。
+- **建议修复**: 为所有回调中的 API 调用添加 `.catch()` 处理：
+```typescript
+this.HubConnection.on('MsgBoxFlasherReceived', () => {
+    let payload = { username: this.UserInfoStore.userName, xusername: this.UserInfoStore.userName }
+    getMessageBox(payload)
+        .then(res => {
+            if (res.data.code == 1) {
+                this.MsgboxStore.$reset()
+                const result = JSON.parse(res.data.data)
+                for (let i = 0; i < result.length; i++) {
+                    this.MsgboxStore.MsgItems.push(result[i])
+                }
+            }
+        })
+        .catch(error => {
+            ElMessage.error('获取消息失败');
+        })
+});
+```
+
+#### 问题 7: AuthService 部分方法缺少错误处理
+- **文件**: `ChatHubVue/src/services/AuthService.ts`
+- **严重程度**: 中
+- **描述**: `Verify()` 和 `SendAESKey()` 方法完全没有错误处理，API 调用失败时会静默失败。
+- **建议修复**: 为这两个方法添加错误处理：
+```typescript
+public async Verify(): Promise<boolean> {
+    return await getVerify().then(() => {
+        return true;
+    }).catch(error => {
+        console.error('验证失败:', error);
+        return false;
+    })
+}
+```
+
+#### 问题 8: FriendsService 部分方法缺少错误处理
+- **文件**: `ChatHubVue/src/services/FriendsService.ts`
+- **严重程度**: 中
+- **描述**: `FindFriendTree` 方法没有 `.catch()` 处理。
+- **建议修复**: 添加错误处理
+
+#### 问题 9: main.ts 缺少全局 Vue 错误处理器
+- **文件**: `ChatHubVue/src/main.ts`
+- **严重程度**: 高
+- **描述**: 没有配置 `app.config.errorHandler` 来捕获 Vue 组件中的未处理错误，也没有配置 `window.addEventListener('unhandledrejection')` 来处理未捕获的 Promise 拒绝。
+- **建议修复**: 在 main.ts 中添加全局错误处理：
+```typescript
+// 全局 Vue 错误处理
+app.config.errorHandler = (err, instance, info) => {
+    console.error('Vue Error:', err);
+    ElMessage.error('发生错误，请刷新页面重试');
+};
+
+// 全局 Promise rejection 处理
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled Promise Rejection:', event.reason);
+    ElMessage.error('网络请求失败，请稍后重试');
+});
+```
+
+#### 问题 10: 错误码处理不完整
+- **文件**: `ChatHubVue/src/common/axiosSetting.ts`
+- **严重程度**: 低
+- **描述**: 响应拦截器只处理了 code 1,2,3,4,-3，没有处理其他可能的业务错误码（如 -1, -2, 5 等）。
+- **建议修复**: 扩展错误码处理，或在响应拦截器中添加对未知错误码的默认处理
+
+#### 问题 11: axios.ts 包装方法没有额外错误处理
+- **文件**: `ChatHubVue/src/common/axios.ts`
+- **严重程度**: 低
+- **描述**: 通用的 HTTP 方法（get, post, delete, put）只是简单包装 http 调用，没有添加额外的错误处理逻辑。虽然错误会传递到调用者，但缺少统一的错误转换。
+- **建议修复**: 可以考虑在包装方法中添加统一的错误转换或日志记录
+
+---
+
+### 总结
+
+本次审查发现前端 API 错误处理存在以下主要问题：
+
+1. **Axios 拦截器问题**：网络错误时可能访问 undefined 属性导致新错误；404 处理不一致
+2. **Service 层普遍缺少错误处理**：多个 Service 文件中的方法没有 `.catch()` 处理，导致 API 调用失败时静默失败
+3. **缺少全局错误处理**：Vue 应用没有配置全局错误处理器
+4. **SignalR 回调中的错误处理缺失**：HubService 中的 SignalR 回调里调用 API 时没有错误处理
+
+建议优先修复高严重程度的问题，特别是问题 1、4、5、6、9，以提升应用的健壮性和用户体验。
