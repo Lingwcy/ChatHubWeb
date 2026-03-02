@@ -39,9 +39,9 @@ builder.Services.AddSwaggerGen(c =>
     requirement[scheme] = new List<string>();
     c.AddSecurityRequirement(requirement);
 });
-//sqlsugar·şÎñ
+//sqlsugarï¿½ï¿½ï¿½ï¿½
 builder.Services.AddSqlsugar(builder.Configuration);
-//¼øÈ¨·şÎñÅäÖÃ
+//ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 builder.Services.AddAuthentication(
 options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -62,9 +62,9 @@ options => {
         options.Events = new JwtBearerEvents
         {
             /*
-             OnMessageReceivedÊÂ¼ş´¦Àí³ÌĞòÔÚJwtBearerÖĞ¼ä¼ş¿ªÊ¼´¦ÀíÇëÇóÖ®Ç°Ö´ĞĞ£¬ÔÊĞíÄã¸ù¾İÌØ¶¨Ìõ¼ş×Ô¶¨ÒåÁîÅÆµÄ»ñÈ¡·½Ê½¡£
-            Õâ¶ÔÓÚ´¦Àí·Ç±ê×¼¸ñÊ½µÄÁîÅÆ´«µİ·½Ê½£¨Èç²éÑ¯×Ö·û´®»ò×Ô¶¨ÒåHTTPÍ·£©·Ç³£ÓĞÓÃ
-            ´Ë´¦×÷ÓÃ£ºÔÚ»ñÈ¡µ½HUBµÄÇëÇóºóÌáÇ°½«TOKENĞ´Èëcontext£¬ÒÔ±ãHUB¶Ôclaims½øĞĞ×Ô¶¯½âÎö
+             OnMessageReceivedï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½JwtBearerï¿½Ğ¼ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®Ç°Ö´ï¿½Ğ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÆµÄ»ï¿½È¡ï¿½ï¿½Ê½ï¿½ï¿½
+            ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½Ç±ï¿½×¼ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Æ´ï¿½ï¿½İ·ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¯ï¿½Ö·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½HTTPÍ·ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½
+            ï¿½Ë´ï¿½ï¿½ï¿½ï¿½Ã£ï¿½ï¿½Ú»ï¿½È¡ï¿½ï¿½HUBï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½TOKENĞ´ï¿½ï¿½contextï¿½ï¿½ï¿½Ô±ï¿½HUBï¿½ï¿½claimsï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
              */
             OnMessageReceived = context =>
             {
@@ -92,10 +92,10 @@ builder.Services.AddAuthorization(o =>
     });
 });
 builder.Services.AddSingleton<IAuthorizationHandler, SelfCertificationRequirementHandler>();
-//²Ö´¢
+//ï¿½Ö´ï¿½
 builder.Services.AddRepository(builder.Configuration);
 
-//Serilog¼¯³É
+//Serilogï¿½ï¿½ï¿½ï¿½
 var logger = new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
         .Enrich.FromLogContext()
@@ -103,7 +103,7 @@ var logger = new LoggerConfiguration()
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
-//Ìá¹©¶Ôµ±Ç° HttpContextµÄ·ÃÎÊ
+//ï¿½á¹©ï¿½Ôµï¿½Ç° HttpContextï¿½Ä·ï¿½ï¿½ï¿½
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<FormOptions>(options =>
@@ -122,14 +122,21 @@ builder.Services.AddSignalR(options =>
 }
 );
 
-//jwt¹¤¾ß
+//jwtï¿½ï¿½ï¿½ï¿½
 builder.Services.AddScoped<JwtSecurityTokenHandler, JwtSecurityTokenHandler>();
 builder.Services.AddScoped<IGroupService, GroupService>();
-//¿çÓòÅäÖÃ
-string[] urls = new[] { builder.Configuration["Cors"], "http://localhost:5173", "https://localhost:5001/", "http://localhost:8848", "http://100.83.131.91:8080", "*" };
+// CORS é…ç½® - ç§»é™¤ "*" å…è®¸æ‰€æœ‰æ¥æºï¼Œä½¿ç”¨ç¯å¢ƒå˜é‡é…ç½®
+var corsConfig = builder.Configuration["Cors"];
+var allowedOrigins = new List<string>();
+if (!string.IsNullOrEmpty(corsConfig))
+{
+    allowedOrigins.Add(corsConfig);
+}
+// æ·»åŠ å¼€å‘ç¯å¢ƒå¸¸ç”¨ç«¯å£
+allowedOrigins.AddRange(new[] { "http://localhost:5173", "http://localhost:3000", "http://localhost:8848" });
 builder.Services.AddCors(opt =>
 {
-    opt.AddDefaultPolicy(builder => builder.WithOrigins(urls).AllowAnyHeader().AllowAnyMethod());
+    opt.AddDefaultPolicy(builder => builder.WithOrigins(allowedOrigins.ToArray()).AllowAnyHeader().AllowAnyMethod());
 });
 var app = builder.Build();
 app.Use(next => new RequestDelegate(
@@ -144,7 +151,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
 }
-// http¹ÜµÀÅäÖÃ
+// httpï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½
 app.Use(async (context, next) =>
 {
     await next.Invoke();

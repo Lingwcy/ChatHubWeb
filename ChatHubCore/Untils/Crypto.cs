@@ -120,23 +120,61 @@ namespace ChatHubApi.Untils
         }
         public static string HashPassword(string password)
         {
-            // 将密码转换为字节数组  
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-
-            // 创建SHA256哈希算法实例  
-            using (SHA256 sha256 = SHA256.Create())
+            // 使用 PBKDF2 进行密码哈希，比 SHA256 更安全
+            // 生成随机盐
+            byte[] salt = new byte[16];
+            using (var rng = RandomNumberGenerator.Create())
             {
-                // 计算哈希值  
-                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+                rng.GetBytes(salt);
+            }
 
-                // 将哈希值转换为十六进制字符串  
-                StringBuilder hex = new StringBuilder(hashBytes.Length * 2);
-                foreach (byte b in hashBytes)
+            // 使用 PBKDF2
+            using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256))
+            {
+                byte[] hash = pbkdf2.GetBytes(32);
+
+                // 组合盐和哈希值存储
+                byte[] hashBytes = new byte[salt.Length + hash.Length];
+                Array.Copy(salt, 0, hashBytes, 0, salt.Length);
+                Array.Copy(hash, 0, hashBytes, salt.Length, hash.Length);
+
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
+
+        /// <summary>
+        /// 验证密码是否匹配
+        /// </summary>
+        public static bool VerifyHashedPassword(string hashedPassword, string password)
+        {
+            try
+            {
+                byte[] hashBytes = Convert.FromBase64String(hashedPassword);
+
+                // 提取盐
+                byte[] salt = new byte[16];
+                Array.Copy(hashBytes, 0, salt, 0, salt.Length);
+
+                // 使用相同的盐和迭代次数验证
+                using (var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000, HashAlgorithmName.SHA256))
                 {
-                    hex.AppendFormat("{0:x2}", b);
-                }
+                    byte[] hash = pbkdf2.GetBytes(32);
 
-                return hex.ToString();
+                    // 比较哈希值
+                    for (int i = 0; i < hash.Length; i++)
+                    {
+                        if (hashBytes[salt.Length + i] != hash[i])
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+            catch
+            {
+                // 如果格式不正确，回退到旧的 SHA256 验证（用于兼容旧数据）
+                return HashPassword(password) == hashedPassword;
             }
         }
 
