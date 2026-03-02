@@ -663,3 +663,186 @@ window.addEventListener('unhandledrejection', (event) => {
 - **严重程度**: 低
 - **描述**: 当用户有未发送的消息时，没有在页面关闭前提示用户确认。
 - **建议修复**: 在 beforeunload 事件中添加确认逻辑
+
+## Task 8: Admin 后台 - 权限控制审查
+
+### 发现的问题
+
+#### 问题 1: 路由守卫未验证按钮级别权限（meta.auths）
+- **文件**: `ChatHubAdminVue/src/router/index.ts`
+- **严重程度**: 高
+- **描述**: 路由守卫只检查了 `meta.roles` 来验证角色权限，但没有验证 `meta.auths`（按钮级别权限）。按钮级别权限的检查只在组件内部通过 `hasAuth` 函数进行，这意味着没有权限的用户仍然可以尝试访问路由，只是在界面上看不到相关按钮。
+- **建议修复**: 在路由守卫中添加对 `meta.auths` 的检查，如果用户没有按钮权限，可以隐藏相关按钮或禁用操作
+
+#### 问题 2: 权限指令未处理动态渲染场景
+- **文件**: `ChatHubAdminVue/src/directives/auth/index.ts`
+- **严重程度**: 中
+- **描述**: `auth` 指令只在 `mounted` 钩子中检查权限并移除无权限元素。如果组件内容是动态渲染的（如 v-if/v-for），权限检查不会重新执行。
+- **建议修复**: 添加 `updated` 钩子或在 `componentUpdated` 中重新检查权限
+
+#### 问题 3: Token 刷新失败后未强制跳转登录页
+- **文件**: `ChatHubAdminVue/src/utils/http/index.ts`
+- **严重程度**: 高
+- **描述**: 当 access token 过期时，系统会尝试使用 refresh token 刷新。但如果 refresh token 也过期或刷新失败，系统只是暂存请求并等待，并不会自动跳转到登录页。这会导致用户看到页面静止但无法操作。
+**: 在 token - **建议修复刷新失败时添加跳转登录页的逻辑：
+```typescript
+.catch(() => {
+    PureHttp.isRefreshing = false;
+    // 跳转到登录页
+    router.push('/login');
+});
+```
+
+#### 问题 4: 响应拦截器未处理 401 错误
+- **文件**: `ChatHubAdminVue/src/utils/http/index.ts`
+- **严重程度**: 中
+- **描述**: 响应拦截器没有处理 401（未授权）错误。当 refresh token 也失败时，返回的是 rejected promise，但没有统一处理 401 情况。
+- **建议修复**: 在响应拦截器中添加 401 错误处理：
+```typescript
+(error: PureHttpError) => {
+    if (error.response?.status === 401) {
+        removeToken();
+        router.push('/login');
+    }
+    // ... 现有逻辑
+}
+```
+
+#### 问题 5: 权限组件 Auth 未使用 v-auth 指令
+- **文件**: `ChatHubAdminVue/src/components/ReAuth/src/auth.tsx`
+- **严重程度**: 低
+- **描述**: `Auth` 组件使用了 `hasAuth` 函数，但没有使用自定义 `v-auth` 指令。如果页面中需要同时使用组件和指令，会导致代码不一致。
+- **建议修复**: 保持一致性，可以选择统一使用组件方式或指令方式
+
+#### 问题 6: hasAuth 函数未缓存权限结果
+- **文件**: `ChatHubAdminVue/src/router/utils.ts`
+- **严重程度**: 低
+- **描述**: `hasAuth` 函数每次调用都会从路由 meta 中获取权限列表并进行比较，没有缓存机制。在大型应用中频繁调用可能影响性能。
+- **建议修复**: 添加权限缓存或在路由加载时预处理权限数据
+
+---
+
+## Task 9: Admin 后台 - CRUD 操作审查
+
+### 发现的问题
+
+#### 问题 1: 页面复制粘贴错误 - 业务逻辑混乱（严重）
+- **文件**: `ChatHubAdminVue/src/views/hubData/friends/friends.vue`, `ChatHubAdminVue/src/views/hubData/friendRequest/friendRequest.vue`, `ChatHubAdminVue/src/views/hubData/onlineUser/onlineUser.vue`
+- **严重程度**: 高
+- **描述**: 多个页面完全复制了 user 页面的代码，导致：
+  - 所有页面都使用 `useUser` hook（业务逻辑错误）
+  - 页面标题错误：friendRequest 页面显示 "好友关系管理"
+  - 搜索字段与实际业务不匹配（如 friendRequest 用 username 搜索）
+  - 更多/操作按钮显示不相关的功能（上传头像、重置密码、分配角色）
+- **建议修复**: 每个页面应该使用独立的 hook 文件，根据实际业务定义字段
+
+#### 问题 2: defineOptions 名称定义错误
+- **文件**: `ChatHubAdminVue/src/views/hubData/friends/friends.vue`, `ChatHubAdminVue/src/views/hubData/friendRequest/friendRequest.vue`
+- **严重程度**: 中
+- **描述**: 
+  - `friends.vue` 中 `defineOptions({ name: "Friends" })` - 应该是 "FriendsManage" 或类似
+  - `friendRequest.vue` 中 `defineOptions({ name: "Friends" })` - 应该是 "FriendRequest"
+- **建议修复**: 根据实际页面功能定义正确的名称
+
+#### 问题 3: 表单验证规则与表单字段不匹配
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/utils/rule.ts`, `ChatHubAdminVue/src/views/hubData/user/form/index.vue`
+- **严重程度**: 中
+- **描述**: 
+  - rule.ts 中定义了 `nickname` 为必填项，但 form/index.vue 中没有 nickname 字段
+  - rule.ts 中定义了 `headerImg` 为必填项，但实际业务中头像可能不需要必填
+- **建议修复**: 验证规则应该与实际表单字段一致
+
+#### 问题 4: 分页参数未正确传递给 API
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/utils/hook.tsx`
+- **严重程度**: 中
+- **描述**: 
+  - `pagination.total`、`pagination.pageSize`、`pagination.currentPage` 都被注释掉了
+  - 搜索方法 `onSearch` 没有传递分页参数给 API
+  - `handleSizeChange` 和 `handleCurrentChange` 只是打印日志，没有更新分页状态
+- **建议修复**: 实现完整的分页功能：
+```typescript
+async function onSearch() {
+    loading.value = true;
+    const { data } = await useUserStoreHook().getAllUsers({
+        ...toRaw(form),
+        page: pagination.currentPage,
+        pageSize: pagination.pageSize
+    });
+    // ...
+}
+```
+
+#### 问题 5: 批量删除缺少二次确认
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/user.vue` 等
+- **严重程度**: 低
+- **描述**: 批量删除操作在 el-popconfirm 中有确认对话框，但没有显示具体要删除的数据数量或信息。用户只能看到"是否确认删除?"的通用提示。
+- **建议修复**: 增强确认信息，显示选中的数量：
+```html
+<el-popconfirm :title="`是否确认删除选中的 ${selectedNum} 项数据?`" @confirm="onbatchDel">
+```
+
+#### 问题 6: 按钮缺少权限控制
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/user.vue` 等
+- **严重程度**: 中
+- **描述**: 增删改查按钮没有使用 `v-auth` 指令进行权限控制。所有登录用户都能看到并操作这些按钮。
+- **建议修复**: 为按钮添加权限指令：
+```html
+<el-button v-auth="'user:add'" ...>新增用户</el-button>
+<el-button v-auth="'user:delete'" ...>删除</el-button>
+```
+
+#### 问题 7: 编辑功能未实现
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/utils/hook.tsx`
+- **严重程度**: 高
+- **描述**: `openDialog` 函数中，当 `title !== "新增"` 时（即编辑模式），只调用了 `chores()` 而没有实际调用更新接口：
+```typescript
+} else {
+    // 实际开发先调用修改接口，再进行下面操作
+    chores();
+}
+```
+- **建议修复**: 实现编辑接口调用
+
+#### 问题 8: 删除操作后未检查返回结果
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/utils/hook.tsx`
+- **严重程度**: 中
+- **描述**: `handleDelete` 函数直接显示成功消息，没有检查 API 返回的 code 值：
+```typescript
+await useUserStoreHook().postDeleteUser(payload);
+message(`您删除了用户编号为${row.id}的这条数据`, { type: "success" });
+```
+- **建议修复**: 检查返回结果后再显示消息：
+```typescript
+const res = await useUserStoreHook().postDeleteUser(payload);
+if (res.data?.code === 1) {
+    message(`删除成功`, { type: "success" });
+    onSearch();
+}
+```
+
+#### 问题 9: onlineUser 页面不应有增删改操作
+- **文件**: `ChatHubAdminVue/src/views/hubData/onlineUser/onlineUser.vue`
+- **严重程度**: 中
+- **描述**: 在线用户列表是只读数据，不应该有新增、编辑、删除、批量删除操作。但当前页面包含了这些按钮。
+- **建议修复**: 移除在线用户页面的增删改相关按钮
+
+#### 问题 10: 图片上传和重置密码功能未完整实现
+- **文件**: `ChatHubAdminVue/src/views/hubData/user/utils/hook.tsx`
+- **严重程度**: 中
+- **描述**: 
+  - `handleUpload` 函数只是打印日志和关闭弹窗，没有实际调用上传 API
+  - `handleReset` 函数只是打印密码和显示成功消息，没有实际调用重置密码 API
+- **建议修复**: 实现实际的 API 调用
+
+---
+
+### 总结
+
+本次审查发现 Admin 后台存在以下主要问题：
+
+1. **权限控制问题**：路由守卫未验证按钮级别权限、Token 刷新失败处理不完善
+2. **CRUD 问题**：页面代码复制粘贴错误导致业务逻辑混乱、分页功能未实现、编辑功能未完成
+3. **表单验证**：验证规则与表单字段不匹配
+4. **按钮权限**：缺少 v-auth 指令控制
+
+建议优先修复高严重程度的问题，特别是问题 1（页面复制粘贴错误）和问题 7（编辑功能未实现）。
