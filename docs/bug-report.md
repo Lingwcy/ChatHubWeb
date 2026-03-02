@@ -591,3 +591,75 @@ window.addEventListener('unhandledrejection', (event) => {
 - **建议修复**: 使用 `watchEffect` 的返回值或 `onBeforeUnmount` 清理
 
 建议优先修复高严重程度的问题，特别是问题 1、4、5、6、9，以提升应用的健壮性和用户体验。
+
+---
+
+## Task 7: 前端 ChatHubVue - 组件通信审查
+
+### 发现的问题
+
+#### 问题 1: MessageCT.vue 缺少 Props 定义和组件通信耦合
+- **文件**: `ChatHubVue/src/views/MainContent/HubContent/MessageCT.vue`
+- **严重程度**: 中
+- **描述**: 该组件完全没有定义 props 和 emits，完全依赖全局 Pinia store 进行状态管理。这导致组件与全局状态高度耦合，难以测试和复用。
+- **建议修复**: 考虑重构为接收 props 并通过 emits 抛出事件的组件
+
+#### 问题 2: MessageCT.vue scrollDown 函数中 setTimeout 未清理
+- **文件**: `ChatHubVue/src/views/MainContent/HubContent/MessageCT.vue`
+- **严重程度**: 中
+- **描述**: `scrollDown` 函数使用了 `setTimeout`，但组件中没有在 `onBeforeUnmount` 生命周期钩子中清理这些定时器。
+- **建议修复**: 保存 timer ID 并在 onBeforeUnmount 中清理
+
+#### 问题 3: MessageCT.vue watch 未显式清理
+- **文件**: `ChatHubVue/src/views/MainContent/HubContent/MessageCT.vue`
+- **严重程度**: 低
+- **描述**: 定义了多个 `watch`，监听 store 中的状态变化，但没有显式清理。
+- **建议修复**: 在 `onBeforeUnmount` 中调用 watch 的返回值进行清理
+
+#### 问题 4: MessageCT.vue 消息列表渲染无虚拟滚动优化
+- **文件**: `ChatHubVue/src/views/MainContent/HubContent/MessageCT.vue`
+- **严重程度**: 中
+- **描述**: 使用 `v-for` 直接渲染所有消息，当消息数量较多时会导致性能问题。
+- **建议修复**: 使用虚拟滚动库或实现分页加载
+
+#### 问题 5: Login.vue 递归 setTimeout 未清理
+- **文件**: `ChatHubVue/src/views/LoginView/Login.vue`
+- **严重程度**: 高
+- **描述**: `setTimeout(doLoginCheck, 1000)` 使用递归方式循环调用，但组件卸载时没有清理这个定时器。
+- **建议修复**: 保存 timer ID 并在 onBeforeUnmount 中清理
+
+#### 问题 6: HubService 事件监听器无清理机制
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 高
+- **描述**: 通过 `this.HubConnection.on()` 注册了大量事件监听器，但没有提供清理方法。每次重连都会累积新的监听器。
+- **建议修复**: 在连接断开时调用 `.off()` 清理所有事件监听器
+
+#### 问题 7: main.ts 页面卸载时无清理逻辑
+- **文件**: `ChatHubVue/src/main.ts`
+- **严重程度**: 中
+- **描述**: 添加了 `beforeunload` 和 `load` 事件监听器，但从未移除。
+- **建议修复**: 应用卸载时移除事件监听器
+
+#### 问题 8: SendEditor.vue 组件卸载清理不完整
+- **文件**: `ChatHubVue/src/views/Compoents/SendEditor.vue`
+- **严重程度**: 低
+- **描述**: 有 `onBeforeUnmount` 清理编辑器实例，但可能还有其他资源没有清理。
+- **建议修复**: 检查并清理所有在组件生命周期中创建的资源
+
+#### 问题 9: 组件间通信完全依赖全局 Store，缺乏事件总线
+- **文件**: 整个项目
+- **严重程度**: 中
+- **描述**: 项目中没有使用 Vue 3 的 provide/inject 或 mitt 等事件总线机制进行组件间通信。所有状态都存储在全局 Pinia store 中。
+- **建议修复**: 对于父子组件通信使用 props/emits，对于跨级组件通信使用 provide/inject
+
+#### 问题 10: appsetting store 中的计数器使用可能导致意外触发
+- **文件**: `ChatHubVue/src/store/index.ts`
+- **严重程度**: 低
+- **描述**: 使用计数器模式来触发 watch 响应，这种方式比较 hack。
+- **建议修复**: 使用布尔标志位或时间戳替代计数器
+
+#### 问题 11: 缺少全局 beforeunload 页面离开确认
+- **文件**: `ChatHubVue/src/main.ts`
+- **严重程度**: 低
+- **描述**: 当用户有未发送的消息时，没有在页面关闭前提示用户确认。
+- **建议修复**: 在 beforeunload 事件中添加确认逻辑
