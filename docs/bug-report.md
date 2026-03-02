@@ -93,3 +93,88 @@ catch(Exception ex)
 - **严重程度**: 中
 - **描述**: CORS 配置中包含 `"*"`（允许所有来源），这是一个安全风险
 - **建议修复**: 移除 `"*"` 配置，只允许受信任的前端域名
+
+---
+
+## Task 2: 后端 Core - 安全风险审查
+
+### 发现的问题
+
+#### 问题 1: 硬编码加密密钥和 IV
+- **文件**: `ChatHubCore/appsettings.json`, `ChatHubCore/appsettings.Development.json`
+- **严重程度**: 高
+- **描述**:
+  - AES 密钥 `ASEKey` 和 IV `ASEIV` 在配置文件中硬编码为 `4555794842396b484a696b4b64413865`
+  - 密钥和 IV 完全相同，这是严重的安全问题
+  - 密钥以明文形式存储在配置文件中
+- **建议修复**:
+  1. 使用环境变量或密钥管理服务存储密钥
+  2. 密钥和 IV 应该不同
+  3. 在生产环境中使用安全的密钥存储机制（如 Azure Key Vault、AWS KMS 等）
+
+#### 问题 2: 密码哈希算法不安全
+- **文件**: `ChatHubCore/Untils/Crypto.cs`
+- **严重程度**: 高
+- **描述**: 使用 SHA256 进行密码哈希，而不是更安全的 bcrypt 或 argon2。SHA256 容易受到彩虹表攻击和 GPU 暴力破解。
+- **建议修复**: 使用 bcrypt、argon2 或 PBKDF2 等专门的密码哈希算法
+
+#### 问题 3: 数据库明文密码
+- **文件**: `ChatHubCore/appsettings.json`, `ChatHubCore/appsettings.Development.json`
+- **严重程度**: 高
+- **描述**: 数据库连接字符串包含明文密码 `password=1444707`
+- **建议修复**:
+  1. 使用环境变量存储数据库密码
+  2. 使用 SQL Server 的集成身份验证或其他安全认证方式
+
+#### 问题 4: JWT 密钥过弱
+- **文件**: `ChatHubCore/appsettings.json`, `ChatHubCore/appsettings.Development.json`
+- **严重程度**: 高
+- **描述**: `SecretKey` 设置为 `kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk`，这是一个非常弱的密钥，只是重复的 'k' 字符
+- **建议修复**: 使用至少 256 位（32 字节）的随机密钥，并存储在安全的位置
+
+#### 问题 5: Admin 登录使用明文密码比较
+- **文件**: `ChatHubCore/Controllers/Admin/Login/AdminAuthController.cs`
+- **严重程度**: 高
+- **描述**: 管理员密码以明文形式存储和比较，没有进行哈希处理。
+```csharp
+var res = await _db.Queryable<sysAdmin>().FirstAsync(it => it.name == loginInput.account && it.psw == loginInput.psw);
+```
+- **建议修复**:
+  1. 对密码进行哈希处理后再存储
+  2. 登录时对输入的密码进行哈希后与数据库中的哈希值比较
+
+#### 问题 6: CryptoMiddleware 中使用相同密钥作为 Key 和 IV
+- **文件**: `ChatHubCore/Middleware/CryptoMiddleware.cs`
+- **严重程度**: 高
+- **描述**: `Crypto.DecryptByAES(encryptedRequestBody, client.Key, client.Key)` - 使用相同的值作为 Key 和 IV，这降低了加密安全性
+- **建议修复**: 分别为 Key 和 IV 使用不同的值
+
+#### 问题 7: 登录响应返回密码哈希
+- **文件**: `ChatHubCore/Controllers/Font/Login/AuthController.cs`
+- **严重程度**: 中
+- **描述**: 登录和注册响应中包含密码哈希值 `userPsw: user.Password`，这会暴露给客户端
+- **建议修复**: 从响应中移除密码字段
+
+#### 问题 8: JWT Token 过期时间过长
+- **文件**: `ChatHubCore/Controllers/Font/Login/AuthController.cs`
+- **严重程度**: 中
+- **描述**: Token 过期时间设置为 30000 分钟（约 500 小时），时间过长会增加令牌被盗用的风险
+- **建议修复**: 将过期时间缩短到合理范围（如 1-24 小时）
+
+#### 问题 9: CORS 配置允许所有来源（重复，见 Task 1 问题 9）
+- **文件**: `ChatHubCore/Program.cs`
+- **严重程度**: 中
+- **描述**: CORS 配置包含 `"*"` 允许所有来源
+- **建议修复**: 移除 `"*"` 配置，只允许受信任的前端域名
+
+#### 问题 10: 敏感数据查询缺少权限控制
+- **文件**: `ChatHubCore/Controllers/Admin/User/UserController.cs`
+- **严重程度**: 中
+- **描述**: `QueryByUserName` 方法没有授权注解，任何人都可以查询用户信息
+- **建议修复**: 添加 `[Authorize]` 属性确保只有已认证用户可以访问
+
+#### 问题 11: SQL 查询使用 Contains 可能存在注入风险
+- **文件**: `ChatHubCore/Controllers/Admin/User/UserController.cs`
+- **严重程度**: 低
+- **描述**: 使用 `.Contains()` 进行模糊查询，虽然 SqlSugar 有参数化处理，但应验证输入
+- **建议修复**: 对输入进行验证和清理，确保只有预期的字符
