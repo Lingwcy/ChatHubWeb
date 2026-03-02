@@ -35,17 +35,6 @@ export class ChatHub {
         this.HubConnection = new SignalR.HubConnectionBuilder()
             .withUrl('https://localhost:5001/MyHub', this.Options)
             .build();
-        // 断线重连
-        this.HubConnection.onclose(async () => {
-            ElNotification({
-                title: '连接断开',
-            })
-            if (this.IsLogin) {
-                await this.startHub();
-            } else {
-                this.HubConnection.stop();//窗口关闭断开通信
-            }
-        });
     }
     public async startHub(): Promise<void> {
         if (this.IsLogin) { return }
@@ -56,6 +45,10 @@ export class ChatHub {
                 message: `成功连接到ChatHub`,
             })
             this.IsLogin = true;
+
+            // 设置断线重连逻辑（带重试次数限制）
+            this.setupReconnectHandler();
+
             this.ChatMethodInitial();
             this.GetUserOfflineMessage(this.UserInfoStore.userName);
             await this.HubConnection.invoke("SendHubKey", this.UserInfoStore.userName, crypto.gkey);
@@ -68,7 +61,55 @@ export class ChatHub {
             this.IsLogin = false;
         }
     }
+
+    // 添加重连处理逻辑（带重试次数限制）
+    private maxReconnectAttempts = 5;
+    private reconnectAttempts = 0;
+    private setupReconnectHandler() {
+        this.HubConnection.onclose(async () => {
+            ElNotification({
+                title: '连接断开',
+                message: this.reconnectAttempts < this.maxReconnectAttempts
+                    ? `正在尝试重新连接... (${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})`
+                    : '连接已断开，请刷新页面重试'
+            });
+
+            if (this.IsLogin && this.reconnectAttempts < this.maxReconnectAttempts) {
+                this.reconnectAttempts++;
+                // 使用指数退避策略
+                const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+                setTimeout(async () => {
+                    try {
+                        await this.HubConnection.start();
+                        this.reconnectAttempts = 0; // 重连成功后重置计数
+                    } catch (err) {
+                        console.log('重连失败:', err);
+                    }
+                }, delay);
+            } else {
+                this.HubConnection.stop();
+            }
+        });
+    }
+
+    // 清理所有 SignalR 事件监听器
+    private removeAllListeners() {
+        const events = [
+            'PublicMsgReceived', 'PublicImageReceived', 'GroupMsgReceived',
+            'FriendsRequestReceived', 'FriendRequestRefused', 'FriendRequestAccepted',
+            'MsgBoxFlasherReceived', 'GroupMsgBoxFlasherReceived', 'PrivateMsgReceived',
+            'RefreshGroupList', 'RefreshGroupNotice', 'RefreshGroupName',
+            'DissolveGroupNotice', 'RefreshFriendList'
+        ];
+        events.forEach(event => {
+            this.HubConnection.off(event);
+        });
+    }
+
     private ChatMethodInitial() {
+        // 先清理旧的监听器，避免重复注册
+        this.removeAllListeners();
+
         //公共消息接收器
         this.HubConnection.on('PublicMsgReceived', (HeaderImg: string, fromUserName: string, msg: string) => {
             const payload = {

@@ -290,15 +290,16 @@ export const UseServiceStore = defineStore('service', {
             File: undefined,
         }
     },
-    persist: {
-        enabled: true,
-        strategies: [
-            {
-                key: '服务数据',
-                storage: localStorage,
-            }
-        ]
-    }
+    // 移除持久化：服务实例包含 SignalR 连接对象、回调函数等不可序列化对象
+    // persist: {
+    //     enabled: true,
+    //     strategies: [
+    //         {
+    //             key: '服务数据',
+    //             storage: localStorage,
+    //         }
+    //     ]
+    // }
 
 })
 const store = createPinia()
