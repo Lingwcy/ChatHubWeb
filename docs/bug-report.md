@@ -530,4 +530,64 @@ window.addEventListener('unhandledrejection', (event) => {
 3. **缺少全局错误处理**：Vue 应用没有配置全局错误处理器
 4. **SignalR 回调中的错误处理缺失**：HubService 中的 SignalR 回调里调用 API 时没有错误处理
 
+---
+
+## Task 6: 前端 ChatHubVue - 状态管理审查
+
+### 发现的问题
+
+#### 问题 1: SignalR 事件监听器累积导致内存泄漏（严重）
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 高
+- **描述**: `ChatMethodInitial()` 方法在每次连接时调用，通过 `this.HubConnection.on()` 注册了大量事件监听器，但从未调用 `.off()` 方法清理旧监听器。每次重连都会累积新的监听器，导致同一消息事件会被触发多次，内存占用持续增长。
+- **建议修复**: 在重连或断开连接前，清理所有事件监听器
+
+#### 问题 2: 重复的 onclose 事件监听器
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 中
+- **描述**: `onclose` 事件监听器被注册了两次，会导致连接断开时显示两次"连接断开"通知。
+- **建议修复**: 删除其中一个 onclose 注册
+
+#### 问题 3: 重连逻辑无限制
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 中
+- **描述**: 自动重连逻辑没有最大重试次数限制和退避策略。如果服务器长时间不可用，会不断尝试重连。
+- **建议修复**: 添加重连次数限制和退避策略
+
+#### 问题 4: UseServiceStore 持久化会导致运行时错误
+- **文件**: `ChatHubVue/src/store/index.ts`
+- **严重程度**: 高
+- **描述**: `UseServiceStore` 启用了 localStorage 持久化，但它存储的是服务实例引用，包含 SignalR 连接对象、回调函数、循环引用，无法被正确序列化。
+- **建议修复**: 移除 `UseServiceStore` 的持久化配置
+
+#### 问题 5: UseUserInformationStore 的 connection 属性被持久化
+- **文件**: `ChatHubVue/src/store/index.ts`
+- **严重程度**: 中
+- **描述**: SignalR 连接对象被包含在持久化中，尝试序列化会导致失败。
+- **建议修复**: 从持久化中排除 connection 属性
+
+#### 问题 6: UseMsgStore 消息持久化导致存储膨胀
+- **文件**: `ChatHubVue/src/store/index.ts`
+- **严重程度**: 低
+- **描述**: 消息历史被持久化到 localStorage，长时间使用后会导致存储空间不足。
+- **建议修复**: 限制持久化的消息数量或禁用消息持久化
+
+#### 问题 7: Main.vue 中 ChatHub 实例管理不当
+- **文件**: `ChatHubVue/src/views/MainContent/Main.vue`
+- **严重程度**: 中
+- **描述**: 当有旧的持久化数据时，可能创建多个 SignalR 连接同时存在。
+- **建议修复**: 在创建新实例前，确保先停止并清理旧实例
+
+#### 问题 8: SignalR 回调中缺乏错误处理
+- **文件**: `ChatHubVue/src/services/HubService.ts`
+- **严重程度**: 中
+- **描述**: 多个 SignalR 事件回调中直接调用 API 方法，但没有添加 `.catch()` 错误处理。
+- **建议修复**: 为所有异步 API 调用添加错误处理
+
+#### 问题 9: 未使用的 watch 清理
+- **文件**: `ChatHubVue/src/views/MainContent/Main.vue`
+- **严重程度**: 低
+- **描述**: 使用 `watch` 监听连接状态变化，但没有显式清理。
+- **建议修复**: 使用 `watchEffect` 的返回值或 `onBeforeUnmount` 清理
+
 建议优先修复高严重程度的问题，特别是问题 1、4、5、6、9，以提升应用的健壮性和用户体验。
