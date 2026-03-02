@@ -260,3 +260,99 @@ return Ok(new { token = output });
 - **严重程度**: 低
 - **描述**: 生成 Token 后又读取并用 Console.WriteLine 打印所有 claims，这些调试代码应该移除
 - **建议修复**: 删除调试代码
+
+---
+
+## Task 4: 后端 Core - SignalR 连接管理审查
+
+### 发现的问题
+
+#### 问题 1: OnConnectedAsync 缺少 Claims 空值检查
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 在获取 JWT Claims 时没有进行空值检查。如果 JWT 中缺少 `UserName` 或 `UserId` Claim，会抛出 `NullReferenceException` 导致连接失败。
+- **建议修复**: 添加空值检查和异常处理
+
+#### 问题 2: OnDisconnectedAsync 缺少 Claims 空值检查
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 当连接异常断开时 Context.User 可能为 null，同样会抛出异常。
+- **建议修复**: 添加空值检查
+
+#### 问题 3: OnConnectedAsync 中 int.Parse(id) 可能抛异常
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: `int.Parse(id)` 没有 try-catch 保护，如果 id 为 null 或格式不正确会抛出异常。
+- **建议修复**: 使用 `int.TryParse` 进行安全转换
+
+#### 问题 4: 缺少 SignalR 连接超时配置
+- **文件**: `ChatHubCore/Program.cs`
+- **严重程度**: 中
+- **描述**: SignalR 配置中缺少 `HandshakeTimeout`、`ServerTimeout` 和 `KeepAliveInterval` 的设置。
+- **建议修复**: 添加超时配置
+
+#### 问题 5: SendHubKey 存在严重安全漏洞
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 允许客户端主动推送加密密钥，这是严重的安全漏洞。攻击者可以伪造任意密钥进行中间人攻击。密钥应该由服务器端在连接时自动生成。
+- **建议修复**: 删除客户端推送密钥的方法，改为服务器端自动生成
+
+#### 问题 6: SendPrivateMsg 缺少 null 检查
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 查询可能返回 null，直接访问 `.key` 会抛出异常。
+- **建议修复**: 添加 null 检查
+
+#### 问题 7: SendGroupMsg 缺少 null 检查
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 同样存在查询返回 null 的问题。
+- **建议修复**: 添加 null 检查
+
+#### 问题 8: SendGroupMsg 异常时没有反馈给发送者
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 中
+- **描述**: 捕获异常后只记录日志并直接返回，发送者不知道消息发送失败。
+- **建议修复**: 向发送者返回错误通知
+
+#### 问题 9: SendImage 方法实现不完整
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 只保存图片到服务器，但没有通知接收者、没有返回图片 URL、没有异常处理。
+- **建议修复**: 实现完整的图片发送流程
+
+#### 问题 10: SendPublicImage 不返回结果
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 高
+- **描述**: 发送图片后没有向发送者返回图片 URL，客户端无法获取已上传图片的访问地址。
+- **建议修复**: 返回图片
+
+#### 问题 11: 缺少 URL 给发送者在线用户过期清理机制
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 中
+- **描述**: 如果客户端异常断开，数据库中的记录不会被删除，造成"幽灵用户"。
+- **建议修复**: 添加后台定时任务定期清理过期记录
+
+#### 问题 12: sysOnlineUser 缺少过期时间字段
+- **文件**: `ChatHubCore/System/Entity/Font/sysOnlineUser.cs`
+- **严重程度**: 中
+- **描述**: 实体类没有过期时间字段，无法有效判断用户是否真正离线。
+- **建议修复**: 添加 `expirationTime` 字段
+
+#### 问题 13: 缺少心跳检测机制
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 中
+- **描述**: 没有实现心跳检测机制，无法及时发现断开的连接。
+- **建议修复**: 实现心跳机制
+
+#### 问题 14: 私聊消息缺少确认机制
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 中
+- **描述**: 发送消息后没有等待客户端确认，发送者不知道消息是否成功送达。
+- **建议修复**: 添加消息确认回调机制
+
+#### 问题 15: OnDisconnectedAsync 删除用户可能失败
+- **文件**: `ChatHubCore/Hub/Hub.cs`
+- **严重程度**: 中
+- **描述**: 删除用户记录时，如果记录不存在或查询失败可能导致异常。
+- **建议修复**: 处理可能的异常
